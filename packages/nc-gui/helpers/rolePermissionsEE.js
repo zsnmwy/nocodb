@@ -8,7 +8,12 @@ export default {
     column: true,
     tableAttachment: true,
     tableRowUpdate: true,
-    rowComments: true
+    rowComments: true,
+    gridViewOptions: true,
+    sortSync: true,
+    fieldsSync: true,
+    gridColUpdate: true,
+    filterSync: true
   },
   commenter: {
     airTable: true,

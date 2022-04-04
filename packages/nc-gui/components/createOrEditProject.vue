@@ -169,8 +169,9 @@
                     </v-text-field>
 
                     <!-- Access Project via -->
-                    <label class="caption"> {{ $t('msg.info.apiOptions') }}</label>
-                    <v-radio-group
+                    <!--
+                      <label class="caption"> {{ $t('msg.info.apiOptions') }}</label>
+                                      <v-radio-group
                       v-model="project.projectType"
                       row
                       hide-details
@@ -192,7 +193,7 @@
                           </v-chip>
                         </template>
                       </v-radio>
-                    </v-radio-group>
+                    </v-radio-group>-->
                   </div>
 
                   <!--            <v-select
@@ -523,6 +524,7 @@
                                             :label="$t('labels.dbCreateIfNotExists')"
                                           />
                                         </v-col>
+                                        <!--  todo : ssl & inflection -->
                                         <v-col v-if="db.client !== 'sqlite3'" class="">
                                           <v-expansion-panels>
                                             <v-expansion-panel style="border: 1px solid wheat">
@@ -649,7 +651,7 @@
                                                       <v-col>
                                                         <!-- Inflection - Table name -->
                                                         <v-select
-                                                          v-model="db.meta.inflection.tn"
+                                                          v-model="db.meta.inflection.table_name"
                                                           :disabled="edit"
                                                           class="caption"
                                                           :label="
@@ -667,7 +669,7 @@
                                                       <v-col>
                                                         <!-- Inflection - Column name -->
                                                         <v-select
-                                                          v-model="db.meta.inflection.cn"
+                                                          v-model="db.meta.inflection.column_name"
                                                           :disabled="edit"
                                                           class="caption"
                                                           :label="
@@ -941,8 +943,8 @@
       :type="dialog.type"
     />
 
-<!-- heading="Connection was successful" -->
-<!-- ok-label="Ok & Save Project" -->
+    <!-- heading="Connection was successful" -->
+    <!-- ok-label="Ok & Save Project" -->
     <dlg-ok-new
       v-model="testSuccess"
       :heading="$t('msg.info.dbConnected')"
@@ -999,7 +1001,12 @@ import colors from '@/mixins/colors'
 import DlgOkNew from '@/components/utils/dlgOkNew'
 import readFile from '@/helpers/fileReader'
 
-const { uniqueNamesGenerator, starWars, adjectives, animals } = require('unique-names-generator')
+const {
+  uniqueNamesGenerator,
+  starWars,
+  adjectives,
+  animals
+} = require('unique-names-generator')
 
 const homeDir = ''
 
@@ -1052,14 +1059,36 @@ export default {
       projectReloading: false,
       enableDbEdit: 0,
       authTypes: [
-        { text: 'JWT', value: 'jwt' },
-        { text: 'Master Key', value: 'masterKey' },
-        { text: 'Middleware', value: 'middleware' },
-        { text: 'Disabled', value: 'none' }
+        {
+          text: 'JWT',
+          value: 'jwt'
+        },
+        {
+          text: 'Master Key',
+          value: 'masterKey'
+        },
+        {
+          text: 'Middleware',
+          value: 'middleware'
+        },
+        {
+          text: 'Disabled',
+          value: 'none'
+        }
       ],
       projectTypes: [
-        { text: 'REST APIs', value: 'rest', icon: 'mdi-code-json', iconColor: 'green' },
-        { text: 'GRAPHQL APIs', value: 'graphql', icon: 'mdi-graphql', iconColor: 'pink' }
+        {
+          text: 'REST APIs',
+          value: 'rest',
+          icon: 'mdi-code-json',
+          iconColor: 'green'
+        },
+        {
+          text: 'GRAPHQL APIs',
+          value: 'graphql',
+          icon: 'mdi-graphql',
+          iconColor: 'pink'
+        }
       ],
 
       showPass: {},
@@ -1115,8 +1144,8 @@ export default {
                     graphqlDepthLimit: 10
                   },
                   inflection: {
-                    tn: ['camelize'],
-                    cn: ['camelize']
+                    table_name: 'camelize',
+                    column_name: 'camelize'
                   }
                 },
                 ui: {
@@ -1374,7 +1403,10 @@ export default {
       if (this.project.projectType) {
         return this.projectTypes.find(({ value }) => value === this.project.projectType)
       } else {
-        return { icon: 'mdi-server', iconColor: 'primary' }
+        return {
+          icon: 'mdi-server',
+          iconColor: 'primary'
+        }
       }
     },
     databaseNamesReverse() {
@@ -1495,15 +1527,15 @@ export default {
           const inflectionObj = xcConfig.envs[env].db[i].meta.inflection
 
           if (inflectionObj) {
-            if (Array.isArray(inflectionObj.tn)) {
-              inflectionObj.tn = inflectionObj.tn.join(',')
+            if (Array.isArray(inflectionObj.table_name)) {
+              inflectionObj.table_name = inflectionObj.table_name.join(',')
             }
-            if (Array.isArray(inflectionObj.cn)) {
-              inflectionObj.cn = inflectionObj.cn.join(',')
+            if (Array.isArray(inflectionObj.column_name)) {
+              inflectionObj.column_name = inflectionObj.column_name.join(',')
             }
 
-            inflectionObj.tn = inflectionObj.tn || 'none'
-            inflectionObj.cn = inflectionObj.cn || 'none'
+            inflectionObj.table_name = inflectionObj.table_name || 'none'
+            inflectionObj.column_name = inflectionObj.column_name || 'none'
           }
 
           if (this.allSchemas) {
@@ -1651,43 +1683,63 @@ export default {
 
       this.projectReloading = true
 
-      const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [
-        {
-          query: {
-            skipProjectHasDb: 1
-          }
-        },
-        this.edit ? 'projectUpdateByWeb' : 'projectCreateByWeb',
-        {
-          project: {
-            title: projectJson.title,
-            folder: 'config.xc.json',
-            type: 'pg'
-          },
-          projectJson
+      // const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [
+      //   {
+      //     query: {
+      //       skipProjectHasDb: 1
+      //     }
+      //   },
+      //   this.edit ? 'projectUpdateByWeb' : 'projectCreateByWeb',
+      //   {
+      //     project: {
+      //       title: projectJson.title,
+      //       folder: 'config.xc.json',
+      //       type: 'pg'
+      //     },
+      //     projectJson
+      //   }
+      // ])
+
+      //
+
+      const con = projectJson.envs._noco.db[0]
+      const inflection = (con.meta && con.meta.inflection) || {}
+      try {
+        const result = (await this.$api.project.create({
+          title: projectJson.title,
+          bases: [{
+            type: con.client,
+            config: con,
+            inflection_column: inflection.column_name,
+            inflection_table: inflection.table_name
+          }],
+          external: true
+        }))
+
+        clearInterval(interv)
+        toast.goAway(100)
+        console.log('project created redirect to project page', projectJson, result)
+
+        await this.$store.dispatch('project/ActLoadProjectInfo')
+
+        this.projectReloading = false
+
+        if (!this.edit && !this.allSchemas) {
+          this.$router.push({
+            path: `/nc/${result.id}`,
+            query: {
+              new: 1
+            }
+          })
         }
-      ])
 
-      clearInterval(interv)
-      toast.goAway(100)
-      console.log('project created redirect to project page', projectJson, result)
-
-      await this.$store.dispatch('project/ActLoadProjectInfo')
-
-      this.projectReloading = false
-
-      if (!this.edit && !this.allSchemas) {
-        this.$router.push({
-          path: `/nc/${result.id}`,
-          query: {
-            new: 1
-          }
-        })
+        this.projectCreated = true
+      } catch (e) {
+        this.$toast.error(await this._extractSdkResponseErrorMsg(e)).goAway(3000)
       }
 
-      this.projectCreated = true
-
       this.projectReloading = false
+      this.$tele.emit('project:create:extdb:submit')
     },
 
     mtdDialogGetEnvNameSubmit(envName, cookie) {
@@ -1711,8 +1763,8 @@ export default {
                 tn: 'nc_evolutions',
                 dbAlias: 'db',
                 inflection: {
-                  tn: 'camelize',
-                  cn: 'camelize'
+                  table_name: 'camelize',
+                  column_name: 'camelize'
                 },
                 api: {
                   type: ''
@@ -1761,8 +1813,8 @@ export default {
           tn: 'nc_evolutions',
           dbAlias,
           inflection: {
-            tn: 'camelize',
-            cn: 'camelize'
+            table_name: 'camelize',
+            column_name: 'camelize'
           },
           api: {
             type: ''
@@ -1887,7 +1939,10 @@ export default {
                 console.log(this.project.envs[e])
 
                 const c2 = {
-                  connection: { ...this.project.envs[e].db[0].connection, database: undefined },
+                  connection: {
+                    ...this.project.envs[e].db[0].connection,
+                    database: undefined
+                  },
                   client: this.project.envs[e].db[0].client
                 }
 
@@ -1965,6 +2020,7 @@ export default {
     getDatabaseForTestConnection(dbType) {
     },
     async testConnection(db, env, panelIndex) {
+      this.$tele.emit('project:create:extdb:test-connection')
       this.$store.commit('notification/MutToggleProgressBar', true)
       try {
         if (!(await this.newTestConnection(db, env, panelIndex))) {
@@ -1984,17 +2040,19 @@ export default {
               },
               client: db.client
             }
+            //
+            // // const result = await this.sqlMgr.testConnection(c1);
+            // const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [
+            //   {
+            //     query: {
+            //       skipProjectHasDb: 1
+            //     }
+            //   },
+            //   'testConnection',
+            //   c1
+            // ])
 
-            // const result = await this.sqlMgr.testConnection(c1);
-            const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [
-              {
-                query: {
-                  skipProjectHasDb: 1
-                }
-              },
-              'testConnection',
-              c1
-            ])
+            const result = (await this.$api.utils.testConnection(c1))
 
             console.log('test connection result', result)
             if (result.code === 0) {
@@ -2038,7 +2096,10 @@ export default {
           const db = this.project.envs[env].db[index]
           Vue.set(db, 'client', this.databaseNames[client])
           if (client !== 'Sqlite') {
-            const { ssl, ...connectionDet } = this.sampleConnectionData[client]
+            const {
+              ssl,
+              ...connectionDet
+            } = this.sampleConnectionData[client]
 
             Vue.set(db, 'connection', {
               ...connectionDet,
@@ -2095,7 +2156,10 @@ export default {
       Vue.set(this.project, 'envs', { ...this.project.envs })
     }
   },
-  fetch({ store, params }) {
+  fetch({
+    store,
+    params
+  }) {
   },
   beforeCreated() {
   },

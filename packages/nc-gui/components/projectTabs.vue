@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="project-container ma-0 pa-0 " style="position: relative">
+  <v-container fluid class="ph-no-capture project-container ma-0 pa-0 " style="position: relative">
     <v-tabs
       ref="projectTabs"
       v-model="activeTab"
@@ -71,7 +71,15 @@
           </div>
           <div v-else-if="tab._nodes.type === 'view'" style="height:100%">
             <!--            <sqlLogAndOutput>-->
-            <ViewTab :ref="'tabs'+index" :nodes="tab._nodes" />
+            <!--            <ViewTab :ref="'tabs'+index" :nodes="tab._nodes" />-->
+            <TableView
+              :ref="'tabs'+index"
+              :is-active="activeTab === `${(tab._nodes && tab._nodes).type || ''}||${(tab._nodes && tab._nodes.dbAlias) || ''}||${tab.name}`"
+              :tab-id="`${pid}||${(tab._nodes && tab._nodes).type || ''}||${(tab._nodes && tab._nodes.dbAlias) || ''}||${tab.name}`"
+              :hide-log-windows.sync="hideLogWindows"
+              :nodes="tab._nodes"
+              is-view
+            />
             <!--            </sqlLogAndOutput>-->
           </div>
           <div v-else-if="tab._nodes.type === 'function'" style="height:100%">
@@ -259,7 +267,7 @@
         :tooltip="$t('tooltip.addTable')"
         icon-class="add-btn"
         :color="[ 'white','grey lighten-2']"
-        @click="dialogCreateTableShow = true"
+        @click="dialogCreateTableShowMethod"
       >
         mdi-plus-box
       </x-icon>
@@ -283,7 +291,7 @@
     <dlg-table-create
       v-if="dialogCreateTableShow"
       v-model="dialogCreateTableShow"
-      @create="$emit('tableCreate',$event); dialogCreateTableShow =false;"
+      @create="$emit('tableCreate',$event); dialogCreateTableShow =false; teleTblCreate()"
     />
 
     <!--    <screensaver v-if="showScreensaver && !($store.state.project.projectInfo && $store.state.project.projectInfo.ncMin)" class="screensaver" />-->
@@ -368,6 +376,13 @@ export default {
     }
   },
   methods: {
+    dialogCreateTableShowMethod(){
+      this.dialogCreateTableShow = true
+      this.$tele.emit('table:create:trigger:mdi-plus-box')
+    },
+    teleTblCreate(){
+      this.$tele.emit('table:create:submit')
+    },
     checkInactiveState() {
       let position = 0
       let idleTime = 0

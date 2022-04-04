@@ -287,7 +287,7 @@
                 <v-tab-item :transition="false">
                   <template v-if="loadRows">
                     <rows-j-excel
-                      ref="tabs3" :table="this.nodes.tn"
+                      ref="tabs3" :table="this.nodes.table_name"
                       :nodes="this.nodes"
                       :newTable="this.newTableCopy"
                       :mtdNewTableUpdate="this.mtdNewTableUpdate"
@@ -307,7 +307,7 @@
           <template v-if="loadRows">
             <rows-xc-data-table
               ref="tabs7"
-              :table="nodes.tn"
+              :table="nodes.table_name"
               :nodes="nodes"
               :new-table="newTableCopy"
               :mtd-new-table-update="mtdNewTableUpdate"
@@ -360,7 +360,7 @@
             <template v-if="loadRows">
               <rows-xc-data-table
                 ref="tabs7"
-                :table="nodes.tn"
+                :table="nodes.table_name"
                 :nodes="nodes"
                 :relation="relation"
                 :relation-type="relationType"
@@ -417,6 +417,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import dlgLabelSubmitCancel from '../utils/dlgLabelSubmitCancel'
+import { isMetaTable } from '../../helpers/xutils'
+import columnList from './tableTabs/columns'
+import indexList from './tableTabs/indexes'
+import triggerList from './tableTabs/triggers'
 import Webhooks from '@/components/project/tableTabs/webhooks'
 import LogicRest from '@/components/project/tableTabs/logicRest'
 import LogicGql from '@/components/project/tableTabs/logicGql'
@@ -424,12 +429,7 @@ import LogicGrpc from '@/components/project/tableTabs/logicGrpc'
 import Validation from '@/components/project/tableTabs/validation'
 import TableAcl from '@/components/project/tableTabs/tableAcl'
 import RowsXcDataTable from '@/components/project/spreadsheet/rowsXcDataTable'
-import dlgLabelSubmitCancel from '../utils/dlgLabelSubmitCancel'
 // import TrialExpired from '../trialExpired'
-import { isMetaTable } from '../../helpers/xutils'
-import columnList from './tableTabs/columns'
-import indexList from './tableTabs/indexes'
-import triggerList from './tableTabs/triggers'
 // import rows from './tableTabs/rows'
 //
 // import AclGql from './tableTabs/aclGql'
@@ -515,7 +515,7 @@ export default {
           dbAlias: this.nodes.dbAlias
         }, 'relationListAll'])
 
-        relationListAll = relationListAll.data.list.filter(rel => rel.rtn === this.nodes.tn).map(({ tn }) => tn)
+        relationListAll = relationListAll.data.list.filter(rel => rel.rtn === this.nodes.table_name).map(({ tn }) => tn)
 
         if (relationListAll.length) {
           this.$toast.info('Table can\'t be  deleted  since Table is being referred in following tables : ' + relationListAll.join(', ')).goAway(10000)
@@ -527,7 +527,7 @@ export default {
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias
         }, 'triggerList', {
-          tn: this.nodes.tn
+          tn: this.nodes.table_name
         }])
 
         for (const trigger of triggerList.data.list) {
@@ -539,7 +539,7 @@ export default {
             'triggerDelete',
             {
               ...trigger,
-              tn: this.nodes.tn,
+              tn: this.nodes.table_name,
               oldStatement: trigger.statement
             }])
 
@@ -552,7 +552,7 @@ export default {
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias
         }, 'columnList', {
-          tn: this.nodes.tn
+          tn: this.nodes.table_name
         }])
 
         columns = columns.data.list
@@ -562,12 +562,12 @@ export default {
           dbAlias: this.nodes.dbAlias
         },
         'tableDelete',
-        { tn: this.nodes.tn, columns }])
+        { tn: this.nodes.table_name, columns }])
 
         this.removeTableTab({
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias,
-          tn: this.nodes.tn
+          tn: this.nodes.table_name
         })
 
         await this.loadTablesFromParentTreeNode({
@@ -604,7 +604,7 @@ export default {
       return process.env.TS_ENABLED
     },
     isMetaTable() {
-      return isMetaTable(this.nodes.tn)
+      return isMetaTable(this.nodes.table_name)
     }
   },
   beforeCreated() {

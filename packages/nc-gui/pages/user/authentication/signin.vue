@@ -79,6 +79,7 @@
                 <!--                </v-btn>-->
 
                 <v-btn
+                  v-t="['login:sign-in']"
                   v-ge="['Sign In', '']"
                   color="primary"
                   large
@@ -285,10 +286,11 @@ export default {
       return this.$store.getters['users/GtrUser']
     },
     type() {
-      return (
-        this.$store.state.project.projectInfo &&
-        this.$store.state.project.projectInfo.authType
-      )
+      return 'jwt'
+      // return (
+      //   this.$store.state.project.projectInfo &&
+      //   this.$store.state.project.projectInfo.authType
+      // )
     },
     googleAuthEnabled() {
       return (

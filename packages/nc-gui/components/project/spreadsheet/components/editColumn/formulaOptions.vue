@@ -60,11 +60,12 @@
 
 <script>
 
-import NcAutocompleteTree from '@/helpers/NcAutocompleteTree'
-import { getWordUntilCaret, insertAtCursor } from '@/helpers'
 import debounce from 'debounce'
 import jsep from 'jsep'
+import { UITypes } from 'nocodb-sdk'
 import formulaList, { validations } from '../../../../../helpers/formulaList'
+import { getWordUntilCaret, insertAtCursor } from '@/helpers'
+import NcAutocompleteTree from '@/helpers/NcAutocompleteTree'
 
 export default {
   name: 'FormulaOptions',
@@ -89,8 +90,15 @@ export default {
           text: fn,
           type: 'function'
         })),
-        ...this.meta.columns.map(c => ({ text: c._cn, type: 'column', c })),
-        ...this.availableBinOps.map(op => ({ text: op, type: 'op' }))
+        ...this.meta.columns.filter(c => !this.column || this.column.id !== c.id).map(c => ({
+          text: c.title,
+          type: 'column',
+          c
+        })),
+        ...this.availableBinOps.map(op => ({
+          text: op,
+          type: 'op'
+        }))
       ]
     },
     acTree() {
@@ -101,35 +109,34 @@ export default {
       return ref
     }
   },
+  watch: {
+    value(v, o) {
+      if (v !== o) {
+        this.formula = this.formula || {}
+        this.formula.value = v || ''
+      }
+    },
+    'formula.value'(v, o) {
+      if (v !== o) {
+        this.$emit('input', v)
+      }
+    }
+  },
   created() {
-    this.formula = this.value ? { ...this.value } : {}
+    this.formula = { value: this.value || '' }
   },
   methods: {
     async save() {
       try {
-        await this.$store.dispatch('meta/ActLoadMeta', {
-          dbAlias: this.nodes.dbAlias,
-          env: this.nodes.env,
-          tn: this.meta.tn,
-          force: true
-        })
-        const meta = JSON.parse(JSON.stringify(this.$store.state.meta.metas[this.meta.tn]))
+        const formulaCol = {
+          title: this.alias,
+          uidt: UITypes.Formula,
+          formula_raw: this.formula.value
+        }
 
-        meta.v.push({
-          _cn: this.alias,
-          formula: {
-            ...this.formula,
-            tree: jsep(this.formula.value)
-          }
-        })
+        const col = await this.$api.dbTableColumn.create(this.meta.id, formulaCol)
 
-        await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-          env: this.nodes.env,
-          dbAlias: this.nodes.dbAlias
-        }, 'xcModelSet', {
-          tn: this.nodes.tn,
-          meta
-        }])
+        console.log(col)
 
         this.$toast.success('Formula column saved successfully').goAway(3000)
         return this.$emit('saved', this.alias)
@@ -139,9 +146,9 @@ export default {
     },
     async update() {
       try {
-        const meta = JSON.parse(JSON.stringify(this.$store.state.meta.metas[this.meta.tn]))
+        const meta = JSON.parse(JSON.stringify(this.$store.state.meta.metas[this.meta.table_name]))
 
-        const col = meta.v.find(c => c._cn === this.column._cn && c.formula)
+        const col = meta.v.find(c => c.title === this.column.title && c.formula)
 
         Object.assign(col, {
           _cn: this.alias,
@@ -156,7 +163,7 @@ export default {
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias
         }, 'xcModelSet', {
-          tn: this.nodes.tn,
+          tn: this.nodes.table_name,
           meta
         }])
         this.$toast.success('Formula column updated successfully').goAway(3000)
@@ -194,7 +201,7 @@ export default {
         }
         pt.arguments.map(arg => this.validateAgainstMeta(arg, arr))
       } else if (pt.type === 'Identifier') {
-        if (this.meta.columns.every(c => c._cn !== pt.name)) {
+        if (this.meta.columns.filter(c => !this.column || this.column.id !== c.id).every(c => c.title !== pt.name)) {
           arr.push(`Column with name '${pt.name}' is not available`)
         }
       } else if (pt.type === 'BinaryExpression') {

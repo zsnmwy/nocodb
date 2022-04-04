@@ -2,7 +2,7 @@
   <!--  <v-dialog v-model="show" width="600">-->
   <v-card width="600" color="">
     <v-card-title v-if="!isForm" class="textColor--text mx-2" :class="{'py-2':isForm}">
-      <span v-if="!isForm">{{ meta ? meta._tn : 'Children' }}</span>
+      <span v-if="!isForm">{{ meta ? meta.title : 'Children' }}</span>
       <v-spacer />
       <v-icon small class="mr-1" @click="loadData()">
         mdi-reload
@@ -19,7 +19,7 @@
         >
           mdi-link
         </v-icon>&nbsp;
-        Link to '{{ meta._tn }}'
+        Link to '{{ meta.title }}'
       </v-btn>
     </v-card-title>
     <v-card-text>
@@ -38,7 +38,7 @@
             >
               mdi-link
             </v-icon>&nbsp;
-            Link to '{{ meta._tn }}'
+            Link to '{{ meta.title }}'
           </v-btn>
         </div>
         <template v-if="isDataAvail">
@@ -52,7 +52,7 @@
             <div class="remove-child-icon d-flex align-center">
               <x-icon
                 v-if="((isPublic && isForm) || (!isPublic && _isUIAllowed('xcDatatableEditable'))) && !readOnly "
-                :tooltip="`Unlink this '${meta._tn}' from '${parentMeta._tn}'`"
+                :tooltip="`Unlink this '${meta.title}' from '${parentMeta.title}'`"
                 :color="['error','grey']"
                 small
                 icon.class="mr-1 mt-n1"
@@ -61,8 +61,8 @@
                 mdi-link-variant-remove
               </x-icon>
               <x-icon
-                v-if="!isPublic && !mm && !bt && !readOnly && _isUIAllowed('xcDatatableEditable')"
-                :tooltip="`Delete row in '${meta._tn}'`"
+                v-if="!isPublic && type === RelationTypes.HAS_MANY && !readOnly && _isUIAllowed('xcDatatableEditable')"
+                :tooltip="`Delete row in '${meta.title}'`"
                 :color="['error','grey']"
                 small
                 @click.stop="$emit('delete',ch,i)"
@@ -91,10 +91,10 @@
 
         <div v-if="isForm" class="mb-2 d-flex align-center justify-center">
           <pagination
-            v-if="!bt && data && data.count > 1"
+            v-if="!bt && data && data.pageInfo&& data.pageInfo.totalRows > 1"
             v-model="page"
             :size="size"
-            :count="data && data.count"
+            :count="data && data.pageInfo&& data.pageInfo.totalRows"
             @input="loadData"
           />
         </div>
@@ -102,10 +102,10 @@
     </v-card-text>
     <v-card-actions v-if="!isForm" class="justify-center flex-column" :class="{'py-0':isForm}">
       <pagination
-        v-if="!bt && data && data.count > 1"
+        v-if="!bt && data && data.pageInfo&& data.pageInfo.totalRows > 1"
         v-model="page"
         :size="size"
-        :count="data && data.count"
+        :count="data && data.pageInfo&& data.pageInfo.totalRows"
         class="mb-3"
         @input="loadData"
       />
@@ -115,6 +115,7 @@
 </template>
 
 <script>
+import { RelationTypes } from 'nocodb-sdk'
 import Pagination from '@/components/project/spreadsheet/components/pagination'
 
 export default {
@@ -151,6 +152,7 @@ export default {
     password: String
   },
   data: () => ({
+    RelationTypes,
     data: null,
     page: 1
   }),
@@ -178,28 +180,61 @@ export default {
   methods: {
     async loadData() {
       if ((!this.isForm && this.isPublic) && this.$route.params.id) {
-        this.data = await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'sharedViewNestedChildDataGet', {
-          password: this.password,
-          limit: this.size,
-          tn: this.tn,
-          view_id: this.$route.params.id,
-          row_id: this.rowId,
-          offset: this.size * (this.page - 1),
-          query: this.query,
-          _cn: this.column._cn,
-          ptn: this.parentMeta.tn,
-          ctn: this.meta.tn,
-          type: this.type
-        }])
+        // this.data = await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'sharedViewNestedChildDataGet', {
+        //   password: this.password,
+        //   limit: this.size,
+        //   tn: this.table_name,
+        //   view_id: this.$route.params.id,
+        //   row_id: this.rowId,
+        //   offset: this.size * (this.page - 1),
+        //   query: this.query,
+        //   _cn: this.column.title,
+        //   ptn: this.parentMeta.table_name,
+        //   ctn: this.meta.table_name,
+        //   type: this.type
+        // }])
+
+        if (this.column && this.column.colOptions && this.rowId) {
+          this.data = (await this.$api.public.dataNestedList(
+            this.$route.params.id,
+            this.rowId,
+            this.column.colOptions.type,
+            this.column.fk_column_id || this.column.id, {
+              limit: this.size,
+              offset: this.size * (this.page - 1)
+            // query: this.query,
+            }, {}))
+        }
+
         return
       }
 
-      if (!this.api || this.isNew) { return }
-      this.data = await this.api.paginatedList({
-        limit: this.size,
-        offset: this.size * (this.page - 1),
-        ...this.queryParams
-      })
+      if (this.isNew) {
+        return
+      }
+      if (this.column && this.column.colOptions) {
+        this.data = (await this.$api.data.nestedList(
+          this.column.fk_model_id,
+          this.rowId,
+          this.column.id,
+          this.column.colOptions.type,
+          {
+            query: {
+              limit: this.size,
+              offset: this.size * (this.page - 1)
+              // ...this.queryParams
+            }
+          }))
+      } else {
+        this.data = (await this.$api.data.list(
+          this.meta.id, {
+            query: {
+              limit: this.size,
+              offset: this.size * (this.page - 1),
+              ...this.queryParams
+            }
+          }))
+      }
     }
   }
 }
