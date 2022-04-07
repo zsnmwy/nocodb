@@ -71,6 +71,7 @@ if (process.env.targetEnv === 'DEV') {
     searchAndReplace('nocodb-sdk')
     .then(() => {
         bumbVersionAndSave()
+        console.log(fs.readFileSync(path.join(__dirname, '..', 'packages', 'nc-gui', 'package.json'), 'utf8'))
     })
 } else {
     bumbVersionAndSave()
