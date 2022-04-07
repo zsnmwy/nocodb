@@ -53,7 +53,8 @@ jobs:
           cd ../..
           targetEnv=${{ github.event.inputs.targetEnv || inputs.targetEnv }} node scripts/upgradeNocodbSdk.js
           cd packages/nc-gui
-          npm install
+          cat package.json
+          npm install --force
           targetEnv=${{ github.event.inputs.targetEnv || inputs.targetEnv }} targetVersion=${{ github.event.inputs.tag || inputs.tag }} npm run build:copy:jsdeliver
           cd ../..
           npm install
