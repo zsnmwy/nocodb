@@ -42,6 +42,7 @@ import Validator from 'validator';
 import { NcError } from '../../../noco/meta/helpers/catchError';
 
 const GROUP_COL = '__nc_group_id';
+
 /**
  * Base class for models
  *
@@ -1135,11 +1136,13 @@ class BaseModelSqlv2 {
 
               // defining HasMany count method within GQL Type class
               proto[column.title] = async function() {
-                return (
-                  this?.[cCol?.title] !== null &&
-                  this?.[cCol?.title] != undefined &&
-                  (await readLoader.load(this?.[cCol?.title]))
-                );
+                if (
+                  this?.[cCol?.title] === null ||
+                  this?.[cCol?.title] === undefined
+                )
+                  return null;
+
+                return await readLoader.load(this?.[cCol?.title]);
               };
               // todo : handle mm
             }
@@ -1510,6 +1513,7 @@ class BaseModelSqlv2 {
       throw e;
     }
   }
+
   async bulkUpdate(datas: any[]) {
     let transaction;
     try {
@@ -1546,6 +1550,7 @@ class BaseModelSqlv2 {
       throw e;
     }
   }
+
   async bulkUpdateAll(
     args: { where?: string; filterArr?: Filter[] } = {},
     data
@@ -1589,6 +1594,7 @@ class BaseModelSqlv2 {
       throw e;
     }
   }
+
   async bulkDelete(ids: any[]) {
     let transaction;
     try {

@@ -126,8 +126,7 @@ export default {
       }
     },
     isForm: Boolean,
-    // todo: remove boolean after api correction
-    value: [Array, Object, Boolean],
+    value: [Array, Object],
     meta: [Object],
     nodes: [Object],
     row: [Object],
