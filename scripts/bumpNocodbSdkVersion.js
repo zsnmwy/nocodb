@@ -15,4 +15,4 @@ if (process.env.targetEnv === 'DEV') {
 } else {
     packageJson.version = version
 }
-fs.writeFileSync(path.join(__dirname, '..', 'packages', 'nocodb-sdk', 'package.json'), JSON.stringify(packageJson, 0, 2))
+fs.writeFileSync(path.join(__dirname, '..', 'packages', 'nocodb-sdk', 'package.json'), JSON.stringify(packageJson, 0, 2),'utf8')
