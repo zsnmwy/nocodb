@@ -271,7 +271,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 import treeViewIcons from '../helpers/treeViewIcons'
 import TableView from './project/table'
-import ViewTab from './project/view'
 import FunctionTab from './project/function'
 import ProcedureTab from './project/procedure'
 import SequenceTab from './project/sequence'
@@ -316,7 +315,6 @@ export default {
     XcMeta,
     ApiClientSwaggerTab,
     TableView,
-    ViewTab,
     FunctionTab,
     ProcedureTab,
     ApisTab,
@@ -412,12 +410,6 @@ export default {
       updateActiveTabx: 'tabs/activeTabCtx'
     }),
     tabActivated(tab) {
-
-      // if (tab._nodes.type === 'apiClientDir' || tab._nodes.type === 'sqlClientDir' || tab._nodes.type === 'sqlEditor') {
-      //   this.$store.commit('windows/MutToggleLogWindowFromTab', {client: true, status: true});
-      // } else {
-      //   this.$store.commit('windows/MutToggleLogWindowFromTab', {client: false, status: false});
-      // }
     }
   },
   computed: {

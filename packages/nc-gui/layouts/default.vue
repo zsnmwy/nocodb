@@ -9,7 +9,6 @@
       dense
       dark
       height="48"
-      @contextmenu="showAirtabLikeLink++"
     >
       <div class="d-flex align-center pt-1" style="flex: 1">
         <v-toolbar-title>
@@ -261,36 +260,6 @@
       :mtd-dialog-cancel="dialogDebugCancel"
     />
     <settings v-model="settingsDialog" />
-
-    <v-dialog
-      v-model="terminalDialog"
-      width="70%"
-    >
-      <x-term v-if="terminalDialog" is-modal style="min-height:400px" />
-    </v-dialog>
-    <v-snackbar v-model="releaseDownloadedSnackbar" :top="true" color="info">
-      New update successfully downloaded. Restart to update.
-      <v-btn @click.native="updateAndRestart()">
-        Update & Restart
-      </v-btn>
-      <v-btn @click.native="releaseDownloadedSnackbar = false">
-        <!-- Close -->
-        {{ $t('general.close') }}
-      </v-btn>
-    </v-snackbar>
-
-    <v-snackbar v-model="downloadAvailSnackbar" :top="true" color="info">
-      New update available. Upgrade?
-      <v-btn @click.native="upgrade()">
-        Upgrade
-      </v-btn>
-      <v-btn @click.native="downloadAvailSnackbar = false">
-        <!-- Close -->
-        {{ $t('general.close') }}
-      </v-btn>
-    </v-snackbar>
-    <change-env v-model="showChangeEnv" />
-
     <loader />
   </v-app>
   <v-app v-else>
@@ -304,40 +273,27 @@
 import ReleaseInfo from '@/components/releaseInfo'
 import { mapGetters, mapActions, mapMutations } from 'vuex'
 import 'splitpanes/dist/splitpanes.css'
-import ChangeEnv from '../components/changeEnv'
 import XBtn from '../components/global/xBtn'
 import dlgUnexpectedError from '../components/utils/dlgUnexpectedError'
 import settings from '../components/settings'
-import xTerm from '../components/xTerm'
 import { copyTextToClipboard } from '@/helpers/xutils'
 import Snackbar from '~/components/snackbar'
 import Language from '~/components/utils/language'
 import Loader from '~/components/loader'
-import TemplatesModal from '~/components/templates/templatesModal'
-import BetterUX from '~/components/utils/betterUX'
-import SettingsModal from '~/components/settings/settingsModal'
 import PreviewAs from '~/components/previewAs'
-import GithubStarBtn from '~/components/githubStarBtn'
 import ShareOrInviteModal from '~/components/auth/shareOrInviteModal'
 
 export default {
   components: {
     ShareOrInviteModal,
-    GithubStarBtn,
     PreviewAs,
-    SettingsModal,
-    BetterUX,
-    TemplatesModal,
     Loader,
     ReleaseInfo,
     Language,
-    ChangeEnv,
     XBtn,
     Snackbar,
     dlgUnexpectedError,
-    // notification,
-    settings,
-    xTerm
+    settings
   },
   data: () => ({
     clickCount: true,
@@ -351,12 +307,10 @@ export default {
       viewer: 'mdi-eye-outline'
     },
     showAppStore: false,
-    showAirtabLikeLink: 0,
     showChangeEnv: false,
     feedDialog: false,
     releaseDownloadedSnackbar: false,
     downloadAvailSnackbar: false,
-    terminalDialog: false,
     settingsDialog: false,
     environmentDialog: false,
     darkTheme: true,
@@ -369,13 +323,10 @@ export default {
     right: true,
     title: 'Xgene',
     isHydrated: false,
-
     snackbar: false,
     timeout: 10000,
-    text: 'contact@senseprofit.com',
     rolesList: null,
     shareModal: false
-
   }),
   computed: {
     ...mapGetters({
@@ -510,22 +461,6 @@ export default {
       }
     },
     handleMigrationsMenuClick(item, closeMenu = true, sqlEditor = false) {
-    },
-
-    terminalTabAdd() {
-      if (this.isDashboard) {
-        const tabIndex = this.tabs.findIndex(el => el.key === 'terminal')
-        if (tabIndex !== -1) {
-          this.changeActiveTab(tabIndex)
-        } else {
-          const item = { name: 'Terminal', key: 'terminal' }
-          item._nodes = {}
-          item._nodes.type = 'terminal'
-          this.$store.dispatch('tabs/ActAddTab', item)
-        }
-      } else {
-        this.terminalDialog = true
-      }
     },
     apiClientTabAdd() {
       // if (this.$route.path.indexOf('dashboard') > -1) {

@@ -3,7 +3,7 @@ export default {
   owner: '*',
   guest: {},
   editor: {
-    airTable: true,
+    smartSheet: true,
     xcDatatableEditable: true,
     column: true,
     tableAttachment: true,
@@ -16,12 +16,12 @@ export default {
     filterSync: true
   },
   commenter: {
-    airTable: true,
+    smartSheet: true,
     column: true,
     rowComments: true
   },
   viewer: {
-    airTable: true,
+    smartSheet: true,
     column: true
   },
   user: {
