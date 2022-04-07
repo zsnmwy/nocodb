@@ -331,15 +331,6 @@ export default {
               tn: this.nodes.table_name || this.nodes.view_name,
               whereConditions: row.keys
             }])
-
-            // await this.sqlMgr.sqlOp({
-            //   env: this.nodes.env,
-            //   dbAlias: this.nodes.dbAlias
-            // }, 'delete', {
-            //   tn: this.nodes.table_name,
-            //   whereConditions: row.keys
-            // });
-
             this.rows.splice(index, 1)
           }
           this.$toast.success('Row deleted successfully').goAway(3000)

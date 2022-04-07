@@ -500,14 +500,7 @@ export default {
     validatorEditDialog: false
   }),
   async created() {
-    // try {
-    // await this.loadColumnList();
     await this.loadTableModelMeta()
-    // } catch (e) {
-    //   throw e
-    // } finally {
-    //
-    // }
   },
   methods: {
 

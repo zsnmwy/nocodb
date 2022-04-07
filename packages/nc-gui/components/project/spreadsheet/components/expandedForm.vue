@@ -461,7 +461,6 @@ export default {
           if (!id) {
             return this.$toast.info('Update not allowed for table which doesn\'t have primary Key').goAway(3000)
           }
-          // await this.api.update(id, updatedObj, this.oldRow)
           await this.$api.data.update(this.viewId || this.meta.id, id, updatedObj)
           for (const key of Object.keys(updatedObj)) {
             // audit
@@ -507,14 +506,6 @@ export default {
     },
     async saveComment() {
       try {
-        // await this.$store.dispatch('sqlMgr/ActSqlOp', [
-        //   { dbAlias: this.dbAlias },
-        //   'xcAuditCommentInsert', {
-        //     model_id: this.meta.columns.filter(c => c.pk).map(c => this.localState[c.title]).join('___'),
-        //     model_name: this.meta.title,
-        //     description: this.comment
-        //   }
-        // ])
 
         await this.$api.utils.commentRow({
           fk_model_id: this.meta.id,

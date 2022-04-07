@@ -185,16 +185,6 @@ export default {
         column.altered = 4
         const columns = this.meta.columns.slice()
         columns[this.columnIndex] = column
-        // await this.$store.dispatch('sqlMgr/ActSqlOpPlus', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'tableUpdate', {
-        //   table_name: this.nodes.table_name,
-        //   title: this.meta.title,
-        //   originalColumns: this.meta.columns,
-        //   columns
-        // }])
-
         await this.$api.dbTableColumn.delete(this.meta.id, column.id)
 
         this.$emit('colDelete')
@@ -207,24 +197,6 @@ export default {
     async setAsPrimaryValue() {
       // todo: pass only updated fields
       try {
-        // const meta = JSON.parse(JSON.stringify(this.meta))
-        // for (const col of meta.columns) {
-        //   if (col.pv) {
-        //     delete col.pv
-        //   }
-        //   if (col.column_name === this.column.column_name) {
-        //     col.pv = true
-        //   }
-        // }
-
-        // await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'xcModelSet', {
-        //   table_name: this.nodes.table_name,
-        //   meta
-        // }])
-
         await this.$api.dbTableColumn.primaryColumnSet(this.meta.id, this.column.id)
         this.$toast.success('Successfully updated as primary column').goAway(3000)
       } catch (e) {

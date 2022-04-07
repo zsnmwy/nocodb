@@ -526,7 +526,6 @@ export default {
   },
   async created() {
     this.genColumnData()
-    // await this.loadDataTypes();
   },
   mounted() {
     this.focusInput()
@@ -685,7 +684,6 @@ export default {
                 .rcn
             }
           ])
-          // await this.loadColumnList();
           this.relationDeleteDlg = false
           this.relation = null
           this.$toast.success('Foreign Key deleted successfully').goAway(3000)

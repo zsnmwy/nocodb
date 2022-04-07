@@ -528,59 +528,6 @@ export default {
         this.dialogShow = false
       } else {
         // todo : check relations and triggers
-        // let relationListAll = await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'relationListAll'])
-        //
-        // relationListAll = relationListAll.data.list.filter(rel => rel.rtn === this.nodes.table_name).map(({ tn }) => tn)
-        //
-        // if (relationListAll.length) {
-        //   this.$toast.info('Table can\'t be  deleted  since Table is being referred in following tables : ' + relationListAll.join(', ')).goAway(10000)
-        //   this.dialogShow = false
-        //   return
-        // }
-        //
-        // const triggerList = await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'triggerList', {
-        //   tn: this.nodes.table_name
-        // }])
-        //
-        // for (const trigger of triggerList.data.list) {
-        //   const result = await this.$store.dispatch('sqlMgr/ActSqlOpPlus', [
-        //     {
-        //       env: this.nodes.env,
-        //       dbAlias: this.nodes.dbAlias
-        //     },
-        //     'triggerDelete',
-        //     {
-        //       ...trigger,
-        //       tn: this.nodes.table_name,
-        //       oldStatement: trigger.statement
-        //     }])
-        //
-        //   console.log('triggerDelete result ', result)
-        //
-        //   this.$toast.success('Trigger deleted successfully').goAway(1000)
-        // }
-        //
-        // let columns = await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'columnList', {
-        //   tn: this.nodes.table_name
-        // }])
-        //
-        // columns = columns.data.list
-        //
-        // await this.$store.dispatch('sqlMgr/ActSqlOpPlus', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // },
-        // 'tableDelete',
-        // { tn: this.nodes.table_name, columns }])
         try {
           await this.$api.dbTable.delete(this.deleteId)
 

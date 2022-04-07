@@ -294,9 +294,7 @@ export default {
         return
       }
       const id = this.meta.columns.filter(c => c.pk).map(c => this.row[c.title]).join('___')
-      // await this.api.update(id, { [_cn]: null }, this.row)
       // todo: audit
-      // await this.$api.data.update(this.meta.id, id, { [_cn]: null })
       await this.$api.data.nestedDelete(
         this.meta.id,
         id,
@@ -377,13 +375,6 @@ export default {
         this.newRecordModal = false
         return
       }
-      // await this.api.update(id, {
-      //   [_cn]: parseIfInteger(parent[this.parentReferenceKey])
-      // }, {
-      //   [_cn]: this.value && this.value[this.parentPrimaryKey]
-      // })
-
-      // await this.$api.data.update(this.meta.id, id, { [_cn]: parseIfInteger(parent[this.parentReferenceKey]) })
 
       await this.$api.data.nestedAdd(
         this.meta.id,

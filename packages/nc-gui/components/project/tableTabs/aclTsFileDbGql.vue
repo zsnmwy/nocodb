@@ -297,13 +297,6 @@ export default {
     },
     async save() {
       try {
-        // await this.sqlMgr.xcResolverPolicyUpdate({
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias,
-        //   tn: this.nodes.table_name,
-        //   data: this.data
-        // })
-
         await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcResolverPolicyUpdate', {
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias,

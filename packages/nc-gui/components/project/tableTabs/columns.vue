@@ -1192,8 +1192,6 @@ export default {
             relationObject
           ])
         }
-
-        // await this.scaffold();
         await this.loadColumnList()
         this.selectedColForNewRelation = null
         this.dialogShow = false

@@ -174,12 +174,12 @@ export default {
       this.$tele.emit('api-mgmt:token:copy')
     },
     async loadApiTokens() {
-      this.tokens = (await this.$api.apiToken.list(this.$store.state.project.projectId))// await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcApiTokenList'])
+      this.tokens = (await this.$api.apiToken.list(this.$store.state.project.projectId))
     },
     async generateToken() {
       try {
         this.newTokenDialog = false
-        await this.$api.apiToken.create(this.$store.state.project.projectId, this.tokenObj) // await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcApiTokenCreate', this.tokenObj])
+        await this.$api.apiToken.create(this.$store.state.project.projectId, this.tokenObj)
         this.$toast.success('Token generated successfully').goAway(3000)
         this.tokenObj = {}
         await this.loadApiTokens()

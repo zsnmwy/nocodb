@@ -741,14 +741,6 @@ export default {
     async deleteHook(item, i) {
       try {
         if (item.id) {
-          // await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-          //   env: this.nodes.env,
-          //   dbAlias: this.nodes.dbAlias
-          // }, 'tableXcHooksDelete', {
-          //   id: item.id,
-          //   title: item.title,
-          //   tn: this.nodes.table_name
-          // }])
           await this.$api.dbTableWebhook.delete(item.id)
           this.hooks.splice(i, 1)
         } else {

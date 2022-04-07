@@ -287,10 +287,6 @@ export default {
     },
     async save() {
       try {
-        // await this.sqlMgr.writeFile({
-        //   path: this.policyPath,
-        //   data: `module.exports.permissions = ${JSON.stringify(this.data1, 0, 2)}`
-        // });
         await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'writeFile', {
           path: this.policyPath,
           data: `module.exports.permissions = ${JSON.stringify(this.data1, 0, 2)}`

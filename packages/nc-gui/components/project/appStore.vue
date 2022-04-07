@@ -224,12 +224,6 @@ export default {
     },
     async confirmResetPlugin() {
       try {
-        // await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcPluginSet', {
-        //   input: null,
-        //   id: this.resetPluginRef.id,
-        //   title: this.resetPluginRef.title,
-        //   uninstall: true
-        // }])
         await this.$api.plugin.update(this.resetPluginRef.id, {
           input: null,
           active: 0

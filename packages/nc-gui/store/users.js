@@ -221,11 +221,11 @@ export const actions = {
       if (!data.ignore_subscribe) {
         delete data.ignore_subscribe
       }
-      // const userRes = await this.$axios.post('/auth/signup?tool=1', data)
+
       const userRes = await this.$api.auth.signup(data)
-      // console.log(userRes);
+
       commit('MutSetToken', userRes.token)
-      // await dispatch('ActGetUserUiAbility')
+
       await dispatch('ActGetUserDetails')
     } catch (e) {
       console.log('ActSignUp error', e.response)
@@ -239,23 +239,12 @@ export const actions = {
     // console.log('in action signin');
     let err = null
     try {
-      // const userPromise = await this.$axios.post('/auth/signin?tool=1', data)
-      const userPromise = await this.$api.auth.signin(data)
-      // console.log(userPromise);
-      commit('MutSetToken', userPromise.token)
-      // await dispatch('ActGetUserUiAbility')
-      await dispatch('ActGetUserDetails')
 
-      //
-      // let userPromise = await this.$axios.post('/auth/signin?tool=1', data);
-      // //console.log('userPromise', userPromise);
-      // commit('MutSetUser', userPromise.data);
-      //
-      // let paidUser = await this.$axios.get('/subscription/isActive');
-      // console.log('paidUser', paidUser, paidUser.data.isActive);
-      // commit('MutSetPaidUser', paidUser.data.isActive);
-      //
-      // await dispatch('ActGetUserUiAbility')
+      const userPromise = await this.$api.auth.signin(data)
+
+      commit('MutSetToken', userPromise.token)
+
+      await dispatch('ActGetUserDetails')
     } catch (e) {
       err = e.response
     }
@@ -264,20 +253,10 @@ export const actions = {
   },
 
   async ActSignOut({ commit, state }) {
-    // console.log('in action signout');
-
     let err = null
 
     try {
-      // console.log(err);
-
       // todo: sdk
-
-      // await this.$axios.post('/auth/signout', null, {
-      //   headers: {
-      //     'xc-auth': state.token
-      //   }
-      // })
       commit('MutSetUser', null)
       commit('MutSetToken', null)
       commit('MutMasterKey', null)

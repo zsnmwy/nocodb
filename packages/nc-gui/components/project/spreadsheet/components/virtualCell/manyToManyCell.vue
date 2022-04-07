@@ -315,18 +315,8 @@ export default {
         return
       }
       await Promise.all([this.loadChildMeta(), this.loadAssociateTableMeta()])
-
-      // const _pcn = this.meta.columns.find(c => c.id === this.column.colOptions.fk_child_column_id).title
-      // const _ccn = this.childMeta.columns.find(c => c.id === this.column.colOptions.fk_parent_column_id).title
-      //
-      // const apcn = this.assocMeta.columns.find(c => c.id === this.column.colOptions.fk_mm_child_column_id).column_name
-      // const accn = this.assocMeta.columns.find(c => c.id === this.column.colOptions.fk_mm_parent_column_id).column_name
-
       const cid = this.childMeta.columns.filter(c => c.pk).map(c => child[c.title]).join('___')
       const pid = this.meta.columns.filter(c => c.pk).map(c => this.row[c.title]).join('___')
-      // const id = this.assocMeta.columns.filter(c => c.column_name === apcn || c.column_name === accn).map(c => c.column_name === apcn ? this.row[_pcn] : child[_ccn]).join('___')
-      // await this.assocApi.delete(id)
-      // await this.$api.data.delete(this.assocMeta.id, id)
       await this.$api.data.nestedDelete(
         this.meta.id,
         pid,

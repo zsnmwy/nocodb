@@ -324,7 +324,6 @@ export default {
         } else {
           const id = this.childMeta.columns.filter(c => c.pk).map(c => child[c.title]).join('___')
           try {
-            // await this.childApi.delete(id)
             await this.$api.data.delete(this.childMeta.id, id)
             this.dialogShow = false
             this.$emit('loadTableData')
@@ -351,12 +350,7 @@ export default {
         this.$toast.info('Unlink is not possible, instead add to another record.').goAway(3000)
         return
       }
-      // const title = column.title
       const id = this.childMeta.columns.filter(c => c.pk).map(c => child[c.title]).join('___')
-      // await this.childApi.update(id, { [title]: null }, child)
-
-      // await this.$api.data.update(this.childMeta.id, id, { [title]: null })
-
       await this.$api.data.nestedDelete(
         this.meta.id,
         this.parentId,
@@ -396,17 +390,7 @@ export default {
       }
 
       const id = this.childMeta.columns.filter(c => c.pk).map(c => child[c.title]).join('___')
-      // const title = this.childForeignKey
       this.newRecordModal = false
-
-      // await this.childApi.update(id, {
-      //   [title]: parseIfInteger(this.parentId)
-      // }, {
-      //   [title]: child[this.childForeignKey]
-      // })
-
-      // await this.$api.data.update(this.childMeta.id, id, { [title]: parseIfInteger(this.parentId) })
-
       await this.$api.data.nestedAdd(
         this.meta.id,
         this.parentId,

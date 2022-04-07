@@ -293,14 +293,6 @@ export default {
     },
     async save() {
       try {
-        //
-        // await this.sqlMgr.xcRpcPolicyUpdate({
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias,
-        //   table_name: this.nodes.table_name,
-        //   data: this.data
-        // })
-
         await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcRpcPolicyUpdate', {
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias,

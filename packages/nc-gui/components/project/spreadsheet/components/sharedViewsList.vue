@@ -164,9 +164,6 @@ export default {
     },
     async deleteLink(id) {
       try {
-        // await this.$store.dispatch('sqlMgr/ActSqlOp', [{ dbAlias: this.nodes.dbAlias }, 'deleteSharedViewLink', {
-        //   id
-        // }])
         await this.$api.dbViewShare.delete(id)
         this.$toast.success('Deleted shared view successfully').goAway(3000)
         await this.loadSharedViewsList()

@@ -153,11 +153,6 @@ export default {
     },
     async saveSettings() {
       try {
-        // await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcPluginSet', {
-        //   input: this.settings,
-        //   id: this.pluginId,
-        //   title: this.plugin.title
-        // }])
         await this.$api.plugin.update(this.id, {
           input: JSON.stringify(this.settings),
           active: 1

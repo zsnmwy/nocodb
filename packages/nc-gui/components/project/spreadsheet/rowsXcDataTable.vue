@@ -972,17 +972,6 @@ export default {
     async createTableIfNewTable() {
       if (this.nodes.newTable && !this.nodes.tableCreated) {
         const columns = this.sqlUi.getNewTableColumns().filter(col => this.nodes.newTable.columns.includes(col.column_name))
-        // await this.$store.dispatch('sqlMgr/ActSqlOpPlus', [
-        //   {
-        //     env: this.nodes.env,
-        //     dbAlias: this.nodes.dbAlias
-        //   },
-        //   'tableCreate',
-        //   {
-        //     tn: this.nodes.table_name,
-        //     title: this.nodes.title,
-        //     columns
-        //   }])
         await this.$api.dbTable.create(
           this.$store.state.project.projectId,
           this.$store.state.project.project.bases[0].id,
@@ -1165,8 +1154,6 @@ export default {
           if (!id) {
             return this.$toast.info('Delete not allowed for table which doesn\'t have primary Key').goAway(3000)
           }
-
-          // await this.api.delete(id)
           await this.$api.data.delete(this.meta.id, id)
         }
         this.data.splice(this.rowContextMenu.index, 1)
@@ -1193,17 +1180,13 @@ export default {
             if (!id) {
               return this.$toast.info('Delete not allowed for table which doesn\'t have primary Key').goAway(3000)
             }
-
-            // await this.api.delete(id)
             await this.$api.data.delete(this.meta.id, id)
           }
           this.data.splice(row, 1)
-          // success++
         } catch (e) {
           return this.$toast.error(`Failed to delete row : ${e.message}`).goAway(3000)
         }
       }
-      // if (success) { this.$toast.success(`Deleted ${success} selected row${success > 1 ? 's' : ''} successfully`).goAway(3000) }
     },
 
     async clearCellValue() {

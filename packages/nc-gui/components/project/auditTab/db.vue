@@ -407,20 +407,6 @@ export default {
     },
     async migrationUp(steps = 99999999999) {
       try {
-        // await this.sqlMgr.migrator().migrationsUp({
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias,
-        //   migrationSteps: steps,
-        //   folder: this.currentProjectFolder,
-        //   sqlContentMigrate: 1
-        // });
-        // await this.sqlMgr.sqlOp(null, 'migrationsUp', {
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias,
-        //   migrationSteps: steps,
-        //   folder: this.currentProjectFolder,
-        //   sqlContentMigrate: 1
-        // });
 
         await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'migrationsUp', {
           env: this.nodes.env,
@@ -437,20 +423,6 @@ export default {
     },
     async migrationDown(steps = 99999999999) {
       try {
-        // await this.sqlMgr.migrator().migrationsDown({
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias,
-        //   migrationSteps: steps,
-        //   folder: this.currentProjectFolder,
-        //   sqlContentMigrate: 1
-        // });
-        // await this.sqlMgr.sqlOp(null, 'migrationsDown', {
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias,
-        //   migrationSteps: steps,
-        //   folder: this.currentProjectFolder,
-        //   sqlContentMigrate: 1
-        // });
         await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'migrationsDown', {
           env: this.nodes.env,
           dbAlias: this.nodes.dbAlias,
