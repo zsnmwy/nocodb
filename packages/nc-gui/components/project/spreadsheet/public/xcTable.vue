@@ -481,7 +481,6 @@ export default {
       shiftKey,
       ctrlKey
     }) {
-      console.log(metaKey, key, altKey, shiftKey, ctrlKey)
       // ctrl + s -> save
       // ctrl + l -> reload
       // ctrl + n -> new

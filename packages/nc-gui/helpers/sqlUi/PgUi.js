@@ -1133,7 +1133,6 @@ export class PgUi {
         columns[i].un = false
         console.log('>> resetting unsigned value', columns[i].column_name)
       }
-      console.log(columns[i].column_name)
     }
   }
 

@@ -124,7 +124,8 @@ export default {
   props: {
     readOnly: Boolean,
     isForm: Boolean,
-    bt: Object,
+    // todo: remove boolean after api correction
+    bt: [Object, Boolean],
     localState: [Array],
     isNew: Boolean,
     value: Boolean,
@@ -146,7 +147,8 @@ export default {
     api: [Object, Function],
     mm: [Object, Boolean],
     isPublic: Boolean,
-    rowId: [String, Number],
+    // todo: remove boolean after api correction
+    rowId: [String, Number, Boolean],
     column: Object,
     type: String,
     password: String

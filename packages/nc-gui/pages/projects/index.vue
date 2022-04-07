@@ -864,39 +864,12 @@ export default {
   async created() {
     this.$store.commit('windows/MutToggleGaEnabled', true)
     this.$store.commit('windows/MutToggleTelemetryEnabled', true)
-
-    // console.log(JSON.stringify(size))
-
     await this.$store.dispatch('users/ActGetUserDetails')
-    // this.$store.commit('windows/MutIsComp', await isComp());
-
-    // new GCP
-    // let user = await this.$axios.get('/api/v1/user/me');
-    // console.log('================ user', user)
-    // if (user.data && user.data.email) {
-    //   this.$store.commit('users/MutSetUser', user.data);
-    //   await this.$store.dispatch('users/ActGetUserUiAbility');
-    // } else {
-    //   this.$store.commit('users/MutSetUser', null);
-    // }
   },
   async mounted() {
     setTimeout(() => (this.showCommunity = true), 2000)
-    // setTimeout(() => {
-    //   if (this.$store.state.windows.showTour.home)
-    //     this.$tours['myTour'].start();
-    // }, 2000)
 
-    // setTimeout(() => this.trialAlert = false, (30 - this.$store.getters['windows/GtrNoOfDaysLeft']) * 15000);
-
-    console.log('=======mounted index')
-    // setTimeout(() => {
-    //   this.$refs.search1.$el.querySelector('input').focus()
-    //   console.log(this.$refs.search1.$el.querySelector('input'))
-    //   console.log('======= within nexttick')
-    // }, 200)
     await this.projectsLoad()
-    // await this.openProjectIfQueryParamFound()
 
     if (this.$route && this.$route.query && this.$route.query.excelUrl) {
       this.excelImportModal = true
@@ -1135,13 +1108,11 @@ export default {
       this.$tele.emit(`project:open:${count}`)
     },
     async projectEdit(project) {
-      console.log('projectEdit')
       this.$router.push({
         path: `project/0?edit=true&projectId=${project.id}`
       })
     },
     async projectOpenFolder(project) {
-      console.log('projectEdit')
     },
 
     async exportMetaZip(projectId) {

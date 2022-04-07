@@ -626,7 +626,6 @@ export default {
       get() {
         let id
         if (this.views) {
-          console.log(this.views)
           const view = this.views.find(v => v.id === this.$route.query.view)
           id = (view && view.id) || ((this.views && this.views[0]) || {}).id
         }
@@ -675,14 +674,6 @@ export default {
       } else {
         this.$set(this.viewsList[event.moved.newIndex], 'order', (this.viewsList[event.moved.newIndex - 1].order + this.viewsList[event.moved.newIndex + 1].order) / 2)
       }
-
-      console.log(this.viewsList)
-
-      // await this.$store.dispatch('sqlMgr/ActSqlOp', [{ dbAlias: 'db' }, 'xcModelViewOrderSet', {
-      //   id: this.viewsList[event.moved.newIndex].id,
-      //   order: this.viewsList[event.moved.newIndex].view_order
-      // }])
-      //
       await this.$api.dbView.update(this.viewsList[event.moved.newIndex].id, {
         title: this.viewsList[event.moved.newIndex].title,
         order: this.viewsList[event.moved.newIndex].order

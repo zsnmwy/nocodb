@@ -18,7 +18,7 @@
     >
       <template #selection="data">
         <v-chip
-          :key="data"
+          :key="data.item"
           small
           class="ma-1 "
           :color="colors[setValues.indexOf(data.item) % colors.length]"

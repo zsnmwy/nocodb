@@ -261,7 +261,6 @@ export default {
     aclInit() {
       this.disableSaveButton = true
       try {
-        // console.log(this.policyPath, this.data1)
         // this.data1 = JSON.parse(JSON.stringify(importFresh(this.policyPath)));
         this.groupRoutes()
         this.initColumnCheckBox()

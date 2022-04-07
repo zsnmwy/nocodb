@@ -50,8 +50,6 @@ export default class SqlMgrv2 {
     const func = this.sqlOp.name;
     log.api(`${func}:args:`, base, op, opArgs);
 
-    console.log(base);
-
     // create sql client for this operation
     const client = this.getSqlClient(base);
 
@@ -74,8 +72,6 @@ export default class SqlMgrv2 {
   public async sqlOpPlus(base: Base, op, opArgs) {
     const func = this.sqlOpPlus.name;
     log.api(`${func}:args:`, base, op, opArgs);
-
-    console.log(base);
 
     // create sql client for this operation
     const sqlClient = this.getSqlClient(base); //await this.projectGetSqlClient(args);
@@ -116,7 +112,6 @@ export default class SqlMgrv2 {
       folder: this.currentProjectFolder,
       sqlClient
     };
-    // console.log(`Migration up args for '${op}'`, migrationArgs);
     await this.migrator(base).migrationsUp(migrationArgs);
 */
     return sqlMigrationStatements;

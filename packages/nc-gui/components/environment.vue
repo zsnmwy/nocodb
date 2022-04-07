@@ -293,7 +293,6 @@ export default {
         'utf-8')
     },
     async saveEnvironment (env) {
-      console.log(env, this.envValues[env])
       try {
         let projectJsonPath, freshProjectObj
 

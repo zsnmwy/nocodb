@@ -320,8 +320,6 @@ export const actions = {
       } else if (data.module === 'Seed' || (data.title || '').toLowerCase() === 'list' || data.type.toLowerCase() === 'list') {
         result = await dispatch('ActSqlOp', [args, op, opArgs])
       } else {
-        console.log(data)
-        // result = await state.sqlMgr.sqlOpPlus(args, op, opArgs);
         result = (await this.$axios({
           url: '?q=sqlOpPlus_' + op,
           baseURL: `${this.$axios.defaults.baseURL}/dashboard`,

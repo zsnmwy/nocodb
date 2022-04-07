@@ -323,7 +323,6 @@ export default {
         table_name: this.nodes.table_name
       })
       try {
-        console.log(this.policyPath, this.data1)
         // this.data1 = JSON.parse(JSON.stringify((await this.sqlMgr.importFresh({path: this.policyPath})).permissions));
         this.data1 = JSON.parse(JSON.stringify((await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'importFresh', { path: this.policyPath }])).permissions))
         this.initColumnCheckBox()

@@ -365,7 +365,6 @@ export default {
 
         term.loadAddon(new WebLinksAddon((e, url) => {
           e.preventDefault()
-          console.log(url)
         }))
         // //
         // //
@@ -389,7 +388,6 @@ export default {
         //   });
         //
         term.onData((data) => {
-          console.log(data)
           client.emit('req', data)
           // term.write(data.replace(/\n/, '\r\n'));
         })
@@ -413,7 +411,6 @@ export default {
       }
     },
     closeTerminal(index) {
-      console.log('======= close terminal')
       try {
         const proc = this.termRef.splice(index, 1)[0]
         proc.term.dispose()

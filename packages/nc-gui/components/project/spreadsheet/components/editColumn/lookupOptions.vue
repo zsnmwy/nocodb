@@ -174,24 +174,6 @@ export default {
     },
     async save() {
       try {
-        // await this.$store.dispatch('meta/ActLoadMeta', {
-        //   dbAlias: this.nodes.dbAlias,
-        //   env: this.nodes.env,
-        //   table_name: this.meta.table_name,
-        //   force: true
-        // })
-        // const meta = JSON.parse(JSON.stringify(this.$store.state.meta.metas[this.meta.table_name]))
-
-        // meta.v.push({
-        //   _cn: this.alias,
-        //   lk: {
-        //     ...this.lookup.table,
-        //     ...this.lookup.column
-        //   }
-        // })
-
-        console.log(this.lookup)
-
         const lookupCol = {
           title: this.alias,
           fk_relation_column_id: this.lookup.table.col.fk_column_id,
@@ -200,14 +182,6 @@ export default {
         }
 
         await this.$api.dbTableColumn.create(this.meta.id, lookupCol)
-
-        // await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'xcModelSet', {
-        //   table_name: this.nodes.table_name,
-        //   meta
-        // }])
 
         return this.$emit('saved', this.alias)
       } catch (e) {

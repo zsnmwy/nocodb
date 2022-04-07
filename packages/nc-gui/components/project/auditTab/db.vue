@@ -329,7 +329,6 @@ export default {
     // },
 
     isMigrationButtonEnabled(name) {
-      console.log('menu -- - ', name)
       return this.nodes.dbConnection.client === 'sqlite3' && name === 'Migration Down'
     },
 
@@ -337,7 +336,6 @@ export default {
       this.selectedMigration.migration = ''
       this.selectedMigration.up = ''
       this.selectedMigration.down = ''
-      console.log(migration)
       this.selectedMigration.migration = migration
       // let result = await this.sqlMgr.migrator().migrationsToSql({
       //   env: this.nodes.env,
@@ -360,7 +358,6 @@ export default {
         title: migration.title,
         titleDown: migration.titleDown
       }])
-      console.log(result)
       this.selectedMigration.up = result.data.object.up
       this.selectedMigration.down = result.data.object.down
     },
@@ -377,7 +374,6 @@ export default {
           onlyList: true
         }
 
-        console.log('this.currentProjectFolder', this.currentProjectFolder)
         // let result = await this.sqlMgr.migrator().migrationsList(migrationArgs);
         // let result = await this.sqlMgr.sqlOp(null, 'migrationsList', migrationArgs);
         const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'migrationsList', migrationArgs])
@@ -394,7 +390,6 @@ export default {
           }
         }
 
-        console.log('loadEnv: ', result)
         this.tableMigrationFiles.data = result.data.object.list
         this.tableMigrationFiles.status = result.data.object.pending
         if (this.tableMigrationFiles.data[0]) {

@@ -595,42 +595,10 @@ export default {
         this.newColumn.title = this.newColumn.column_name
 
         if (this.editColumn) {
-          const col = await this.$api.dbTableColumn.update(this.meta.id, this.column.id, this.newColumn)
-          console.log(col)
-          //   tn: this.nodes.table_name,
-          //   title: this.meta.title,
-          //   originalColumns: this.meta.columns,
-          //   columns
-          // }
-
-          // columns[this.columnIndex] = this.newColumn
+          await this.$api.dbTableColumn.update(this.meta.id, this.column.id, this.newColumn)
         } else {
-          const col = await this.$api.dbTableColumn.create(this.meta.id, this.newColumn)
-          console.log(col)
+          await this.$api.dbTableColumn.create(this.meta.id, this.newColumn)
         }
-
-        //
-        // const columns = [...this.meta.columns]
-        //
-        // if (columns.length) {
-        //   columns[0].table_name = this.nodes.table_name
-        // }
-        //
-
-        //
-        // await this.$store.dispatch('sqlMgr/ActSqlOpPlus', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'tableUpdate', {
-        //   tn: this.nodes.table_name,
-        //   title: this.meta.title,
-        //   originalColumns: this.meta.columns,
-        //   columns
-        // }])
-        //
-        // if (this.isRelation && this.$refs.relation) {
-        //   await this.$refs.relation.saveRelation()
-        // }
 
         this.$emit('saved', this.newColumn.title, this.editColumn ? this.meta.columns[this.columnIndex].title : null)
       } catch (e) {
@@ -717,7 +685,6 @@ export default {
                 .rcn
             }
           ])
-          console.log('relationDelete result ', result)
           // await this.loadColumnList();
           this.relationDeleteDlg = false
           this.relation = null

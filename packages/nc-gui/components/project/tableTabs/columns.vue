@@ -825,7 +825,6 @@ export default {
       }
     },
     async handleKeyDown({ metaKey, key, altKey, shiftKey, ctrlKey }) {
-      console.log(metaKey, key, altKey, shiftKey, ctrlKey)
       // cmd + s -> save
       // cmd + l -> reload
       // cmd + n -> new
@@ -942,8 +941,6 @@ export default {
 
       column.dtx = 'specificType'
 
-      console.log('data type changed', index, column)
-
       this.$set(column, 'uidt', this.sqlUi.getUIType(column))
     },
     async loadColumnList() {
@@ -1026,7 +1023,6 @@ export default {
       this.snack = true
     },
     close() {
-      console.log('Dialog closed')
     },
 
     saveDefaultValue(col) {
@@ -1047,7 +1043,6 @@ export default {
       this.snack = true
     },
     closePrecision() {
-      console.log('Dialog closed')
     },
     showScale(columnObj) {
       return this.sqlUi.showScale(columnObj)
@@ -1064,7 +1059,6 @@ export default {
       this.snack = true
     },
     closeScale() {
-      console.log('Dialog closed')
     },
     removeUnsigned(columns) {
       this.sqlUi.removeUnsigned(columns)
@@ -1160,7 +1154,6 @@ export default {
             }
           })
         } else if (this.edited) {
-          console.log('this.columns[index].altered before', this.columns)
           this.removeUnsigned(this.columns)
           const result = await this.$store.dispatch('sqlMgr/ActSqlOpPlus', [{
             env: this.nodes.env,
@@ -1170,7 +1163,6 @@ export default {
             originalColumns: this.originalColumns,
             columns: this.columns
           }])
-          console.log('update table result', result)
         }
         await this.loadColumnList()
       } catch (e) {
@@ -1199,7 +1191,6 @@ export default {
             relationObject.type === 'real' ? 'relationCreate' : 'xcVirtualRelationCreate',
             relationObject
           ])
-          console.log('relationCreate result: ', result)
         }
 
         // await this.scaffold();
@@ -1243,7 +1234,6 @@ export default {
                 .rcn
             }
           ])
-          console.log('relationDelete result ', result)
           await this.loadColumnList()
           this.relationDeleteDlg = false
           this.selectedColForRelationDelete = null

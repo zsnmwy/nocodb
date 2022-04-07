@@ -345,7 +345,6 @@ export default {
   data: () => ({
     clickCount: true,
     templateModal: false,
-    ghStarText: 'Star',
     swaggerOrGraphiqlUrl: null,
     showScreensaver: false,
     roleIcon: {
@@ -437,7 +436,6 @@ export default {
   mounted() {
     this.selectedEnv = this.$store.getters['project/GtrActiveEnv']
     this.loadProjectInfo()
-    setInterval(() => this.ghStarText = this.ghStarText === 'Star' ? 'Fork' : 'Star', 60000)
   },
   // errorCaptured(err, vm, info) {
   //   console.log("errorCaptured", err, vm, info);
@@ -548,7 +546,6 @@ export default {
         if (tabIndex !== -1) {
           this.changeActiveTab(tabIndex)
         } else {
-          console.log('add terminal tab')
           const item = { name: 'Terminal', key: 'terminal' }
           item._nodes = {}
           item._nodes.type = 'terminal'
@@ -564,7 +561,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add terminal tab')
         const item = { name: 'API Client', key: 'apiClientDir' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'apiClientDir'
@@ -580,7 +576,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add terminal tab')
         const item = { name: 'API Client', key: 'apiClientSwaggerDir' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'apiClientSwaggerDir'
@@ -595,7 +590,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add project info tab')
         const item = { name: 'Info', key: 'projectInfo' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'projectInfo'
@@ -625,7 +619,6 @@ export default {
       // if (tabIndex !== -1) {
       //   this.changeActiveTab(tabIndex);
       // } else {
-      //   console.log('add graphql tab');
       //   let item = {name: 'Graphql Client', key: `graphqlClientDir`}
       //   item._nodes = {env: 'dev'};
       //   item._nodes.type = 'graphqlClientDir';
@@ -638,7 +631,6 @@ export default {
       // if (tabIndex !== -1) {
       //   this.changeActiveTab(tabIndex);
       // } else {
-      //   console.log('add swagger tab');
       //   let item = {name: 'Swagger Client', key: `swaggerClientDir`}
       //   item._nodes = {env: 'dev'};
       //   item._nodes.type = 'swaggerClientDir';
@@ -651,7 +643,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add grpc tab')
         const item = { name: 'gRPC Client', key: 'grpcClient' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'grpcClient'
@@ -663,7 +654,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add roles tab')
         const item = { name: 'Team & Auth ', key: 'roles' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'roles'
@@ -678,7 +668,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add roles tab')
         const item = { name: 'Themes', key: 'projectSettings' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'projectSettings'
@@ -690,7 +679,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add acl tab')
         const item = { name: 'ACL', key: 'acl' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'acl'
@@ -702,7 +690,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add acl tab')
         const item = { name: 'Meta Management', key: 'disableOrEnableModel' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'disableOrEnableModel'
@@ -714,7 +701,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add cron job tab')
         const item = { name: 'Cron Jobs', key: 'cronJobs' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'cronJobs'
@@ -726,7 +712,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add app store tab')
         const item = { name: 'App Store', key: 'appStore' }
         item._nodes = { env: '_noco' }
         item._nodes.type = 'appStore'

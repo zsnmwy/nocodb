@@ -126,9 +126,9 @@ export default {
       }
     },
     isForm: Boolean,
-    value: [Object, Array],
+    // todo: remove boolean after api correction
+    value: [Array, Object, Boolean],
     meta: [Object],
-    bt: Object,
     nodes: [Object],
     row: [Object],
     api: [Object, Function],
@@ -206,9 +206,6 @@ export default {
       }
       // todo: use reduce
       return {
-        // hm: (this.parentMeta && this.parentMeta.v && this.parentMeta.v.filter(v => v.hm).map(({ hm }) => hm.table_name).join()) || '',
-        // bt: (this.parentMeta && this.parentMeta.v && this.parentMeta.v.filter(v => v.bt).map(({ bt }) => bt.rtn).join()) || '',
-        // mm: (this.parentMeta && this.parentMeta.v && this.parentMeta.v.filter(v => v.mm).map(({ mm }) => mm.rtn).join()) || ''
       }
     },
     parentAvailableColumns() {

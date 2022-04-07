@@ -1019,7 +1019,6 @@ export default {
           template = JSON.parse(template)
         }
 
-        console.log(template)
         this.parseTemplate(template)
       } catch (e) {
         this.$toast.error(e.message).goAway(5000)
@@ -1169,7 +1168,6 @@ export default {
 
           this.$toast.info('Initiating Github for template').goAway(3000)
           const res = await this.$axios.post(`${process.env.NC_API_URL}/api/v1/projectTemplateCreate`, this.projectTemplate)
-          console.log(res)
           this.$toast.success('Initiated Github successfully').goAway(3000)
           window.open(res.data.path, '_blank')
         } else {

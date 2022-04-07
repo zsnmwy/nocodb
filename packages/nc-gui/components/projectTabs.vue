@@ -376,11 +376,11 @@ export default {
     }
   },
   methods: {
-    dialogCreateTableShowMethod(){
+    dialogCreateTableShowMethod() {
       this.dialogCreateTableShow = true
       this.$tele.emit('table:create:trigger:mdi-plus-box')
     },
-    teleTblCreate(){
+    teleTblCreate() {
       this.$tele.emit('table:create:submit')
     },
     checkInactiveState() {
@@ -426,7 +426,6 @@ export default {
       }
     },
     async handleKeyDown(event) {
-      console.log('======== project tabs key handler')
       const activeTabEleKey = `tabs${this.activeTab}`
       let isHandled = false
 

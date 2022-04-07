@@ -420,7 +420,6 @@ export default {
       col.rqd = true
     },
     colPropAIDisabled(col) {
-      // console.log(col);
       if (col.dtx === 'integer' ||
           col.dtx === 'bigInteger' ||
           col.dtx === 'specificType') {
@@ -436,7 +435,6 @@ export default {
     },
 
     colPropUNDisabled(col) {
-      // console.log(col);
       if (col.dtx === 'integer' ||
           col.dtx === 'bigInteger' ||
           col.dt.includes('int')) {

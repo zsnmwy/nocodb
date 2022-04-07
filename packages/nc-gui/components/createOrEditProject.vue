@@ -1487,20 +1487,15 @@ export default {
       Vue.set(this.databases, panelIndex, tabIndex)
     },
     getProjectJson() {
-      console.log('Project json before creating', this.project)
-
       /**
        * remove UI keys within project
        */
       const xcConfig = JSON.parse(JSON.stringify(this.project))
-      console.log(JSON.stringify(this.project))
-      console.log('Project json after parsing', xcConfig)
       delete xcConfig.ui
 
       for (const env in xcConfig.envs) {
         for (let i = 0; i < xcConfig.envs[env].db.length; ++i) {
           xcConfig.envs[env].db[i].meta.api.type = this.project.projectType
-          console.log('getProjectJson:', env, i, xcConfig.envs[env].db[i])
           if (
             xcConfig.envs[env].db[i].client === 'mysql' ||
             xcConfig.envs[env].db[i].client === 'mysql2'
@@ -1595,7 +1590,6 @@ export default {
         }
       }
 
-      console.log('Project json : after', xcConfig)
       return xcConfig
     },
 
@@ -1718,7 +1712,6 @@ export default {
 
         clearInterval(interv)
         toast.goAway(100)
-        console.log('project created redirect to project page', projectJson, result)
 
         await this.$store.dispatch('project/ActLoadProjectInfo')
 
@@ -1743,10 +1736,8 @@ export default {
     },
 
     mtdDialogGetEnvNameSubmit(envName, cookie) {
-      console.log(envName)
       this.dialogGetEnvName.dialogShow = false
       if (envName in this.project.envs) {
-        console.log('Environment exists')
       } else {
         Vue.set(this.project.envs, envName, {
           db: [
@@ -1786,7 +1777,6 @@ export default {
       }
     },
     mtdDialogGetEnvNameCancel() {
-      console.log('mtdDialogGetTableNameCancel cancelled')
       this.dialogGetEnvName.dialogShow = false
     },
 
@@ -1890,7 +1880,6 @@ export default {
       }
     },
     async newTestConnection(db, env, panelIndex) {
-      console.log(this.project.envs[env][0])
       if (
         db.connection.host === 'localhost' &&
         !this.edit &&
@@ -1921,7 +1910,6 @@ export default {
             'testConnection',
             c1
           ])
-          console.log('test connection result', result)
 
           if (result.code === 0) {
             db.ui.setup = 1
@@ -1936,8 +1924,6 @@ export default {
               if (e === env) {
                 //  ignore
               } else {
-                console.log(this.project.envs[e])
-
                 const c2 = {
                   connection: {
                     ...this.project.envs[e].db[0].connection,
@@ -1989,17 +1975,14 @@ export default {
       }
       let sendAdvancedConfig = false
       const sslOptions = Object.values(connection.ssl).filter(el => !!el)
-      console.log('sslOptions:', sslOptions)
       if (sslOptions[0]) {
         sendAdvancedConfig = true
       } else {
-        console.log('no ssl options')
       }
       return sendAdvancedConfig
     },
 
     handleSSL(db, creating = true) {
-      console.log('handleSSL', db)
       const sendAdvancedConfig = this.sendAdvancedConfig(db.connection)
       if (!sendAdvancedConfig) {
         // args.ssl = undefined;
@@ -2024,12 +2007,8 @@ export default {
       this.$store.commit('notification/MutToggleProgressBar', true)
       try {
         if (!(await this.newTestConnection(db, env, panelIndex))) {
-          // this.activeDbNode.testConnectionStatus = false;
-          //
-
           this.handleSSL(db)
 
-          console.log('testconnection params', db)
           if (db.client === 'sqlite3') {
             db.ui.setup = 1
           } else {
@@ -2040,21 +2019,9 @@ export default {
               },
               client: db.client
             }
-            //
-            // // const result = await this.sqlMgr.testConnection(c1);
-            // const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [
-            //   {
-            //     query: {
-            //       skipProjectHasDb: 1
-            //     }
-            //   },
-            //   'testConnection',
-            //   c1
-            // ])
 
             const result = (await this.$api.utils.testConnection(c1))
 
-            console.log('test connection result', result)
             if (result.code === 0) {
               db.ui.setup = 1
               // this.dialog.heading = "Connection was successful"
@@ -2068,8 +2035,6 @@ export default {
               this.dialog.type = 'error'
               this.dialog.show = true
             }
-
-            console.log('testconnection params : after', db)
           }
         }
       } catch (e) {
@@ -2143,8 +2108,6 @@ export default {
       db.ui.setup = status
     },
     removeDBFromEnv(db, env, panelIndex, dbIndex) {
-      console.log(db, env, panelIndex, dbIndex)
-
       for (const env in this.project.envs) {
         if (this.project.envs[env].db.length > dbIndex) {
           this.project.envs[env].db.splice(dbIndex, 1)
@@ -2237,7 +2200,6 @@ export default {
       try {
         let data = await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcProjectGetConfig'])
         data = JSON.parse(data.config)
-        console.log('created:', data)
         this.constructProjectJsonFromProject(data)
         this.$set(this.project, 'folder', data.folder)
       } catch (e) {

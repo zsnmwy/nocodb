@@ -83,7 +83,6 @@ export default {
   }),
   computed: {
     suggestionsList() {
-      console.log(this)
       const unsupportedFnList = this.sqlUi.getUnsupportedFnList()
       return [
         ...this.availableFunctions.filter(fn => !unsupportedFnList.includes(fn)).map(fn => ({
@@ -135,8 +134,6 @@ export default {
         }
 
         const col = await this.$api.dbTableColumn.create(this.meta.id, formulaCol)
-
-        console.log(col)
 
         this.$toast.success('Formula column saved successfully').goAway(3000)
         return this.$emit('saved', this.alias)

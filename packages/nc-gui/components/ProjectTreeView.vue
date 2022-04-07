@@ -967,7 +967,6 @@ export default {
 
     },
     openUIACL(child) {
-      console.log(child)
       this.disableOrEnableModelTabAdd()
       setTimeout(() => {
         this.$router.push({
@@ -1010,7 +1009,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add app store tab')
         let item = {
           name: 'App Store',
           key: `appStore`
@@ -1049,7 +1047,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add roles tab')
         let item = {
           name: `${this.$t('title.team&auth')} `,
           key: `roles`
@@ -1064,7 +1061,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add acl tab')
         let item = {
           name: `${this.$t('title.metaMgmt')}`,
           key: `disableOrEnableModel`
@@ -1079,7 +1075,6 @@ export default {
       if (tabIndex !== -1) {
         this.changeActiveTab(tabIndex)
       } else {
-        console.log('add audit tab')
         let item = {
           name: `${this.$t('title.audit')}`,
           key: `migrationsDir`
@@ -1345,7 +1340,6 @@ export default {
         this.$tele.emit(action)
 
         if (action) {
-          console.log('action and context', item, action)
           if (action === 'ENV_DB_TABLES_CREATE') {
             this.dialogGetTableName.dialogShow = true
             this.$tele.emit('table:create:trigger:right-click')
@@ -1378,7 +1372,6 @@ export default {
             await this.loadSequences(this.menuItem)
             this.$toast.success('Table refreshed').goAway(1000)
           } else if (action === 'ENV_DB_TABLES_RENAME') {
-            console.log(`${item._nodes.type} Rename`)
             this.dialogRenameTable.cookie = item
             this.dialogRenameTable.dialogShow = true
             this.dialogRenameTable.defaultValue = item.name
@@ -1391,7 +1384,6 @@ export default {
               folder: this.currentProjectFolder,
               sqlContentMigrate: 1,
             })
-            console.log('migrations down done')
           } else if (action === 'SHOW_NODES') {
             console.log('\n_nodes.type = ', item._nodes.type, '\n')
             console.log('_nodes.key = ', item._nodes.key, '\n')
@@ -1403,7 +1395,6 @@ export default {
             action === 'ENV_DB_PROCEDURES_DELETE' ||
             action === 'ENV_DB_SEQUENCES_DELETE'
           ) {
-            console.log(`${item._nodes.type} delete`)
             this.deleteSelectedNode('showDialog', item)
           } else if (action === 'ENV_DB_TABLES_CREATE_STATEMENT') {
             await this.handleSqlStatementGeneration(
@@ -1479,7 +1470,6 @@ export default {
         newItem.tooltip = 'SQL Client'
         newItem.type = 'sqlClientDir'
 
-        console.log('Generated sql client node', sqlClientNode)
 
         this.$toast.success(msg).goAway(2000)
 
@@ -1525,11 +1515,9 @@ export default {
       this.dialogRenameTable.dialogShow = false
       this.dialogRenameTable.defaultValue = null
       this.$toast.success('Table renamed successfully').goAway(3000)
-      console.log(title, cookie)
       this.$tele.emit('table:rename:submit')
     },
     mtdDialogRenameTableCancel() {
-      console.log('mtdDialogGetTableNameCancel cancelled')
       this.dialogRenameTable.dialogShow = false
       this.dialogRenameTable.defaultValue = null
     },
@@ -1592,8 +1580,6 @@ export default {
       this.$set(this.dialogGetTableName, 'dialogShow', false)
     },
     mtdDialogGetTableNameSubmit(tn, cookie) {
-      console.log(tn)
-
       let tables = tn.split(',')
       this.$store.commit('notification/MutToggleProgressBar', true)
       this.dialogGetTableName.dialogShow = false
@@ -1621,11 +1607,9 @@ export default {
       setTimeout(() => this.$store.commit('notification/MutToggleProgressBar', false), 200)
     },
     mtdDialogGetTableNameCancel() {
-      console.log('mtdDialogGetTableNameCancel cancelled')
       this.dialogGetTableName.dialogShow = false
     },
     mtdDialogGetViewNameSubmit(view_name) {
-      console.log(view_name)
       this.$store.dispatch('tabs/ActAddTab', {
         _nodes: {
           env: this.menuItem._nodes.env,
@@ -1644,11 +1628,9 @@ export default {
       this.dialogGetViewName.dialogShow = false
     },
     mtdDialogGetViewNameCancel() {
-      console.log('mtdDialogGetTableNameCancel cancelled')
       this.dialogGetViewName.dialogShow = false
     },
     mtdDialogGetFunctionNameSubmit(function_name) {
-      console.log(function_name)
       this.$store.dispatch('tabs/ActAddTab', {
         _nodes: {
           dbKey: this.menuItem._nodes.dbKey,
@@ -1665,11 +1647,9 @@ export default {
       this.dialogGetFunctionName.dialogShow = false
     },
     mtdDialogGetFunctionNameCancel() {
-      console.log('mtdDialogGetFunctionNameCancel cancelled')
       this.dialogGetFunctionName.dialogShow = false
     },
     mtdDialogGetProcedureNameSubmit(procedure_name) {
-      console.log(procedure_name)
       this.$store.dispatch('tabs/ActAddTab', {
         _nodes: {
           dbKey: this.menuItem._nodes.dbKey,
@@ -1685,7 +1665,6 @@ export default {
       this.dialogGetProcedureName.dialogShow = false
     },
     mtdDialogGetSequenceNameSubmit(sequence_name) {
-      console.log(sequence_name)
       this.$store.dispatch('tabs/ActAddTab', {
         _nodes: {
           dbKey: this.menuItem._nodes.dbKey,
@@ -1702,11 +1681,9 @@ export default {
       this.dialogGetSequenceName.dialogShow = false
     },
     mtdDialogGetProcedureNameCancel() {
-      console.log('mtdDialogGetProcedureNameCancel cancelled')
       this.dialogGetProcedureName.dialogShow = false
     },
     mtdDialogGetSequenceNameCancel() {
-      console.log('mtdDialogGetSequenceNameCancel cancelled')
       this.dialogGetSequenceName.dialogShow = false
     },
     async renameSelectedNode(action = '', item) {

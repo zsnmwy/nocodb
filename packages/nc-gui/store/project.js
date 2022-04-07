@@ -158,12 +158,10 @@ export const getters = {
   },
   projectQueriesFolder(state) {
     // unserializedList.o.folder
-    console.log(state.unserializedList[0])
     return state.unserializedList[0] && state.unserializedList[0].projectJson.queriesFolder
   },
   projectApisFolder(state) {
     // unserializedList.o.folder
-    console.log(state.unserializedList[0])
     return state.unserializedList[0] && state.unserializedList[0].projectJson.apisFolder
   },
   projectApisFolderPath(state) {
@@ -359,31 +357,14 @@ export const actions = {
     dispatch,
     rootState
   }, data) {
-    console.log('args', data)
-
     const {
       key,
       dbKey
     } = data
 
-    // console.time("table");
-    console.log('project data from actions', data)
     const db = deepFind(state.unserializedList, dbKey)
 
     if (db) {
-      console.log('DB found for tables load fn', db)
-      // const client = await sqlMgr.projectGetSqlClient({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // });
-      // const result = await client.tableList();
-      // const result = await dispatch('sqlMgr/ActSqlOpPlus', [
-      //   {
-      //     env: data._nodes.env,
-      //     dbAlias: data._nodes.dbAlias
-      //   },
-      //   "xcTableAndViewList", {includeM2M: rootState.windows.includeM2M}
-      // ], {root: true});
 
       const tables = (await this.$api.dbTable.list(
         state.projectId,
@@ -393,19 +374,12 @@ export const actions = {
         })).list
 
       commit('tables', tables)
-      // if (!result.data.list.length) {
-      //   this.$toast.info('No tables in this schema').goAway(2000);
-      // }
 
-      // result.data.list = result.data.list.filter(t => rootState.windows.metatables || !isMetaTable(t.table_name));
-      console.log('tablelist', tables)
       deepSet(state.unserializedList, tables, `${key}`)
       commit('list', state.unserializedList)
     } else {
       console.error('DB Not found for tables load fn')
     }
-
-    // console.timeEnd("table");
   },
   async loadTables({
     commit,
@@ -468,30 +442,15 @@ export const actions = {
       key,
       dbKey
     } = data
-    // console.log("project data from actions", state, data);
     const db = deepFind(state.unserializedList, dbKey)
 
     if (db) {
-      console.log('DB found for tables load views', db)
-      // const client = await sqlMgr.projectGetSqlClient({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // });
-      // const result = await client.viewList();
-      //
 
       const result = await this.dispatch('sqlMgr/ActSqlOp', [{
         env: data._nodes.env,
         dbAlias: data._nodes.dbAlias
       }, 'viewList'])
-
-      // const result = await sqlMgr.sqlOp({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // }, 'viewList')
-
       if (!result.data.list.length) {
-        console.log('no views')
         this.$toast.info('No views in this schema').goAway(2000)
       }
       deepSet(state.unserializedList, result.data.list, `${key}`)
@@ -520,7 +479,6 @@ export const actions = {
     dispatch
   }, data) {
 
-    console.log('loadViewsFromParentTreeNode', data)
     let dbKey = data._nodes.dbKey || ''
     let {
       key,
@@ -567,17 +525,6 @@ export const actions = {
     const db = deepFind(state.unserializedList, dbKey)
 
     if (db) {
-      console.log('DB found for tables load functions', db)
-      // const client = await sqlMgr.projectGetSqlClient({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // });
-      // const result = await client.functionList();
-
-      // const result = await sqlMgr.sqlOp({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // }, 'functionList')
       const result = await this.dispatch('sqlMgr/ActSqlOp', [{
         env: data._nodes.env,
         dbAlias: data._nodes.dbAlias
@@ -614,7 +561,6 @@ export const actions = {
     state,
     dispatch
   }, data) {
-    console.log('loadFunctionsFromParentTreeNode', data)
     let dbKey = data._nodes.dbKey || ''
     let {
       key,
@@ -662,18 +608,6 @@ export const actions = {
     const db = deepFind(state.unserializedList, dbKey)
 
     if (db) {
-      console.log('DB found for tables load procedures', db)
-      // const client = await sqlMgr.projectGetSqlClient({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // });
-      // const result = await client.procedureList();
-
-      // const result = await sqlMgr.sqlOp({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // }, 'procedureList')
-
       const result = await this.dispatch('sqlMgr/ActSqlOp', [{
         env: data._nodes.env,
         dbAlias: data._nodes.dbAlias
@@ -682,11 +616,6 @@ export const actions = {
       if (!result.data.list.length) {
         this.$toast.info('No procedures in this schema').goAway(2000)
       }
-
-      console.log('_loadProcedures', result, {
-        env: data._nodes.env,
-        dbAlias: data._nodes.dbAlias
-      })
       deepSet(state.unserializedList, result.data.list, `${key}`)
       commit('list', state.unserializedList)
     } else {
@@ -719,17 +648,9 @@ export const actions = {
       key,
       dbKey
     } = data
-    console.log('_loadSequences', data)
-    // console.log("project data from actions", state, data);
     const db = deepFind(state.unserializedList, dbKey)
 
     if (db) {
-      console.log('DB found for tables load sequences', db)
-      // const client = await sqlMgr.projectGetSqlClient({
-      //   env: data._nodes.env,
-      //   dbAlias: data._nodes.dbAlias
-      // });
-      // const result = await client.sequenceList();
       let result = {}
       if (0) {
         result.data = {}
@@ -745,10 +666,6 @@ export const actions = {
         }
 
       }
-      console.log('_loadSequences', result, {
-        env: data._nodes.env,
-        dbAlias: data._nodes.dbAlias
-      })
       deepSet(state.unserializedList, result.data.list, `${key}`)
       commit('list', state.unserializedList)
     } else {
@@ -764,7 +681,6 @@ export const actions = {
       key,
       dbKey
     } = data._nodes
-    console.log('loadSequences')
     await dispatch('_loadSequences', {
       ...data,
       dbKey,
@@ -777,7 +693,6 @@ export const actions = {
     state,
     dispatch
   }, data) {
-    console.log('loadProceduresFromParentTreeNode', data)
     let dbKey = data._nodes.dbKey || ''
     let {
       key,
@@ -800,7 +715,6 @@ export const actions = {
     state,
     dispatch
   }, data) {
-    console.log('loadSequencesFromParentTreeNode', data)
     let dbKey = data._nodes.dbKey || ''
     let {
       key,
@@ -837,12 +751,6 @@ export const actions = {
 
   async ActLoadProjectInfo({ commit }) {
     const projectInfo = (await this.$api.utils.appInfo())
-    //   (await this.$axios({
-    //   url: '/auth/type',
-    //   baseURL: `${this.$axios.defaults.baseURL}/dashboard`,
-    //   method: 'get'
-    // })).data;
-
     commit('MutProjectInfo', projectInfo)
   }
 }

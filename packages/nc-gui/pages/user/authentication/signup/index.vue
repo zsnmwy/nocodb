@@ -356,7 +356,6 @@ export default {
           if (err) {
             this.formUtil.formErr = true
             this.formUtil.formErrMsg = err.data.msg
-            console.log(err.data.msg)
             this.signUpButtonLoading = false
             return
           }

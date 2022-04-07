@@ -41,7 +41,6 @@ export default {
   },
   computed: {
     notification1() {
-      console.log('')
       return this.$store.state.notification.snackbar
     }
   },

@@ -52,7 +52,6 @@
         :row="row"
         :value="row[column.title]"
         :meta="meta"
-        :bt="bt"
         :nodes="nodes"
         :api="api"
         :sql-ui="sqlUi"

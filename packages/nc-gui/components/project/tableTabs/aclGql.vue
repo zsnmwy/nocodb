@@ -272,7 +272,6 @@ export default {
         table_name: this.nodes.table_name
       }])
       try {
-        console.log(this.policyPath, this.data1)
         this.data1 = JSON.parse(
           JSON.stringify(
             (

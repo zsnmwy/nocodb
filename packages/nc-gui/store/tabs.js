@@ -9,7 +9,6 @@ export const state = () => ({
 
 export const mutations = {
   add(state, tab) {
-    console.log('tabs:', tab)
     if (state.list.length >= 8) {
       state.list.shift()
     }
@@ -25,7 +24,6 @@ export const mutations = {
     state.list = []
   },
   active(state, index) {
-    console.log('> > > > active', state, index)
     if (state.list[index]) {
       state.activeTabCtx = { ...state.list[index] }
       state.activeTab = index
@@ -43,7 +41,6 @@ export const mutations = {
   },
   activeTabCtx(state, activeTabCtx) {
     let list = [...state.list]
-    console.log('> > > > activeTabCtx', state, activeTabCtx)
 
     list = list.map((el) => {
       if (el.name === state.activeTabCtx.name) {
@@ -76,15 +73,12 @@ export const mutations = {
 
 export const getters = {
   list(state) {
-    console.log('> > > > list', state)
     return state.list
   },
   activeTab(state) {
-    console.log('> > > > gtr activeTab', state.activeTab)
     return state.activeTab
   },
   activeTabCtx(state) {
-    console.log('> > > > gtr activeTabCtx', state.activeTabCtx)
     return state.activeTabCtx
   }
 }

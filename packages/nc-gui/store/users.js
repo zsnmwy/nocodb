@@ -98,11 +98,6 @@ export const getters = {
 // state variables are modified here
 export const mutations = {
 
-  // MutPlusCounter(state, todos) {
-  //   //console.log('in MutPlusCounter');
-  //   state.counter += 1
-  // },
-
   MutSetUser(state, user) {
     // console.log('in MutPlusCounter', user);
 
@@ -121,7 +116,6 @@ export const mutations = {
   },
 
   MutSetSocialAuthCalled(state, called) {
-    // console.log('in MutPlusCounter', user);
     state.social_auth_called = called
   },
 
@@ -156,14 +150,11 @@ export const actions = {
   },
 
   ActPollSession({ commit, getters, rootGetters }, todo) {
-    console.log('Within action : ActPollSession')
     setInterval(async() => {
-      console.log('Poll section : ')
       if (getters.GtrUser) {
         try {
           const res = await this.$api.auth.me() // this.$axios.get('/user/me')
           if (res === null || !res.email) {
-            console.log('Setting user to null : no session available')
             commit('MutSetUser', null)
           } else {
             commit('MutSetUser', res)
@@ -171,22 +162,18 @@ export const actions = {
           commit('windows/MutPollingSet', 0, { root: true })
         } catch (e) {
           if (e.response.status === 504) {
-            console.log('polling timed out: maxPollingRetryExceeded ', rootGetters['windows/GtrMaxPollingRetryExceeded'])
             commit('windows/MutPollingIncrementBy', 1, { root: true })
 
             if (rootGetters['windows/GtrMaxPollingRetryExceeded']) {
-              console.log('polling retry has been exceeded resetting user to null and retry count to 0')
               commit('MutSetUser', null)
               commit('windows/MutPollingSet', 0, { root: true })
             }
           } else {
-            console.log('Unknown error while polling', e)
             commit('MutSetUser', null)
             commit('windows/MutPollingSet', 0, { root: true })
           }
         }
       } else {
-        console.log('User is null')
       }
     }, process.env.pollingInterval)
   },
@@ -304,57 +291,6 @@ export const actions = {
   },
   /** ************** END : authentication ****************/
 
-  /** ************** START : password reset-recovery ****************/
-  async ActPasswordForgot({ commit }, data) {
-    try {
-      await this.$axios.post('/auth/password/forgot', data)
-    } catch (e) {
-      return e.response
-    }
-  },
-
-  async ActGetPasswordReset({ commit }, query) {
-    // console.log('in action ActGetPasswordReset', query);
-
-    try {
-      const result = await this.$axios.get('/auth/token/validate/' + query.token)
-      console.log(result)
-      return true
-    } catch (e) {
-      console.log(e)
-      return false
-    }
-  },
-
-  async ActPostPasswordReset({ commit }, data) {
-    try {
-      const resetPromise = await this.$axios.post('/auth/password/reset/' + data.token, data)
-      commit('MutSetUser', resetPromise.data)
-    } catch (e) {
-      console.log(e)
-    }
-  },
-
-  async ActPostPasswordChange({ commit }, data) {
-    try {
-      await this.$axios.post('/user/password/change', data)
-    } catch (e) {
-      return e.response
-    }
-  },
-
-  async ActGetSubscriptionsList({ commit }, data) {
-    try {
-      const res = await this.$axios.get('/subscription/')
-      console.log(res)
-      return res.data
-    } catch (e) {
-      console.log(e)
-      throw e
-    }
-  },
-  /** ************** END : password reset-recovery ****************/
-
   async ActGetUserDetails({ commit, state }) {
     try {
       const user = await this.$api.auth.me({ // await this.$axios.get('/user/me', {
@@ -419,13 +355,6 @@ export const actions = {
   },
 
   /** ************** START : social auth ****************/
-  ActAuthFb({ commit }) {
-    // console.log('in action signout');
-  },
-
-  ActAuthFbCbk({ commit }) {
-    // console.log('in action signout');
-  },
 
   async ActAuthGoogle({ commit, rootState }) {
     // console.log('in action ActAuthGoogle', rootState);
@@ -443,76 +372,14 @@ export const actions = {
           }
         })
       )
-
-      // console.log('after actauthgoogle');
-
-      // console.log(gProimise);
-      // this.$router.push(rootState.route.from.path)
-      // this.$router.push(url)
     } catch (e) {
       console.log(e)
     }
-  },
-
-  ActAuthGoogleCbk({ commit }) {
-    // console.log('in action signout');
-  },
-
-  ActAuthPaypal({ commit }) {
-    // console.log('in action signout');
-  },
-
-  ActAuthPaypalCbk({ commit }) {
-    // console.log('in action signout');
-  },
-
-  ActAuthTwitter({ commit }) {
-    // console.log('in action signout');
-  },
-
-  ActAuthTwitterCbk({ commit }) {
-    // console.log('in action signout');
-  },
-  async ActGetAuthType({ commit }) {
-    const { type, firstUser } = (await this.$api.utils.appInfo())// (await this.$axios.get('/auth/type'))
-    commit('MutAuthType', type)
-    return { type, firstUser }
-  },
-  async ActVerifyMasterKey({ commit }, secret) {
-    return (await this.$axios({
-      url: '/auth/admin/verify',
-      baseURL: `${this.$axios.defaults.baseURL}/dashboard`,
-      method: 'post',
-      data: { secret }
-    })).data
-    // return (await this.$axios.post(, {secret})).data;
   }
 
-  // ActAuthLinkedin({commit}) {
-  //   //console.log('in action signout');
-  // },
-  //
-  // ActAuthLinkedinCbk({commit}) {
-  //   console.log('in action signout');
-  // },
-  //
-  // ActAuthLinkedin({commit}) {
-  //   console.log('in action signout');
-  // },
-  //
-  // ActAuthLinkedinCbk({commit}) {
-  //   console.log('in action signout');
-  // },
   /** ************** END : social auth ****************/
 
 }
-
-// export default {
-//   state,
-//   getters,
-//   actions,
-//   mutations
-// }
 
 /**
  * @copyright Copyright (c) 2021, Xgene Cloud Ltd

@@ -266,7 +266,6 @@ export default {
     },
     async aclInit() {
       try {
-        console.log(this.sqlMgr)
         this.disableSaveButton = true
         // this.policies = (await this.sqlMgr.projectGetGrpcPolicyFromDb({
         //   env: this.nodes.env,

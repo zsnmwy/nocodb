@@ -8,7 +8,6 @@
  */
 export default function (data) {
   // data is projects array from sqlite with xmigarator.json file data as project.data
-  console.log("projects data treeview serilizer", data);
   const projects = [];
   for (let i = 0; i < data.length; i++) {
     const el = data[i];
@@ -62,9 +61,6 @@ function envParser(data, projectKey, projectJson) {
 function dbparser(data, envKey, env) {
   const dbs = [];
   for (let i = 0; i < data.length; i++) {
-
-    console.log('database ==>', data[i]);
-
     const db = data[i];
     const dbKey = `${envKey}.${i}`;
 
