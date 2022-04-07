@@ -514,7 +514,8 @@ export default class Column<T = any> implements ColumnType {
         if (
           addFormulaErrorIfMissingColumn({
             formula,
-            columnId: id
+            columnId: id,
+            title: col?.title
           })
         )
           await FormulaColumn.update(formula.id, formula, ncMeta);

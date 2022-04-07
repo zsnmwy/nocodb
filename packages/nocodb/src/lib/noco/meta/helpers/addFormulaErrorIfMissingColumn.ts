@@ -3,10 +3,12 @@ import jsep from 'jsep';
 
 export default function addFormulaErrorIfMissingColumn({
   formula,
-  columnId
+  columnId,
+  title
 }: {
   formula: FormulaColumn;
   columnId: string;
+  title?: string;
 }): void | boolean {
   let modified = false;
 
@@ -17,7 +19,7 @@ export default function addFormulaErrorIfMissingColumn({
     } else if (pt.type === 'Identifier') {
       if (pt.name === columnId) {
         virtualColumn.error = virtualColumn.formula.error || '';
-        virtualColumn.error += `Column '${columnId}' was deleted`;
+        virtualColumn.error += `Column '${title || columnId}' was deleted`;
         modified = true;
       }
     } else if (pt.type === 'BinaryExpression') {
