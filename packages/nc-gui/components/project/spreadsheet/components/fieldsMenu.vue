@@ -263,9 +263,6 @@ export default {
         this.$tele.emit('fields:system-field-checkbox')
       }
     }
-    // viewId() {
-    //   return this.meta && this.meta.views && this.meta.views[0] && this.meta.views[0].id
-    // }
   },
   watch: {
     async viewId(v) {

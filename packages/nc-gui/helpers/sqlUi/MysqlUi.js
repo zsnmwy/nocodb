@@ -585,25 +585,11 @@ export class MysqlUi {
     if (col.dt === 'int' || col.dt === 'bigint' || col.dt === 'smallint' || col.dt === 'tinyint') {
       col.altered = col.altered || 2
     }
-
-    // if (!col.ai) {
-    //   col.dtx = 'specificType'
-    // } else {
-    //   col.dtx = ''
-    // }
   }
 
   static onCheckboxChangeAU(col) {
     console.log(col)
-    // if (1) {
     col.altered = col.altered || 2
-    // }
-
-    // if (!col.ai) {
-    //   col.dtx = 'specificType'
-    // } else {
-    //   col.dtx = ''
-    // }
   }
 
   static showScale(columnObj) {

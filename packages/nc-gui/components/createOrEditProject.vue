@@ -74,81 +74,6 @@
 
           <div ref="panelContainer" style="">
             <api-overlay v-show="projectReloading" :project-created="projectCreated" />
-            <!--            <v-overlay absolute color="grey" opacity="0.4"-->
-            <!--                       class="create-project-overlay">-->
-
-            <!--<div>
-              <v-card dark style="width: 100%; max-height:100%;overflow: auto">
-                <v-container fluid style="min-height:200px;">
-                  &lt;!&ndash;                    <v-row class="text-center">&ndash;&gt;
-                  &lt;!&ndash;                      <v-col cols="12">&ndash;&gt;
-                  <v-card class="pa-2 text-center elevation-10" dark>
-                    <h3 class="title mb-3 mt-4">APIs Generated</h3>
-                    <p><span class="display-2 font-weight-bold">1,200,000</span><br>
-                      <span class="subtitle grey&#45;&#45;text text&#45;&#45;lighten-1">within 60 seconds</span></p>
-                  </v-card>
-                  &lt;!&ndash;                      </v-col>&ndash;&gt;
-                  &lt;!&ndash;                    </v-row>&ndash;&gt;
-                  <v-row>
-                    <v-col>
-                      <v-card dark class=" elevation-10">
-                        <v-card-text class="pb-0 font-weight-bold"># Databases</v-card-text>
-                        <v-card-text class="title white&#45;&#45;text">
-                          <v-icon class="mt-n2 mr-1" color="info">mdi-database-sync</v-icon>
-
-                          180/190
-                        </v-card-text>
-                      </v-card>
-                    </v-col>
-                    <v-col>
-                      <v-card dark class=" elevation-10">
-                        <v-card-text class="pb-0 font-weight-bold"># Tables</v-card-text>
-                        <v-card-text class="title white&#45;&#45;text">
-                          <v-icon class="mr-1 mt-n1 " color="info">mdi-table-large</v-icon>
-                          50000
-                        </v-card-text>
-                      </v-card>
-                    </v-col>
-                    <v-col>
-                      <v-card dark class=" elevation-10">
-                        <v-card-text class="pb-0 font-weight-bold">Time Saved</v-card-text>
-                        <v-card-text class="title white&#45;&#45;text">
-                          <v-icon class="mr-1 mt-n1" color="secondary">mdi-clock-fast</v-icon>
-                          10hrs
-                        </v-card-text>
-                      </v-card>
-                    </v-col>
-                    <v-col>
-                      <v-card dark class=" elevation-10">
-                        <v-card-text class="pb-0 font-weight-bold">CostSaved</v-card-text>
-                        <v-card-text class="title white&#45;&#45;text">
-                          <v-icon color="success" class="mt-n2 mr-1">mdi-currency-usd-circle</v-icon>
-                          100$
-                        </v-card-text>
-                      </v-card>
-                    </v-col>
-                  </v-row>
-                  &lt;!&ndash;                    <v-divider class="my-3 "></v-divider>&ndash;&gt;
-                  <v-card dark class=" elevation-10">
-                    <p class="title text-center pt-2">List of Database</p>
-                    <v-simple-table style="width: 100%">
-                      <tr v-for="i in 40">
-                        <td v-for="j in 5" class="py-2 px-3">
-                          <div class="d-flex">
-                            <v-icon color="green" x-small class="mr-2">mdi-moon-full</v-icon>
-                            <span class="caption">Database {{ i }} {{ j }}</span>
-                            <v-spacer></v-spacer>
-
-                          </div>
-                        </td>
-                      </tr>
-                    </v-simple-table>
-                  </v-card>
-                </v-container>
-              </v-card>
-            </div>-->
-            <!--            </v-overlay>-->
-
             <v-container fluid>
               <v-row>
                 <v-col cols="12" class="mb-0 pb-0">
@@ -163,53 +88,11 @@
                       :label="$t('placeholder.projName')"
                       autofocus
                     >
-                      <!--                      <v-icon color="info" class="blink_me mt-n1" slot="prepend">-->
-                      <!--                        mdi-lightbulb-on-->
-                      <!--                      </v-icon>-->
                     </v-text-field>
 
-                    <!-- Access Project via -->
-                    <!--
-                      <label class="caption"> {{ $t('msg.info.apiOptions') }}</label>
-                                      <v-radio-group
-                      v-model="project.projectType"
-                      row
-                      hide-details
-                      dense
-                      class="mb-0 mt-0"
-                    >
-                      <v-radio
-                        v-for="(type, i) in projectTypes"
-                        :key="type.value"
-                        :color="type.iconColor"
-                        :value="type.value"
-                      >
-                        <template #label>
-                          <v-chip :color="i ? colors[3] : colors[7]">
-                            <v-icon small class="mr-1">
-                              {{ type.icon }}
-                            </v-icon>
-                            <span class="caption">{{ type.text }}</span>
-                          </v-chip>
-                        </template>
-                      </v-radio>
-                    </v-radio-group>-->
+
                   </div>
 
-                  <!--            <v-select
-                                v-model="project.projectType" hint="Access via API type" persistent-hint dense
-                                :items="projectTypes">
-                                <template v-slot:prepend>
-                                  <img v-if="typeIcon.type === 'img'" :src="typeIcon.icon" style="width: 32px">
-                                  <v-icon v-else :color="typeIcon.iconColor">{{ typeIcon.icon }}</v-icon>
-                                </template>
-                                <template v-slot:item="{item}">
-                                  <span class="caption d-flex align-center">
-                                  <img v-if="item.type === 'img'" :src="item.icon" style="width: 30px">
-                                    <v-icon v-else :color="item.iconColor">{{ item.icon }}</v-icon> &nbsp; {{ item.text }}</span>
-                                </template>
-
-                              </v-select>-->
                 </v-col>
 
                 <v-col
@@ -218,10 +101,6 @@
                   offset="1"
                   :class="{ 'mt-0 pt-0': !edit, 'mt-3 pt-3': edit }"
                 >
-                  <!--            <h2 :class="{'text-center mb-2':!edit,'text-center mb-2 grey&#45;&#45;text':edit}">
-                                {{ project.title && project.title.toUpperCase() }}'s
-                                Environments</h2> -->
-
                   <p
                     :class="{
                       'text-center mb-2 mt-3': !edit,
@@ -245,8 +124,6 @@
                     >
                       <v-expansion-panel-header disable-icon-rotate>
                         <p class="pa-0 ma-0">
-                          <!--                          <v-icon>mdi-test-tube</v-icon> &nbsp;-->
-                          <!--                          <span class="title">&nbsp;<b>'{{ envKey }}'</b> environment : </span>-->
                           <v-tooltip v-for="(db, tabIndex) in envData.db" :key="tabIndex" bottom>
                             <template #activator="{ on }">
                               <v-icon
@@ -322,21 +199,6 @@
                                   db.connection.database
                                 }}</span>
                               </v-tab>
-                              <!--                  <v-tooltip bottom>
-                                                  <template v-slot:activator="{ on }">
-                                                    <x-btn tooltip="Add New Database to Environment" text small class="ma-2" v-on="on"
-                                                           @click.prevent.stop="addNewDB(envKey,panelIndex)"
-                                                           v-ge="['project','env-db-add']"
-                                                    >
-                                                      <v-hover v-slot:default="{ hover }">
-                                                        <v-icon :color="hover ? 'primary' : 'grey'">mdi-database-plus
-                                                        </v-icon>
-                                                      </v-hover>
-                                                    </x-btn>
-                                                  </template>
-                                                  <span>Add new database to '{{ envKey }}' environment</span>
-                                                </v-tooltip>
-                  -->
                               <v-tabs-items v-model="databases[panelIndex]">
                                 <v-tab-item
                                   v-for="(db, dbIndex) in project.envs[envKey].db"
@@ -423,14 +285,6 @@
                                               >
                                                 {{ data.item }}
                                               </v-chip>
-                                              <!--                                              <div class="d-flex flex-column mx-auto "-->
-                                              <!--                                                   style="width:100%;border-bottom: 1px solid #ddd">-->
-                                              <!--                                                <img class="mx-auto py-3" width="80" :src="dbIcons[data.item]"/>-->
-                                              <!--                                                &lt;!&ndash;                                              {{ data.item }}&ndash;&gt;-->
-
-                                              <!--                                                <p v-if="!databaseNames[data.item]" class="text-center grey&#45;&#45;text">-->
-                                              <!--                                                  Coming soon</p>-->
-                                              <!--                                              </div>-->
                                             </template>
                                           </v-select>
                                         </v-col>
@@ -778,157 +632,10 @@
                       </v-expansion-panel-content>
                     </v-expansion-panel>
 
-                    <!--  <v-expansion-panel>
-                        <v-expansion-panel-header disable-icon-rotate>
-                          <v-tooltip bottom>
-                            <template v-slot:activator="{ on }">
-                              <x-btn tooltip="Add New Environment to Project" color="grey" block v-on="on" outlined
-                                     v-ge="['project','env-add']"
-                                     @click.stop="addNewEnvironment">
-                                <v-icon>mdi-plus</v-icon>
-                                Add Another Environment
-                              </x-btn>
-                            </template>
-                            <span>Add new environment to {{ project.title }} project</span>
-                          </v-tooltip>
-                          <template v-slot:actions>
-                            <i></i>
-                          </template>
-                        </v-expansion-panel-header>
-                      </v-expansion-panel>-->
+
                   </v-expansion-panels>
                 </v-col>
 
-                <!--                <v-col cols="10" offset="1" v-show="isTitle"
-                                       :class="{'mt-0 pt-0':!edit,'mt-3 pt-3':edit}">
-                                  &lt;!&ndash;                  <h2 :class="{'text-center mb-2':!edit,'text-center mb-2 grey&#45;&#45;text':edit}">&ndash;&gt;
-                                  &lt;!&ndash;                    Advanced Configuration</h2>&ndash;&gt;
-                                  <v-expansion-panels focusable accordion="" class="elevation-20"
-                                                      style="border: 1px solid grey">
-                                    <v-expansion-panel
-                                      @change="onAdvancePanelToggle"
-                                    >
-                                      <v-expansion-panel-header disable-icon-rotate>
-
-                                        <p class="pa-0 ma-0">
-                                          <v-icon class="mt-n2 " color="grey darken-1">mdi-cog</v-icon> &nbsp;
-                                          <span class="grey&#45;&#45;text text&#45;&#45;darken-1">Advance Configuration</span>
-                                        </p>
-
-                                      </v-expansion-panel-header>
-                                      <v-expansion-panel-content eager>
-                                        <v-card class="mt-3">
-                                          <v-card-title>
-                                            <v-icon class="mr-2">mdi-shield-account-outline</v-icon>
-                                            Authentication Configuration
-                                          </v-card-title>
-
-                                          <v-card-text>
-                                            <v-container class="justify-center">
-                                              <v-row>
-                                                <v-col cols="12" class="py-0">
-                                                  <v-select
-                                                    v-model="auth.authType" hint="Choose Authentication type"
-                                                    persistent-hint dense
-                                                    :items="authTypes">
-
-                                                    <template v-slot:item="{item}">
-                                                  <span class="caption">
-                                                    {{ item.text }}</span>
-                                                    </template>
-
-                                                  </v-select>
-
-                                                </v-col>
-                                                <v-col cols="12" class="py-0" v-if="auth.authType && auth.authType !== 'none'">
-                                                  <v-text-field
-
-                                                    v-if="auth.authType !== 'middleware'"
-                                                    v-model="auth.authSecret"
-                                                    label="Enter Auth Secret (Randomly generated)"
-                                                    :type="showSecret ?   'text' : 'password'"
-                                                  >
-                                                    <template v-slot:append>
-                                                      <v-icon small
-                                                              @click="showSecret = !showSecret"
-                                                      >{{
-                                                          showSecret ? 'visibility_off' :
-                                                            'visibility'
-                                                        }}
-                                                      </v-icon>
-                                                    </template>
-                                                  </v-text-field>
-                                                  <v-text-field
-                                                    v-else
-
-                                                    v-model="auth.webhook"
-                                                    label="Webhook url"
-
-                                                  >
-                                                  </v-text-field>
-
-                                                </v-col>
-
-                                              </v-row>
-                                            </v-container>
-                                          </v-card-text>
-                                        </v-card>
-                                        &lt;!&ndash;                      </v-expansion-panel-content>&ndash;&gt;
-                                        &lt;!&ndash;                    </v-expansion-panel>&ndash;&gt;
-                                        &lt;!&ndash;                  </v-expansion-panels>&ndash;&gt;
-                                        &lt;!&ndash;                </v-col>&ndash;&gt;
-                                        &lt;!&ndash;                <v-col cols="10" offset="1" v-show="project.title.trim().length"&ndash;&gt;
-                                        &lt;!&ndash;                       :class="{'mt-0 pt-0':!edit,'mt-3 pt-3':edit}">&ndash;&gt;
-
-                                        &lt;!&ndash;                  <v-expansion-panels v-model="smtpPanel" focusable accordion="" class="elevation-20"&ndash;&gt;
-                                        &lt;!&ndash;                                      style="border: 1px solid grey">&ndash;&gt;
-
-                                        &lt;!&ndash;                    <v-expansion-panel>&ndash;&gt;
-                                        &lt;!&ndash;                      <v-expansion-panel-header disable-icon-rotate>&ndash;&gt;
-
-                                        &lt;!&ndash;                        <p class="pa-0 ma-0">&ndash;&gt;
-                                        &lt;!&ndash;                          <v-icon class="mt-n2 " color="grey darken-1">mdi-email-edit</v-icon> &nbsp;&ndash;&gt;
-                                        &lt;!&ndash;                          <span class="grey&#45;&#45;text text&#45;&#45;darken-1">SMTP Configuration</span>&ndash;&gt;
-                                        &lt;!&ndash;                        </p>&ndash;&gt;
-
-                                        &lt;!&ndash;                      </v-expansion-panel-header>&ndash;&gt;
-                                        &lt;!&ndash;                      <v-expansion-panel-content :eager="false">&ndash;&gt;
-
-                                        <v-card class="mt-3">
-                                          <v-card-title>
-                                            <v-icon class="mr-2">mdi-email-edit</v-icon>
-                                            SMTP Configuration
-                                          </v-card-title>
-                                          <v-card-text>
-
-                                            <v-text-field
-                                              v-model="smtpConfiguration.from"
-                                              label="From address"
-                                              placeholder="Company<noreply@company.com>"
-
-                                            >
-                                            </v-text-field>
-
-                                            <label>Mailer Config Options<span class="caption"> (For connection example visit:  <a
-                                              href="https://nodemailer.com/smtp/#examples">https://nodemailer.com/smtp/#examples</a>)</span></label>
-                                            <monaco-json-editor
-                                              ref="monacoEditor"
-                                              v-model="smtpConfiguration.options"
-                                              style="height: 300px; width:100% "></monaco-json-editor>
-                                          </v-card-text>
-                                        </v-card>
-                                      </v-expansion-panel-content>
-                                    </v-expansion-panel>
-
-                                  </v-expansion-panels>
-
-                                </v-col>
-
-                                <v-col cols="10" offset="1" v-show="isTitle"
-                                       :class="{'mt-0 pt-0':!edit,'mt-3 pt-3':edit}">
-
-                                  <create-project-coming-soon></create-project-coming-soon>
-                                </v-col>-->
               </v-row>
             </v-container>
           </div>
@@ -1448,18 +1155,6 @@ export default {
     selectFile(db, obj, key, index) {
       this.$refs[key][index].click()
 
-      // console.log(obj, key);
-      // const file = dialog.showOpenDialog({
-      //   properties: ["openFile"]
-      // });
-      // console.log(typeof file, file, typeof file[0]);
-      // if (file && file[0]) {
-      //   let fileName = path.basename(file[0]);
-      //   db.ui[obj][key] = fileName;
-      //   Vue.set(db.ui[obj], key, fileName)
-      //   //db.connection[obj][key] = file[0].toString();
-      //   Vue.set(db.connection[obj], key, file[0].toString())
-      // }
     },
     onPanelToggle(panelIndex, envKey) {
       this.$nextTick(() => {
@@ -1594,9 +1289,7 @@ export default {
     },
 
     constructProjectJsonFromProject(project) {
-      // const {projectJson: envs, ...rest} = project;
 
-      // let p = {...rest, ...envs};
       const p = project // JSON.parse(JSON.stringify(project.projectJson));
 
       p.ui = {
@@ -1676,25 +1369,6 @@ export default {
       }, 1000)
 
       this.projectReloading = true
-
-      // const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [
-      //   {
-      //     query: {
-      //       skipProjectHasDb: 1
-      //     }
-      //   },
-      //   this.edit ? 'projectUpdateByWeb' : 'projectCreateByWeb',
-      //   {
-      //     project: {
-      //       title: projectJson.title,
-      //       folder: 'config.xc.json',
-      //       type: 'pg'
-      //     },
-      //     projectJson
-      //   }
-      // ])
-
-      //
 
       const con = projectJson.envs._noco.db[0]
       const inflection = (con.meta && con.meta.inflection) || {}
@@ -1828,24 +1502,8 @@ export default {
       this.dialog.show = false
     },
     selectDir(ev) {
-      // console.log(ev)
-      // const file = dialog.showOpenDialog({
-      //   properties: ['openDirectory']
-      // })
-      // if (file && file[0]) {
-      //   this.baseFolder = file[0]
-      //   this.project.folder = file[0]
-      //   this.userSelectedDir = true
-      // }
     },
     selectSqliteFile(db) {
-      // console.log(ev)
-      // const file = dialog.showOpenDialog({
-      //   properties: ["openFile"]
-      // });
-      // if (file && file[0]) {
-      //   db.connection.connection.filename = file[0];
-      // }
     },
 
     getDbStatusColor(db) {
@@ -1985,19 +1643,10 @@ export default {
     handleSSL(db, creating = true) {
       const sendAdvancedConfig = this.sendAdvancedConfig(db.connection)
       if (!sendAdvancedConfig) {
-        // args.ssl = undefined;
         db.connection.ssl = undefined
       }
 
       if (db.connection.ssl) {
-        // db.connection.ssl.caFilePath = db.connection.ssl.ca;
-        // db.connection.ssl.keyFilePath = db.connection.ssl.key;
-        // db.connection.ssl.certFilePath = db.connection.ssl.cert;
-        // if(creating) {
-        //   delete db.connection.ssl.ca;
-        //   delete db.connection.ssl.key;
-        //   delete db.connection.ssl.cert;
-        // }
       }
     },
     getDatabaseForTestConnection(dbType) {
@@ -2090,11 +1739,8 @@ export default {
               database: [this.project.folder, `${this.project.title}_${env}_${index + 1}`].join(
                 '/'
               ),
-              // database: path.join(this.project.folder, `${this.project.title}_${env}_${index + 1}`),
               useNullAsDefault: true
             })
-            // Vue.set(db.connection, 'connection', {filename: `${this.project.folder}/${this.project.title}_${env}_${index + 1}`})
-            // Vue.set(db.connection, 'database', `${this.project.folder}/${this.project.title}_${env}_${index + 1}`)
           }
         }
       }
@@ -2142,12 +1788,6 @@ export default {
             if (db.client !== 'sqlite3') {
               Vue.set(db.connection, 'database', `${this.project.title}_${env}_${index + 1}`)
             } else {
-              // Vue.set(db.connection, 'connection', {
-              //   filename: path.join(
-              //     this.project.folder,
-              //     `${this.project.title}_${env}_${index + 1}`
-              //   )
-              // })
               Vue.set(db.connection, 'database', `${this.project.title}_${env}_${index + 1}`)
             }
           }
@@ -2195,8 +1835,6 @@ export default {
       this.compErrorMessages[Math.floor(Math.random() * this.compErrorMessages.length)]
 
     if (this.edit) {
-      // this.edit = true;
-      // await this.$store.dispatch('sqlMgr/instantiateSqlMgr');
       try {
         let data = await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'xcProjectGetConfig'])
         data = JSON.parse(data.config)
@@ -2241,17 +1879,10 @@ export default {
               ...this.sampleConnectionData[dbsAvailable[0]],
               ssl: { ...this.sampleConnectionData[dbsAvailable[0]].ssl }
             }
-            // db.ui.setup = await PortScanner.isAlive(db.connection.host, parseInt(db.connection.port)) ? 0 : -1;
           }
         }
       }
 
-      // for (let env in this.project.envs) {
-      //   for (let db of this.project.envs[env]) {
-      //     db.ui.setup = await PortScanner.isAlive(db.connection.host, parseInt(db.connection.port)) ? 0 : -1;
-      //     console.log('testing port', env, db.connection.database, db.ui.setup);
-      //   }
-      // }
     }
   },
   beforeMount() {

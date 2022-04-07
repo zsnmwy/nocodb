@@ -531,56 +531,6 @@
           </v-list>
           <v-divider />
 
-          <!--          <v-list dense>-->
-          <!--    <v-list-item dense class="body-2 pt-2">
-                <div class="d-100 d-flex ">
-                  <v-icon color="" @click="toggleMini" class="mr-1" small>mdi-arrow-expand-horizontal</v-icon>
-
-                  <span v-shortkey="[ 'ctrl','shift', 'm']"
-                        @shortkey="$store.commit('windows/MutToggleTheme')"></span>
-
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-icon v-on="on" class="mt-1 ml-3" size="22" @click="$store.commit('windows/MutToggleTheme')">
-                        mdi-format-color-fill
-                      </v-icon>
-                    </template>
-                    Change theme (^⇧M)
-                  </v-tooltip>
-
-                  <span v-shortkey="[ 'ctrl','shift', 'b']"
-                        @shortkey="changeTheme"></span>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-icon @dblclick="showAppStore=true" @click="changeTheme" v-on="on" size="23"
-                              :style="$vuetify.theme.dark ? {}:{color:'lightgrey'}"
-                              class="ml-3">mdi-bat
-                      </v-icon>
-                    </template>
-                    <h3 class="pa-3">
-                      {{ $vuetify.theme.dark ? 'It does come in Black (^⇧B)' : 'Does it come in Black ? (^⇧B)' }}
-                      <i></i>
-                    </h3>
-                  </v-tooltip>
-
-                </div>
-              </v-list-item>-->
-
-          <!--            <v-tooltip bottom>-->
-          <!--              <template v-slot:activator="{on}">-->
-          <!--                <v-list-item dense v-on="on" @click="openLink('https://github.com/sponsors/nocodb')" class="body-2">-->
-          <!--                  <v-list-item-icon>-->
-          <!--                    <v-icon color="red" class=" heart-anim" small> mdi-heart</v-icon>-->
-          <!--                  </v-list-item-icon>-->
-          <!--                  <v-list-item-title><span class="font-weight-regular caption">Sponsor Us</span></v-list-item-title>-->
-
-          <!--                </v-list-item>-->
-          <!--              </template>-->
-          <!--              Sponsor Us-->
-          <!--            </v-tooltip>-->
-          <!--          </v-list>-->
-          <!--          <v-divider></v-divider>-->
-
           <v-list v-if="_isUIAllowed('previewAs') || previewAs" dense>
             <v-list-item>
               <!-- Preview as -->
@@ -588,18 +538,11 @@
               <v-icon small class="ml-1">
                 mdi-drama-masks
               </v-icon>
-              <!--                <v-icon small>mdi-menu-down</v-icon>-->
             </v-list-item>
 
             <v-list dense>
-              <!--              <v-list-item v-for="role in rolesList" @click="setPreviewUSer(role.title)" :key="role.title">-->
-              <!--                <v-icon small class="mr-1" :color="role.title === previewAs ? 'x-active' : ''">{{ roleIcon[role.title] }}</v-icon>-->
-              <!--                <span class="caption text-capitalize"-->
-              <!--                      :class="{ 'x-active&#45;&#45;text' : role.title === previewAs }">{{ role.title }}</span>-->
-              <!--              </v-list-item>-->
               <div class="mx-4 d-flex align-center mb-2">
                 <template v-for="(role, i) in rolesList">
-                  <!--                  <span v-if="i" vertical :key="i" class="mx-2 caption grey&#45;&#45;text">or</span>-->
                   <v-divider v-if="i" :key="i" vertical class="mx-2 caption grey--text" />
                   <div
                     :key="role.title"
@@ -632,37 +575,6 @@
               </template>
             </v-list>
           </v-list>
-
-          <!--  <v-list dense>
-
-              <v-list-item>
-                <v-list-item-title>
-                  <span class="body-2 grey&#45;&#45;text">Community</span>
-                  <v-icon color="red" class=" heart-anim" small> mdi-heart</v-icon>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item dense v-on="on" @click="openLink('https://github.com/sponsors/nocodb')" class="body-2">
-                <v-list-item-icon>
-
-                </v-list-item-icon>
-                <v-list-item-title><span class="font-weight-regular caption">Sponsor Us</span></v-list-item-title>
-
-              </v-list-item>
-              <v-list-item dense v-on="on" @click="openLink('https://github.com/sponsors/nocodb')" class="body-2">
-                <v-list-item-icon>
-                  <v-icon color="red" class=" heart-anim" small> mdi-heart</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title><span class="font-weight-regular caption">Sponsor Us</span></v-list-item-title>
-
-              </v-list-item>
-              <v-list-item dense v-on="on" @click="openLink('https://github.com/sponsors/nocodb')" class="body-2">
-                <v-list-item-icon>
-                  <v-icon color="red" class=" heart-anim" small> mdi-heart</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title><span class="font-weight-regular caption">Sponsor Us</span></v-list-item-title>
-
-              </v-list-item>
-            </v-list>-->
         </div>
 
         <template v-if="_isUIAllowed('settings')">
@@ -698,13 +610,6 @@
       @create="mtdViewCreate($event)"
     />
 
-    <!--    <textDlgSubmitCancel
-          v-if="dialogGetTableName.dialogShow"
-          :dialogShow="dialogGetTableName.dialogShow"
-          :heading="dialogGetTableName.heading"
-          :mtdDialogSubmit="mtdDialogGetTableNameSubmit"
-          :mtdDialogCancel="mtdDialogGetTableNameCancel"
-        />-->
 
     <textDlgSubmitCancel
       v-if="dialogRenameTable.dialogShow"
@@ -716,13 +621,7 @@
       :mtd-dialog-submit="mtdDialogRenameTableSubmit"
       :mtd-dialog-cancel="mtdDialogRenameTableCancel"
     />
-    <!--    <textDlgSubmitCancel
-          v-if="dialogGetViewName.dialogShow"
-          :dialogShow="dialogGetViewName.dialogShow"
-          :heading="dialogGetViewName.heading"
-          :mtdDialogSubmit="mtdDialogGetViewNameSubmit"
-          :mtdDialogCancel="mtdDialogGetViewNameCancel"
-        />-->
+
     <textDlgSubmitCancel
       v-if="dialogGetFunctionName.dialogShow"
       :dialog-show="dialogGetFunctionName.dialogShow"

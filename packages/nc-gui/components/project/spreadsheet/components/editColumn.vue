@@ -10,7 +10,6 @@
       <v-container fluid @click.stop.prevent>
         <v-row>
           <v-col cols="12" class="mt-2">
-            <!--label: Column Name-->
             <v-text-field
               ref="column"
               v-model="newColumn.column_name"
@@ -376,19 +375,6 @@
                           :sql-ui="sqlUi"
                           v-on="$listeners"
                         />
-
-                        <!--                  <v-autocomplete
-                          label="Formula"
-                          hide-details
-                          class="caption formula-type"
-                          outlined
-                          dense
-                          :items="formulas"
-                        >
-                          <template #item="{item}">
-                            <span class="green&#45;&#45;text text&#45;&#45;darken-2 caption font-weight-regular">{{ item }}</span>
-                          </template>
-                        </v-autocomplete>-->
                       </v-col>
                     </template>
                   </v-row>
@@ -546,21 +532,6 @@ export default {
       this.newColumn = this.column ? { ...this.column } : this.sqlUi.getNewColumn([...this.meta.columns, ...(this.meta.v || [])].length + 1)
       this.newColumn.cno = this.newColumn.column_name
     },
-    /*
-      async loadDataTypes() {
-          try {
-            const result = await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-              env: this.nodes.env,
-              dbAlias: this.nodes.dbAlias
-            }, 'getKnexDataTypes', {}])
-
-            this.dataTypes = result.data.list;
-          } catch (e) {
-            this.$toast.error('Error loading datatypes :' + e).goAway(4000);
-            throw e;
-          }
-        },
-        */
     close() {
       this.$emit('close')
       this.newColumn = {}

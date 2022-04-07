@@ -168,10 +168,6 @@
 /* eslint-disable */
 
 import draggable from 'vuedraggable'
-//
-// const {promisify, fs, path, config, Handlebars} = require("electron").remote.require(
-//   "./libs"
-// );
 export default {
   name: 'Environment',
   directives: {},

@@ -212,63 +212,7 @@
                 <!-- Add Gallery View -->
                 {{ $t('msg.info.addView.gallery') }}
               </v-tooltip>
-              <!-- <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-list-item
-                    dense
-                    class="body-2"
-                    v-on="on"
-                    @click="enableDummyFeat ? openCreateViewDlg('calendar') : comingSoon()"
-                  >
-                    <v-list-item-icon class="mr-n1">
-                      <v-icon x-small>
-                        mdi-calendar
-                      </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                      <span class="font-weight-regular">
-                        &lt;!&ndash; Calendar &ndash;&gt;
-                        {{ $t('objects.viewType.calendar') }}
-                      </span>
-                    </v-list-item-title>
 
-                    <v-spacer />
-                    <v-icon class="mr-1" small>
-                      mdi-plus
-                    </v-icon>
-                  </v-list-item>
-                </template>
-                &lt;!&ndash; Add Calendar View &ndash;&gt;
-                {{ $t('msg.info.addView.calendar') }}
-              </v-tooltip> -->
-              <!--              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-list-item
-                    dense
-                    open-class="body-2"
-                    v-on="on"
-                    @click="openCreateViewDlg('kanban')"
-                  >
-                    <v-list-item-icon class="mr-n1">
-                      <v-icon x-small>
-                        mdi-tablet-dashboard
-                      </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                      <span class="font-weight-regular">
-                        &lt;!&ndash; Kanban &ndash;&gt;
-                        {{ $t('objects.viewType.kanban') }}
-                      </span>
-                    </v-list-item-title>
-                    <v-spacer />
-                    <v-icon class="mr-1" small>
-                      mdi-plus
-                    </v-icon>
-                  </v-list-item>
-                </template>
-                Add Kanban View
-                {{ $t('msg.info.addView.kanban') }}
-              </v-tooltip>-->
               <v-tooltip
                 bottom
               >

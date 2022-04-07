@@ -1,8 +1,5 @@
 <template>
   <div>
-    <!--    <select v-on="parentListeners"  v-model="localState" multiple>
-          <option v-for="val of setValues" :key="val" :value="val">{{ val }}</option>
-        </select>-->
 
     <v-combobox
       v-model="localState"

@@ -1,5 +1,4 @@
 <template>
-  <!--  <v-dialog v-model="show" width="600">-->
   <v-card width="600" color="">
     <v-card-title v-if="!isForm" class="textColor--text mx-2" :class="{'py-2':isForm}">
       <span v-if="!isForm">{{ meta ? meta.title : 'Children' }}</span>
@@ -180,19 +179,6 @@ export default {
   methods: {
     async loadData() {
       if ((!this.isForm && this.isPublic) && this.$route.params.id) {
-        // this.data = await this.$store.dispatch('sqlMgr/ActSqlOp', [null, 'sharedViewNestedChildDataGet', {
-        //   password: this.password,
-        //   limit: this.size,
-        //   tn: this.table_name,
-        //   view_id: this.$route.params.id,
-        //   row_id: this.rowId,
-        //   offset: this.size * (this.page - 1),
-        //   query: this.query,
-        //   _cn: this.column.title,
-        //   ptn: this.parentMeta.table_name,
-        //   ctn: this.meta.table_name,
-        //   type: this.type
-        // }])
 
         if (this.column && this.column.colOptions && this.rowId) {
           this.data = (await this.$api.public.dataNestedList(
@@ -202,7 +188,6 @@ export default {
             this.column.fk_column_id || this.column.id, {
               limit: this.size,
               offset: this.size * (this.page - 1)
-            // query: this.query,
             }, {}))
         }
 

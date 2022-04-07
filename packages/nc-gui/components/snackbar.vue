@@ -12,9 +12,6 @@
 
 <script>
 
-// const {shell} = require("electron").remote.require(
-//   "./libs"
-// );
 export default {
   data() {
     return {

@@ -88,34 +88,6 @@ export default {
       if (!this.valid) {
         return
       }
-      // const showFields = null
-      // let attachmentCol
-      // let singleSelectCol
-      // if (this.show_as === 'gallery') {
-      //   showFields = { [this.primaryValueColumn]: true }
-      //   attachmentCol = this.meta.columns.find(c => c.uidt === 'Attachment')
-      //   if (attachmentCol) {
-      //     showFields[attachmentCol.column_name] = true
-      //   }
-      //   this.meta.columns.forEach((c) => {
-      //     if (c.pk) {
-      //       showFields[c.column_name] = true
-      //     }
-      //   })
-      // }
-      //
-      // if (this.show_as === 'kanban') {
-      //   showFields = { [this.primaryValueColumn]: true }
-      //   singleSelectCol = this.meta.columns.find(c => c.uidt === 'SingleSelect')
-      //   if (singleSelectCol) {
-      //     showFields[singleSelectCol.column_name] = true
-      //   }
-      //   this.meta.columns.forEach((c) => {
-      //     if (c.pk) {
-      //       showFields[c.column_name] = true
-      //     }
-      //   })
-      // }
 
       this.loading = true
       try {
@@ -140,20 +112,6 @@ export default {
             }))
             break
         }
-
-        // const viewMeta = await this.sqlOp({
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'xcVirtualTableCreate', {
-        //   title: this.view_name,
-        //   query_params: {
-        //     showFields,
-        //     coverImageField: attachmentCol ? attachmentCol.title : '',
-        //     groupingField: singleSelectCol ? singleSelectCol.title : '',
-        //     ...this.queryParams
-        //   },
-        //   parent_model_title: this.table,
-        //   show_as: this.show_as
-        // })
         this.$toast.success('View created successfully').goAway(3000)
         this.$emit('created', data)
         this.$emit('input', false)

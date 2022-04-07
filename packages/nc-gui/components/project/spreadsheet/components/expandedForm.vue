@@ -22,15 +22,6 @@
           </v-icon>
         </v-btn>
 
-        <!--        <x-icon-->
-        <!--          :tooltip="`${showSystemFields ? 'Hide' : 'Show'} system fields`"-->
-        <!--          icon.class="mr-3 mt-n1"-->
-        <!--          small-->
-        <!--          @click="showSystemFields = !showSystemFields"-->
-        <!--        >-->
-        <!--          mdi-table-headers-eye-->
-        <!--        </x-icon>-->
-
         <x-icon
           v-if="!isNew && _isUIAllowed('rowComments')"
           icon-class="mr-2"
@@ -406,11 +397,6 @@ export default {
     },
     async getAuditsAndComments() {
       this.loadingLogs = true
-      // const data = await this.$store.dispatch('sqlMgr/ActSqlOp', [{ dbAlias: this.dbAlias }, 'xcModelRowAuditAndCommentList', {
-      //   model_id: this.meta.columns.filter(c => c.pk).map(c => this.localState[c.title]).join('___'),
-      //   model_name: this.meta.title,
-      //   comments: this.commentsOnly
-      // }])
 
       const data = (await this.$api.utils.commentList({
         row_id: this.meta.columns.filter(c => c.pk).map(c => this.localState[c.title]).join('___'),
@@ -492,14 +478,8 @@ export default {
     },
     async reload() {
       const id = this.meta.columns.filter(c => c.pk).map(c => this.localState[c.title]).join('___')
-      // const where = this.meta.columns.filter(c => c.pk).map(c => `(${c.title},eq,${this.localState[c.title]})`).join('~and')
       this.$set(this, 'changedColumns', {})
       this.localState = (await this.$api.data.read(this.viewId || this.meta.id, id, { query: this.queryParams || {} }))
-      // const data = await this.api.list({ ...(this.queryParams || {}), where }) || [{}]
-      // this.localState = data[0] || this.localState
-      // if (!this.isNew && this.toggleDrawer) {
-      //   this.getAuditsAndComments()
-      // }
     },
     calculateDiff(date) {
       return dayjs.utc(date).fromNow()

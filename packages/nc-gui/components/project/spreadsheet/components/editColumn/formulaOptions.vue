@@ -28,9 +28,6 @@
           @keydown.up.prevent="suggestionListUp"
           @keydown.enter.prevent="selectText"
         />
-        <!--          </template>-->
-        <!--          <span class="caption">Example: AVG(column1, column2, column3)</span>-->
-        <!--        </v-tooltip>-->
       </template>
       <v-list v-if="suggestion" ref="sugList" dense max-height="50vh" style="overflow: auto">
         <v-list-item-group
@@ -227,27 +224,12 @@ export default {
     },
     handleInput() {
       this.selected = 0
-      // const $fakeDiv = this.$refs.fakeDiv
       this.suggestion = null
-      const query = getWordUntilCaret(this.$refs.input.$el.querySelector('input')) // this.formula.value
-      // if (query !== '') {
+      const query = getWordUntilCaret(this.$refs.input.$el.querySelector('input'))
       const parts = query.split(/\W+/)
-
       this.wordToComplete = parts.pop()
-
-      // if (this.wordToComplete !== '') {
-      // get best match using popularity
       this.suggestion = this.acTree.complete(this.wordToComplete)
-
       this.autocomplete = !!this.suggestion.length
-      // } else {
-      //   // $span.textContent = '' // clear ghost span
-      // }
-      // } else {
-      //   this.autocomplete = false
-      //   // $time.textContent = ''
-      //   // $span.textContent = '' // clear ghost span
-      // }
     },
     selectText() {
       if (this.selected > -1 && this.selected < this.suggestion.length) {

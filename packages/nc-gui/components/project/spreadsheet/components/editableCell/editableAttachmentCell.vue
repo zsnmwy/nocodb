@@ -26,7 +26,6 @@
         >
           <v-tooltip bottom>
             <template #activator="{on}">
-              <!--            <img alt="#" v-if="isImage(item.title)" :src="item.url" v-on="on" @click="selectImage(item.url,i)">-->
               <v-img
                 v-if="isImage(item.title)"
                 lazy-src="https://via.placeholder.com/60.png?text=Loading..."
@@ -214,7 +213,6 @@
               v-for="(item,i) in (isPublicForm ? localFilesState : localState)"
               :key="i"
             >
-              <!--            <div class="d-flex justify-center" style="height:80px">-->
               <v-card
                 :key="i"
                 class="ma-2 pa-2 d-flex align-center justify-center overlay-thumbnail"
@@ -235,12 +233,9 @@
                   mdi-file
                 </v-icon>
               </v-card>
-              <!--            </div>-->
             </v-slide-item>
           </v-slide-group>
         </v-sheet>
-        <!--        <v-img v-if="showImage && selectedImage" max-width="90vh" max-height="95vh"-->
-        <!--               :src="selectedImage"></v-img>-->
         <v-icon x-large class="close-icon" @click="showImage=false">
           mdi-close-circle
         </v-icon>
@@ -338,12 +333,6 @@ export default {
       this.uploading = true
       for (const file of this.$refs.file.files) {
         try {
-        // const item = await this.$store.dispatch('sqlMgr/ActUploadOld', [{
-        //   dbAlias: this.dbAlias
-        // }, 'xcAttachmentUpload', {
-        //   appendPath: [this.meta.table_name],
-        //   prependName: [this.column.column_name]
-        // }, file])
 
           const data = await this.$api.dbView.upload(this.$store.state.project.projectId, this.viewId, {
             files: file,

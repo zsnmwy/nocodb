@@ -2,7 +2,6 @@ import inflection from 'inflection'
 
 export default class GqlApi {
   constructor(table, columns, meta, $ctx) {
-    // this.table = table;
     this.columns = columns
     this.meta = meta
     this.$ctx = $ctx

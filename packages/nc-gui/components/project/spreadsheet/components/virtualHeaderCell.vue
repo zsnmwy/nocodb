@@ -69,15 +69,6 @@
             {{ $t('general.edit') }}
           </span>
         </v-list-item>
-        <!--  <v-list-item dense @click="setAsPrimaryValue">
-            <x-icon small class="mr-1" color="primary">mdi-key-star</x-icon>
-            <v-tooltip bottom>
-              <template v-slot:activator="{on}">
-                <span class="caption" v-on="on">Set as Primary value</span>
-              </template>
-              <span class="caption font-weight-bold">Primary value will be shown in place of primary key</span>
-            </v-tooltip>
-          </v-list-item> -->
         <v-list-item
           @click="columnDeleteDialog = true"
         >

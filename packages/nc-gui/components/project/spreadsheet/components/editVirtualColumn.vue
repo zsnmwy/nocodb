@@ -113,20 +113,6 @@ export default {
     async save() {
       // todo: rollup update
       try {
-        // if (this.column.formula) {
-        //   await this.$refs.formula.update()
-        // } else {
-        //   await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //     env: this.nodes.env,
-        //     dbAlias: this.nodes.dbAlias
-        //   }, 'xcUpdateVirtualKeyAlias', {
-        //     table_name: this.nodes.table_name,
-        //     oldAlias: this.column.title,
-        //     newAlias: this.newColumn.title
-        //   }])
-        //
-        //   this.$toast.success('Successfully updated alias').goAway(3000)
-        // }
         await this.$api.dbTableColumn.update(this.meta.id, this.column.id, this.newColumn)
       } catch (e) {
         console.log(this._extractSdkResponseErrorMsg(e))

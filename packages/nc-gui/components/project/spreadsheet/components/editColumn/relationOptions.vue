@@ -187,9 +187,6 @@ export default {
         this.relation.type === 'real' && !this.isSQLite ? 'relationCreate' : 'xcVirtualRelationCreate',
         { alias: this.alias, ...this.relation }
       ])
-      // } catch (e) {
-      //   throw e
-      // }
     },
     onColumnSelect() {
       const col = this.refColumns.find(c => this.relation.parentColumn === c.column_name)

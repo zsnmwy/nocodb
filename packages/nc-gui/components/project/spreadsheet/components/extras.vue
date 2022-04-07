@@ -13,14 +13,6 @@
       <div class="text-center caption grey--text mt-3 mb-1">
         Built with Vue JS<br><img src="vue.svg" class="vue-icon mt-1 mb-n1" alt="vue.js" width="30">
       </div>
-
-      <!--      <div class="justify-center caption grey&#45;&#45;text mt-2 d-flex align-center ">
-        <img src="favicon-32.png" alt="nocodb" width="20px">
-        <v-icon size="13" color="red" class="mx-3">
-          mdi-heart
-        </v-icon>
-        <img src="vue.svg" class="vue-icon" alt="vue.js" width="20px">
-      </div>-->
     </div>
     <template v-else>
       <div class="d-flex justify-end">
@@ -87,12 +79,6 @@
           </v-list-item>
         </v-list>
       </div>
-
-      <!--      <sponsor-mini-->
-      <!--        :class="{ active: !showCommunity }"-->
-      <!--        class="item elevation-0"-->
-      <!--        :nav="true"-->
-      <!--      />-->
     </template>
   </div>
 </template>

@@ -2,16 +2,6 @@
   <div class="h-100" style="min-height: 500px">
     <v-toolbar v-if="!viewMode" class="elevation-0">
       <slot name="toolbar" :valid="valid">
-        <!--      <v-text-field
-          v-model="url"
-          clearable
-          placeholder="Enter template url"
-          outlined
-          hide-details
-          dense
-          @keydown.enter="loadUrl"
-        />-->
-        <!--      <v-btn outlined class='ml-1' @click='loadUrl'> Load URL</v-btn>-->
 
         <v-tooltip bottom>
           <template #activator="{on}">
@@ -36,43 +26,18 @@
           mdi-information-outline
         </v-icon>
 
-        <!--      <v-icon class="mr-3" @click="openUrl">
-          mdi-web
-        </v-icon>-->
-        <!--      <v-tooltip bottom>
-          <template #activator="{on}">
-            <v-icon
-              class="mr-3"
-              v-on="on"
-              @click="url = '',project.tables= []"
-            >
-              mdi-close-circle-outline
-            </v-icon>
-          </template>
-          <span class="caption">Reset template</span>
-        </v-tooltip>-->
-
         <v-btn small outlined class="mr-1" @click="project = {tables : []}">
           <v-icon small>
             mdi-close
           </v-icon>
           Reset
         </v-btn>
-        <!--      <v-icon
-          :color="$store.getters['github/isAuthorized'] ? '' : 'error'"
-          class="mr-3"
-          @click="githubConfigForm = !githubConfigForm"
-        >
-          mdi-github
-        </v-icon>-->
         <v-btn small outlined class="mr-1" @click="createTableClick">
           <v-icon small>
             mdi-plus
           </v-icon>
           New table
         </v-btn>
-
-        <!--      <v-btn outlined small class='mr-1' @click='submitTemplate'> Submit Template</v-btn>-->
         <v-btn
           color="primary"
           outlined
@@ -447,28 +412,7 @@
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
-
-                <!--            <v-btn small color='primary' class='mt-10' @click='createTablesDialog = true'>New Table</v-btn>-->
                 <div v-if="!viewMode" class="mx-auto" style="max-width:600px">
-                  <!--                  <div class="mt-10">
-                    <v-text-field
-                      ref="project"
-                      v-model="project.title"
-                      class="caption"
-                      outlined
-                      dense
-                      label="Project Name"
-                      :rules="[v => !!v || 'Project name required'] "
-                    />
-                  </div>-->
-                  <!--
-                  <div
-                    class="rounded pa-5 mb-5 d-100 text-center caption"
-                    :style="{background:project.image_url}"
-                    @click="generateGradient"
-                  >
-                    Click to change gradient
-                  </div>-->
                   <template v-if="!excelImport">
                     <gradient-generator v-model="project.image_url" class=" d-100 mt-4" />
 

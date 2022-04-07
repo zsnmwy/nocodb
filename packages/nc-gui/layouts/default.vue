@@ -57,9 +57,6 @@
 
           <language class="mr-3" />
           <template v-if="isDashboard">
-            <!--            <div v-if="_isUIAllowed('settings')">-->
-            <!--              <settings-modal />-->
-            <!--            </div>-->
             <div>
               <x-btn
                 v-if="_isUIAllowed('add-user')"
@@ -366,10 +363,6 @@ export default {
     error: null,
     dialogErrorShow: false,
     dialogDebug: false,
-    // migrationsMenu: [
-    //   { name: 'dev', children: [{ name: 'db-1' }, { name: 'db-2' }] },
-    //   { name: 'test', children: [{ name: 'db-1' }, { name: 'db-2' }] }
-    // ],
     clipped: false,
     drawer: null,
     fixed: false,
@@ -437,12 +430,6 @@ export default {
     this.selectedEnv = this.$store.getters['project/GtrActiveEnv']
     this.loadProjectInfo()
   },
-  // errorCaptured(err, vm, info) {
-  //   console.log("errorCaptured", err, vm, info);
-  //   this.error = err;
-  //   this.dialogErrorShow = true;
-  //   return false;
-  // },
   methods: {
     ...mapActions({ changeActiveTab: 'tabs/changeActiveTab' }),
     ...mapMutations({
@@ -523,21 +510,6 @@ export default {
       }
     },
     handleMigrationsMenuClick(item, closeMenu = true, sqlEditor = false) {
-      // if (item._nodes.type != "db") return;
-      //
-      // if (closeMenu) this.$refs.migrationsMenu.isActive = false;
-      // const tabIndex = this.tabs.findIndex(el => el.name === item.name);
-      // if (tabIndex != -1) {
-      //   this.changeActiveTab(tabIndex);
-      // } else {
-      //   if (sqlEditor) {
-      //     const tabData = JSON.parse(JSON.stringify(item));
-      //     tabData._nodes.type = "sqlEditor";
-      //     this.$store.dispatch("tabs/ActAddTab", tabData);
-      //   } else {
-      //     this.$store.dispatch("tabs/ActAddTab", item);
-      //   }
-      // }
     },
 
     terminalTabAdd() {
@@ -566,9 +538,6 @@ export default {
         item._nodes.type = 'apiClientDir'
         this.$store.dispatch('tabs/ActAddTab', item)
       }
-      // } else {
-      //   this.terminalDialog = true;
-      // }
     },
     apiClientSwaggerTabAdd() {
       // if (this.$route.path.indexOf('dashboard') > -1) {
@@ -581,9 +550,6 @@ export default {
         item._nodes.type = 'apiClientSwaggerDir'
         this.$store.dispatch('tabs/ActAddTab', item)
       }
-      // } else {
-      //   this.terminalDialog = true;
-      // }
     },
     projectInfoTabAdd() {
       const tabIndex = this.tabs.findIndex(el => el.key === 'projectInfo')
@@ -607,35 +573,14 @@ export default {
         item._nodes.type = 'meta'
         this.$store.dispatch('tabs/ActAddTab', item)
       }
-      // } else {
-      //   this.terminalDialog = true;
-      // }
     },
     apiClientSwaggerOpen() {
       this.$router.push('/apiClient')
     },
     graphqlClientTabAdd() {
-      // const tabIndex = this.tabs.findIndex(el => el.key === `graphqlClientDir`);
-      // if (tabIndex !== -1) {
-      //   this.changeActiveTab(tabIndex);
-      // } else {
-      //   let item = {name: 'Graphql Client', key: `graphqlClientDir`}
-      //   item._nodes = {env: 'dev'};
-      //   item._nodes.type = 'graphqlClientDir';
-      //   this.$store.dispatch("tabs/ActAddTab", item);
-      // }
       window.open(this.swaggerOrGraphiqlUrl, '_blank')
     },
     swaggerClientTabAdd() {
-      // const tabIndex = this.tabs.findIndex(el => el.key === `swaggerClientDir`);
-      // if (tabIndex !== -1) {
-      //   this.changeActiveTab(tabIndex);
-      // } else {
-      //   let item = {name: 'Swagger Client', key: `swaggerClientDir`}
-      //   item._nodes = {env: 'dev'};
-      //   item._nodes.type = 'swaggerClientDir';
-      //   this.$store.dispatch("tabs/ActAddTab", item);
-      // }
       window.open(this.swaggerOrGraphiqlUrl, '_blank')
     },
     grpcTabAdd() {

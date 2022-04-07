@@ -208,15 +208,6 @@ export default {
     },
     // todo : optimize
     childApi() {
-      // return this.childMeta && this.$ncApis.get({
-      //   env: this.nodes.env,
-      //   dbAlias: this.nodes.dbAlias,
-      //   table: this.childMeta.table_name
-      // })
-      // return this.childMeta && this.childMeta.title
-      //   ? ApiFactory.create(this.$store.getters['project/GtrProjectType'],
-      //     this.childMeta && this.childMeta.title, this.childMeta && this.childMeta.columns, this, this.childMeta)
-      //   : null
     },
     childPrimaryCol() {
       return this.childMeta && (this.childMeta.columns.find(c => c.pv) || {}).title

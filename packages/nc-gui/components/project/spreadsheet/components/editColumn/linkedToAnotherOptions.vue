@@ -13,7 +13,6 @@
           >
             <v-radio value="hm" label="Has Many" />
             <v-radio value="mm" label="Many To Many" />
-            <!--            <v-radio disabled value="oo" label="One To One" />-->
           </v-radio-group>
         </v-col>
         <v-col cols="12">
@@ -54,21 +53,6 @@
 
     <v-container v-show="advanceOptions" fluid class="wrapper">
       <v-row>
-        <!--    <v-col cols="6">
-              <v-text-field
-                outlined
-                class="caption"
-                hide-details
-                :label="$t('labels.childColumn')"
-                :full-width="false"
-                v-model="relation.childColumn"
-                required
-                dense
-                ref="childColumnRef"
-                @change="onColumnSelect"
-              ></v-text-field>
-            </v-col
-            >-->
       </v-row>
       <template v-if="!isSQLite">
         <v-row>
@@ -149,21 +133,7 @@ export default {
       ]
     },
     tableRules() {
-      return [
-        // v => !!v || 'Required',
-        // (v) => {
-        //   if (this.type === 'mm') {
-        //     return !(this.meta.manyToMany || [])
-        //       .some(mm => (mm.table_name === v && mm.rtn === this.meta.table_name) || (mm.rtn === v && mm.table_name === this.meta.table_name)) ||
-        //       'Duplicate many to many relation is not allowed at the moment'
-        //   }
-        //   if (this.type === 'hm') {
-        //     return !(this.meta.hasMany || [])
-        //       .some(hm => hm.table_name === v) ||
-        //       'Duplicate has many relation is not allowed at the moment'
-        //   }
-        // }
-      ]
+      return []
     }
   },
   async created() {

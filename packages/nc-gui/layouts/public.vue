@@ -9,7 +9,6 @@
       dark
       height="40"
     >
-      <!-- <v-toolbar-side-icon></v-toolbar-side-icon> -->
       <v-toolbar-title>
         <v-tooltip bottom>
           <template #activator="{ on }">
@@ -19,8 +18,6 @@
               v-on="on"
             >
               <v-img :src="require('~/assets/img/icons/512x512-trans.png')" max-height="30px" max-width="30px" />
-              <!-- <v-icon color="primary">alpha-x-circle</v-icon
-              ><v-icon color="primary">alpha-c-circle </v-icon> -->
             </v-btn>
           </template>
           NocoDB Home

@@ -161,15 +161,6 @@ export default {
     },
     // todo : optimize
     parentApi() {
-      // return this.parentMeta && this.$ncApis.get({
-      //   env: this.nodes.env,
-      //   dbAlias: this.nodes.dbAlias,
-      //   table: this.parentMeta.table_name
-      // })
-      // return this.parentMeta && this.parentMeta.title
-      //   ? ApiFactory.create(this.$store.getters['project/GtrProjectType'],
-      //     this.parentMeta && this.parentMeta.title, this.parentMeta && this.parentMeta.columns, this, this.parentMeta)
-      //   : null
     },
     parentId() {
       return this.pid ?? (this.value && this.parentMeta && this.parentMeta.columns.filter(c => c.pk).map(c => this.value[c.title]).join('___'))
@@ -184,19 +175,13 @@ export default {
       return this.parentMeta && (this.parentMeta.columns.find(c => c.pk) || {}).title
     },
     parentReferenceKey() {
-      // return this.parentMeta && (this.parentMeta.columns.find(c => c.column_name === this.bt.rcn) || {}).title
       return this.parentMeta && (this.parentMeta.columns.find(c => c.id === this.column.colOptions.fk_parent_column_id) || {}).title
     },
     btWhereClause() {
       // if parent reference key is pk, then filter out the selected value
       // else, filter out the selected value + empty values (as we can't set an empty value)
       const prk = this.parentReferenceKey
-      // const isPk = !!(this.parentMeta && (this.parentMeta.columns.find(c => c.pk && c.title === prk))) || false
-      // let selectedValue = this.meta && this.meta.columns ? this.meta.columns.filter(c => c.column_name === this.bt.column_name).map(c => this.row[c.title] || '').join('___') : ''
       const selectedValue = this.meta && this.meta.columns ? this.meta.columns.filter(c => c.id === this.column.colOptions.fk_child_column_id).map(c => this.row[c.title] || '').join('___') : ''
-      // if (this.parentMeta && (this.parentMeta.columns.find(c => c.title === prk)).type !== 'string') {
-      //   selectedValue = selectedValue || 0
-      // }
       return `(${prk},not,${selectedValue})~or(${prk},is,null)`
     },
     parentQueryParams() {
@@ -342,13 +327,6 @@ export default {
           dbAlias: this.nodes.dbAlias,
           id: this.column.colOptions.fk_related_model_id
         })
-        // const parentTableData = await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-        //   env: this.nodes.env,
-        //   dbAlias: this.nodes.dbAlias
-        // }, 'tableXcModelGet', {
-        //   tn: this.bt.rtn
-        // }]);
-        // this.parentMeta = JSON.parse(parentTableData.meta)
       }
     },
     async showNewRecordModal() {
@@ -356,15 +334,9 @@ export default {
       this.newRecordModal = true
     },
     async addChildToParent(parent) {
-      // const pkColumns = this.parentMeta.columns.filter(c => c.pk)
       const pid = this._extractRowId(parent, this.parentMeta)
       const id = this._extractRowId(this.row, this.meta)
       const _cn = this.meta.columns.find(c => c.id === this.column.colOptions.fk_child_column_id).title
-      // const isNum = false
-
-      // if (pkColumns.length === 1) {
-      //   isNum = ['float', 'integer'].includes(this.sqlUi.getAbstractType(pkColumns[0]))
-      // }
 
       if (this.isNew) {
         const _rcn = this.parentMeta.columns.find(c => c.id === this.column.colOptions.fk_parent_column_id).title

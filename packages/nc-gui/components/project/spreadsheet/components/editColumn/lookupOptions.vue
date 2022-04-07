@@ -79,50 +79,6 @@ export default {
 
       return refTables
 
-      // return (this.meta
-      //   ? [
-      //       ...(this.meta.belongsTo || []).map(({ rtn, _rtn, rcn, table_name, cn }) => ({
-      //         type: 'bt',
-      //         rtn,
-      //         _rtn,
-      //         rcn,
-      //         table_name,
-      //         cn,
-      //         ltn: rtn,
-      //         _ltn: _rtn
-      //       })),
-      //       ...(this.meta.hasMany || []).map(({
-      //         table_name,
-      //         title,
-      //         cn,
-      //         rcn,
-      //         rtn
-      //       }) => ({
-      //         type: 'hm',
-      //         table_name,
-      //         title,
-      //         cn,
-      //         rcn,
-      //         rtn,
-      //         ltn: table_name,
-      //         _ltn: title
-      //       })),
-      //       ...(this.meta.manyToMany || []).map(({ vtn, _vtn, vrcn, vcn, rtn, _rtn, rcn, table_name, cn }) => ({
-      //         type: 'mm',
-      //         table_name,
-      //         cn,
-      //         vtn,
-      //         _vtn,
-      //         vrcn,
-      //         rcn,
-      //         rtn,
-      //         vcn,
-      //         _rtn,
-      //         ltn: rtn,
-      //         _ltn: _rtn
-      //       }))
-      //     ]
-      //   : []).filter(t => this.tables.includes(t.ltn))
     },
     columnList() {
       return ((
@@ -140,12 +96,6 @@ export default {
   methods: {
     async loadTablesList() {
       const result = (await this.$api.dbTable.list(this.$store.state.project.projectId, this.$store.state.project.project.bases[0].id))
-
-      //   await this.$store.dispatch('sqlMgr/ActSqlOp', [{
-      //   env: this.nodes.env,
-      //   dbAlias: this.nodes.dbAlias
-      // }, 'tableList'])
-
       this.tables = result.list
     },
     checkLookupExist(v) {

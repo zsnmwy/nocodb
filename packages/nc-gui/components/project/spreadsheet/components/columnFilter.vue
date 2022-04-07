@@ -61,49 +61,6 @@
               mdi-close-box
             </v-icon>
             <span v-else :key="i + '_1'" />
-
-            <!--        <span
-            v-if="!i"
-            :key="i + '_2'"
-            class="caption d-flex align-center"
-          >{{ $t('labels.where') }}</span>
-
-          <v-select
-            v-else
-            :key="i + '_4'"
-            v-model="filter.logicOp"
-            class="flex-shrink-1 flex-grow-0 elevation-0 caption "
-            :items="['and' ,'or']"
-            solo
-            flat
-            dense
-            hide-details
-            :disabled="filter.readOnly"
-            @click.stop
-          >
-            <template #item="{item}">
-              <span class="caption font-weight-regular">{{ item }}</span>
-            </template>
-          </v-select>-->
-            <!--        <v-text-field-->
-            <!--          v-if="filter.readOnly"-->
-            <!--          :key="i + '_5'"-->
-            <!--          v-model="filter.field"-->
-            <!--          class="caption "-->
-            <!--          placeholder="Field"-->
-            <!--          solo-->
-            <!--          flat-->
-            <!--          dense-->
-            <!--          disabled-->
-            <!--          hide-details-->
-            <!--          @click.stop-->
-            <!--        >-->
-            <!--          <template #item="{item}">-->
-            <!--            <span class="caption font-weight-regular">{{ item }}</span>-->
-            <!--          </template>-->
-            <!--        </v-text-field>-->
-            <!--        v-else-->
-
             <span
               v-if="!i"
               :key="i + '_2'"
@@ -200,13 +157,6 @@
       </template>
     </div>
 
-    <!--    <v-list-item dense class="pt-2 list-btn">
-          <v-btn @click.stop="addFilter" small class="elevation-0 grey&#45;&#45;text">
-            <v-icon small color="grey">mdi-plus</v-icon>
-            Add Filter
-          </v-btn>
-        </v-list-item>-->
-
     <v-btn
       small
       class="elevation-0 grey--text my-3"
@@ -218,12 +168,6 @@
       <!-- Add Filter -->
       {{ $t('activity.addFilter') }}
     </v-btn>
-    <!--    <v-btn small class="elevation-0 grey&#45;&#45;text my-3" @click.stop="addFilterGroup">-->
-    <!--      <v-icon small color="grey">-->
-    <!--        mdi-plus-->
-    <!--      </v-icon>-->
-    <!--      Add Filter Group-->
-    <!--    </v-btn>-->
     <slot />
   </div>
 </template>
