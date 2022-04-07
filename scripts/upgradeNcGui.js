@@ -7,21 +7,6 @@ const execSync = require('child_process').execSync;
 const ncLibPackage = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'packages', 'nc-lib-gui', 'package.json')))
 
 
-const version = ncLibPackage.version
-  .replace(/\.(\d+)$/, (_, v) => {
-      return `.${++v}`
-  })
-
-if (process.env.targetEnv === 'DEV') {
-    // nightly build
-    // e.g. 0.84.2-20220220-1250
-    ncLibPackage.version = `${ncLibPackage.version}-${process.env.targetVersion}`
-    ncLibPackage.name += '-daily'
-} else {
-    ncLibPackage.version = version
-}
-
-
 const replacePackageName = (filePath) => {
     return new Promise((resolve, reject) => {
         return fs.readFile(filePath, 'utf8', function (err, data) {
