@@ -1,4 +1,5 @@
 import Base from '../noco-models/Base';
+import ProjectUser from '../noco-models/ProjectUser';
 import Noco from '../noco/Noco';
 import { ProjectType } from 'nocodb-sdk';
 import {
@@ -195,6 +196,9 @@ export default class Project implements ProjectType {
       CacheDelDirection.CHILD_TO_PARENT
     );
 
+    // delete project users
+    await ProjectUser.deleteFromProject(projectId);
+
     // set meta
     return await ncMeta.metaUpdate(
       null,
@@ -248,6 +252,7 @@ export default class Project implements ProjectType {
       // set cache
       await NocoCache.set(key, o);
     }
+
     // set meta
     return await ncMeta.metaUpdate(
       null,
@@ -270,6 +275,10 @@ export default class Project implements ProjectType {
     if (project.title) {
       await NocoCache.del(`${CacheScope.PROJECT}:${project.title}`);
     }
+
+    // delete project users
+    await ProjectUser.deleteFromProject(projectId);
+
     await NocoCache.deepDel(
       CacheScope.PROJECT,
       `${CacheScope.PROJECT}:${projectId}`,

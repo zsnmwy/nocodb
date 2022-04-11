@@ -1,5 +1,5 @@
 import {
-  // CacheDelDirection,
+  CacheDelDirection,
   CacheGetType,
   CacheScope,
   MetaTable
@@ -43,6 +43,9 @@ export default class ProjectUser {
       true
     );
 
+    // del count
+    await NocoCache.del(`${CacheScope.PROJECT_USER}:${fk_user_id}:count`);
+
     return this.get(project_id, fk_user_id, ncMeta);
   }
 
@@ -67,7 +70,8 @@ export default class ProjectUser {
         projectUser
       );
     }
-    return projectUser;
+
+    return projectUser && new ProjectUser(projectUser);
   }
 
   public static async getUsersList(
@@ -94,8 +98,11 @@ export default class ProjectUser {
         `${MetaTable.PROJECT_USERS}.project_id`,
         `${MetaTable.PROJECT_USERS}.roles as roles`
       )
-      .offset(offset)
-      .limit(limit);
+      .offset(offset);
+
+    if (limit !== Infinity) {
+      queryBuilder.limit(limit);
+    }
 
     if (query) {
       queryBuilder.where('email', 'like', `%${query.toLowerCase?.()}%`);
@@ -169,11 +176,48 @@ export default class ProjectUser {
     if (email) {
       await NocoCache.delAll(CacheScope.USER, `${email}*`);
     }
+    // del project user
     await NocoCache.del(`${CacheScope.PROJECT_USER}:${projectId}:${userId}`);
+    // del count
+    await NocoCache.del(`${CacheScope.PROJECT_USER}:${userId}:count`);
+    // del list
+    await NocoCache.deepDel(
+      CacheScope.PROJECT_USER,
+      `${CacheScope.PROJECT_USER}:${userId}`,
+      CacheDelDirection.PARENT_TO_CHILD
+    );
     return await ncMeta.metaDelete(null, null, MetaTable.PROJECT_USERS, {
       fk_user_id: userId,
       project_id: projectId
     });
+  }
+
+  // triggered from Project.ts
+  static async deleteFromProject(projectId) {
+    // del projectUser
+    await NocoCache.del(`${CacheScope.PROJECT_USER}:${projectId}`);
+    // get user lists
+    const projectUsers = await this.getUsersList(
+      {
+        project_id: projectId,
+        limit: Infinity,
+        offset: 0
+      },
+      Noco.ncMeta
+    );
+    // delete each user count
+    for (const user of projectUsers) {
+      // del projectUser count
+      await NocoCache.del(`${CacheScope.PROJECT_USER}:${user.id}:count`);
+      // del projectUser
+      await NocoCache.del(`${CacheScope.PROJECT_USER}:${projectId}:${user.id}`);
+      // del list
+      await NocoCache.deepDel(
+        CacheScope.PROJECT_USER,
+        `${CacheScope.PROJECT_USER}:${user.id}:list`,
+        CacheDelDirection.PARENT_TO_CHILD
+      );
+    }
   }
 
   static async userProjectList(
@@ -188,78 +232,90 @@ export default class ProjectUser {
     } = {},
     ncMeta = Noco.ncMeta
   ) {
-    // todo: redis - cache
+    let userProjectList = await NocoCache.getList(CacheScope.PROJECT_USER, [
+      userId
+    ]);
+    if (!userProjectList.length) {
+      const qb = ncMeta
+        .knex(MetaTable.PROJECT)
+        .innerJoin(
+          MetaTable.PROJECT_USERS,
+          `${MetaTable.PROJECT}.id`,
+          `${MetaTable.PROJECT_USERS}.project_id`
+        )
+        .innerJoin(
+          MetaTable.USERS,
+          `${MetaTable.USERS}.id`,
+          `${MetaTable.PROJECT_USERS}.fk_user_id`
+        )
+        .innerJoin(
+          MetaTable.BASES,
+          `${MetaTable.BASES}.project_id`,
+          `${MetaTable.PROJECT}.id`
+        )
+        // extract owner email
+        .select(
+          ncMeta
+            .knex(`${MetaTable.PROJECT_USERS} as pu`)
+            .select('admin.email')
+            .innerJoin(
+              `${MetaTable.USERS} as admin`,
+              `pu.fk_user_id`,
+              `admin.id`
+            )
+            .where('pu.project_id', ncMeta.knex.raw(`${MetaTable.PROJECT}.id`))
+            .where('pu.roles', 'owner')
+            .first()
+            .as('owner_email')
+        )
 
-    const qb = ncMeta
-      .knex(MetaTable.PROJECT)
-      .innerJoin(
-        MetaTable.PROJECT_USERS,
-        `${MetaTable.PROJECT}.id`,
-        `${MetaTable.PROJECT_USERS}.project_id`
-      )
-      .innerJoin(
-        MetaTable.USERS,
-        `${MetaTable.USERS}.id`,
-        `${MetaTable.PROJECT_USERS}.fk_user_id`
-      )
-      .innerJoin(
-        MetaTable.BASES,
-        `${MetaTable.BASES}.project_id`,
-        `${MetaTable.PROJECT}.id`
-      )
-      // extract owner email
-      .select(
-        ncMeta
-          .knex(`${MetaTable.PROJECT_USERS} as pu`)
-          .select('admin.email')
-          .innerJoin(`${MetaTable.USERS} as admin`, `pu.fk_user_id`, `admin.id`)
-          .where('pu.project_id', ncMeta.knex.raw(`${MetaTable.PROJECT}.id`))
-          .where('pu.roles', 'owner')
-          .first()
-          .as('owner_email')
-      )
+        .select(`${MetaTable.PROJECT}.id`)
+        .select(`${MetaTable.PROJECT}.title`)
+        .select(`${MetaTable.PROJECT}.prefix`)
+        .select(`${MetaTable.PROJECT}.description`)
+        .select(`${MetaTable.PROJECT}.meta`)
+        .select(`${MetaTable.PROJECT}.color`)
 
-      .select(`${MetaTable.PROJECT}.id`)
-      .select(`${MetaTable.PROJECT}.title`)
-      .select(`${MetaTable.PROJECT}.prefix`)
-      .select(`${MetaTable.PROJECT}.description`)
-      .select(`${MetaTable.PROJECT}.meta`)
-      .select(`${MetaTable.PROJECT}.color`)
+        .select(`${MetaTable.PROJECT_USERS}.starred`)
+        .select(`${MetaTable.PROJECT_USERS}.roles`)
+        .select(`${MetaTable.PROJECT_USERS}.pinned`)
+        .select(`${MetaTable.PROJECT_USERS}.group`)
+        .select(`${MetaTable.PROJECT_USERS}.order`)
+        .select(`${MetaTable.PROJECT_USERS}.hidden`)
 
-      .select(`${MetaTable.PROJECT_USERS}.starred`)
-      .select(`${MetaTable.PROJECT_USERS}.roles`)
-      .select(`${MetaTable.PROJECT_USERS}.pinned`)
-      .select(`${MetaTable.PROJECT_USERS}.group`)
-      .select(`${MetaTable.PROJECT_USERS}.order`)
-      .select(`${MetaTable.PROJECT_USERS}.hidden`)
+        .select(`${MetaTable.BASES}.type as data_source_type`)
 
-      .select(`${MetaTable.BASES}.type as data_source_type`)
+        .orderBy(`${MetaTable.PROJECT_USERS}.order`)
+        .where(`${MetaTable.PROJECT_USERS}.fk_user_id`, userId)
+        .where(`${MetaTable.PROJECT}.deleted`, false)
 
-      .orderBy(`${MetaTable.PROJECT_USERS}.order`)
-      .where(`${MetaTable.PROJECT_USERS}.fk_user_id`, userId)
-      .where(`${MetaTable.PROJECT}.deleted`, false)
+        .offset(offset)
+        .limit(limit);
 
-      .offset(offset)
-      .limit(limit);
+      if (query) {
+        qb.where(`${MetaTable.PROJECT}.title`, 'like', `%${query}%`);
+      }
 
-    if (query) {
-      qb.where(`${MetaTable.PROJECT}.title`, 'like', `%${query}%`);
+      if (filterShared) {
+        qb.whereNot(`${MetaTable.PROJECT_USERS}.roles`, 'owner');
+      }
+      if (filterStarred) {
+        qb.where(`${MetaTable.PROJECT_USERS}.starred`, true);
+      }
+      if (recentlyOpened) {
+        qb.orderBy(`${MetaTable.PROJECT_USERS}.opened_date`, 'desc');
+      } else {
+        // todo: sort by order
+        qb.orderBy(`${MetaTable.PROJECT}.created_at`, 'desc');
+      }
+      userProjectList = await qb;
+      await NocoCache.setList(
+        CacheScope.PROJECT_USER,
+        [userId],
+        userProjectList
+      );
     }
-
-    if (filterShared) {
-      qb.whereNot(`${MetaTable.PROJECT_USERS}.roles`, 'owner');
-    }
-    if (filterStarred) {
-      qb.where(`${MetaTable.PROJECT_USERS}.starred`, true);
-    }
-    if (recentlyOpened) {
-      qb.orderBy(`${MetaTable.PROJECT_USERS}.opened_date`, 'desc');
-    } else {
-      // todo: sort by order
-      qb.orderBy(`${MetaTable.PROJECT}.created_at`, 'desc');
-    }
-
-    return await qb;
+    return userProjectList;
   }
 
   static async userProjectCount(
@@ -267,43 +323,52 @@ export default class ProjectUser {
     { query = null, filterShared = false, filterStarred = false } = {},
     ncMeta = Noco.ncMeta
   ) {
-    // todo: redis - cache
+    const userProjectCount =
+      userId &&
+      (await NocoCache.get(
+        `${CacheScope.PROJECT_USER}:${userId}:count`,
+        CacheGetType.TYPE_OBJECT
+      ));
+    if (!userProjectCount) {
+      const qb = ncMeta
+        .knex(MetaTable.PROJECT)
+        .innerJoin(
+          MetaTable.PROJECT_USERS,
+          `${MetaTable.PROJECT}.id`,
+          `${MetaTable.PROJECT_USERS}.project_id`
+        )
+        .innerJoin(
+          MetaTable.USERS,
+          `${MetaTable.USERS}.id`,
+          `${MetaTable.PROJECT_USERS}.fk_user_id`
+        )
+        .innerJoin(
+          MetaTable.BASES,
+          `${MetaTable.BASES}.project_id`,
+          `${MetaTable.PROJECT}.id`
+        )
 
-    const qb = ncMeta
-      .knex(MetaTable.PROJECT)
-      .innerJoin(
-        MetaTable.PROJECT_USERS,
-        `${MetaTable.PROJECT}.id`,
-        `${MetaTable.PROJECT_USERS}.project_id`
-      )
-      .innerJoin(
-        MetaTable.USERS,
-        `${MetaTable.USERS}.id`,
-        `${MetaTable.PROJECT_USERS}.fk_user_id`
-      )
-      .innerJoin(
-        MetaTable.BASES,
-        `${MetaTable.BASES}.project_id`,
-        `${MetaTable.PROJECT}.id`
-      )
+        .count(`${MetaTable.PROJECT}.id`, { as: 'count' })
+        .where(`${MetaTable.PROJECT_USERS}.fk_user_id`, userId)
+        .where(`${MetaTable.PROJECT}.deleted`, false)
+        .first();
 
-      .count(`${MetaTable.PROJECT}.id`, { as: 'count' })
-      .where(`${MetaTable.PROJECT_USERS}.fk_user_id`, userId)
-      .where(`${MetaTable.PROJECT}.deleted`, false)
-      .first();
+      if (query) {
+        qb.where(`${MetaTable.PROJECT}.title`, 'like', `%${query}%`);
+      }
 
-    if (query) {
-      qb.where(`${MetaTable.PROJECT}.title`, 'like', `%${query}%`);
+      if (filterShared) {
+        qb.whereNot(`${MetaTable.PROJECT_USERS}.roles`, 'owner');
+      }
+      if (filterStarred) {
+        qb.where(`${MetaTable.PROJECT_USERS}.starred`, true);
+      }
+      await NocoCache.set(
+        `${CacheScope.PROJECT_USER}:${userId}:count`,
+        (await qb)?.count
+      );
     }
-
-    if (filterShared) {
-      qb.whereNot(`${MetaTable.PROJECT_USERS}.roles`, 'owner');
-    }
-    if (filterStarred) {
-      qb.where(`${MetaTable.PROJECT_USERS}.starred`, true);
-    }
-
-    return (await qb)?.count;
+    return userProjectCount;
   }
 
   static async userProjectUpdate(
@@ -312,8 +377,7 @@ export default class ProjectUser {
     body: ProjectUpdateRequestType,
     ncMeta = Noco.ncMeta
   ) {
-    // todo: redis cache update
-    const updateBody = extractProps(body, [
+    const updateObj = extractProps(body, [
       'starred',
       'pinned',
       'group',
@@ -321,11 +385,19 @@ export default class ProjectUser {
       'hidden'
     ]);
 
-    await ncMeta.metaUpdate(null, null, MetaTable.PROJECT_USERS, updateBody, {
+    // get existing cache
+    const key = `${CacheScope.PROJECT_USER}:${projectId}:${userId}`;
+    let o = await NocoCache.get(key, CacheGetType.TYPE_OBJECT);
+    if (o) {
+      o = { ...o, ...updateObj };
+      // set cache
+      await NocoCache.set(key, o);
+    }
+    // set meta
+    await ncMeta.metaUpdate(null, null, MetaTable.PROJECT_USERS, updateObj, {
       fk_user_id: userId,
       project_id: projectId
     });
-
     return true;
   }
 
@@ -334,8 +406,13 @@ export default class ProjectUser {
     projectId: string,
     ncMeta = Noco.ncMeta
   ) {
-    // todo: redis cache update
-
+    // del projectUser
+    await NocoCache.del(`${CacheScope.PROJECT_USER}:${projectId}:${userId}`);
+    // del projectUser count
+    await NocoCache.del(`${CacheScope.PROJECT_USER}:${userId}:count`);
+    // del list
+    await NocoCache.del(`${CacheScope.PROJECT_USER}:${userId}:list`);
+    // set meta
     await ncMeta.metaUpdate(
       null,
       null,
@@ -346,7 +423,6 @@ export default class ProjectUser {
         project_id: projectId
       }
     );
-
-    return true;
+    return this.get(userId, projectId, ncMeta);
   }
 }
