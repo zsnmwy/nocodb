@@ -197,6 +197,9 @@ export const getters = {
   GtrProjectId(state) {
     return state.project && state.project.id
   },
+  GtrBaseId(state) {
+    return state.project && state.project.bases&& state.project.bases[0]&& state.project.bases[0].id
+  },
   GtrProjectPrefix(state) {
     return state.project && state.project.prefix
   },
@@ -371,6 +374,7 @@ export const actions = {
 
       const tables = (await this.$api.dbTable.list(
         state.projectId,
+        state.project.bases[0].id,
         {
           includeM2M: rootState.windows.includeM2M || ''
         })).list
