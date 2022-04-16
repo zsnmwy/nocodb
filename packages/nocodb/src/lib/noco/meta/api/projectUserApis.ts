@@ -265,4 +265,5 @@ router.delete(
   '/api/v1/db/meta/projects/:projectId/users/:userId',
   ncMetaAclMw(projectUserDelete, 'projectUserDelete')
 );
+
 export default router;

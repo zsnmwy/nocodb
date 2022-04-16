@@ -323,7 +323,7 @@ export default class ProjectUser {
     { query = null, filterShared = false, filterStarred = false } = {},
     ncMeta = Noco.ncMeta
   ) {
-    const userProjectCount =
+    let userProjectCount =
       userId &&
       (await NocoCache.get(
         `${CacheScope.PROJECT_USER}:${userId}:count`,
@@ -363,9 +363,10 @@ export default class ProjectUser {
       if (filterStarred) {
         qb.where(`${MetaTable.PROJECT_USERS}.starred`, true);
       }
+      userProjectCount = (await qb)?.count;
       await NocoCache.set(
         `${CacheScope.PROJECT_USER}:${userId}:count`,
-        (await qb)?.count
+        userProjectCount
       );
     }
     return userProjectCount;

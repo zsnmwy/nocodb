@@ -419,6 +419,10 @@ export default router => {
     '/api/v1/db/meta/projects/:projectId',
     ncMetaAclMw(projectGet, 'projectGet')
   );
+  router.patch(
+    '/api/v1/db/meta/projects/:projectId',
+    ncMetaAclMw(projectUpdate, 'projectUpdate')
+  );
   router.delete(
     '/api/v1/db/meta/projects/:projectId',
     ncMetaAclMw(projectDelete, 'projectDelete')
@@ -431,7 +435,4 @@ export default router => {
     '/api/v1/db/meta/projects',
     ncMetaAclMw(projectList, 'projectList')
   );
-  router.patch(
-    '/api/v1/db/meta/projects/:projectId',
-    ncMetaAclMw(projectUpdate, 'projectUpdate'));
 };
