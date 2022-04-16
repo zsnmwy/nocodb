@@ -620,6 +620,13 @@ export type ColumnReqType =
     }
   | { uidt?: string; formula_raw?: string; formula?: string; title?: string };
 
+export interface ProjectUpdateRequestType {
+  starred?: boolean;
+  pinned?: boolean;
+  hidden?: boolean;
+  order?: number;
+}
+
 import axios, { AxiosInstance, AxiosRequestConfig, ResponseType } from 'axios';
 
 export type QueryParamsType = Record<string | number, any>;
