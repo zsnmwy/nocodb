@@ -89,7 +89,7 @@ export async function signup(req: Request, res: Response<TableType>) {
       });
     } else {
       if (process.env.NC_INVITE_ONLY_SIGNUP) {
-        NcError.badRequest('Not allowed to signup, contact super admin.');
+        NcError.badRequest('Not allowed to signup, contact super admin');
       } else {
         roles = 'user_new';
       }
