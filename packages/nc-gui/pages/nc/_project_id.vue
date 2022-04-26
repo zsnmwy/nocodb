@@ -149,7 +149,8 @@ export default {
   top:-30px;
   left: 0;
   width: 100%;
-  background: var(--v-primary-base);
+  /*background: var(--v-primary-base);*/
+  background-color: var(--v-backgroundColorDefault-base);
 }
 .pane-toggle {
   position: absolute;

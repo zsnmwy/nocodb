@@ -2,12 +2,10 @@
   <v-app v-if="isProjectInfoLoaded">
     <snackbar />
     <v-app-bar
-      class="elevation-0"
-      color="primary"
+      class="elevation-0 backgroundColorDefault"
       app
       clipped-left
       dense
-      dark
       height="48"
     >
       <div class="d-flex align-center pt-1" style="flex: 1">

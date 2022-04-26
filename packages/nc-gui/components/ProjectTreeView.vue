@@ -7,17 +7,17 @@
   >
     <!--    :expand-on-hover="mini"-->
     <div
-      class="primary nc-project-title theme--dark"
+      class="nc-project-title backgroundColorDefault"
       :class="{ shared: sharedBase }"
     >
       <img v-if="sharedBase" src="favicon-32.png" height="18" class="ml-2">
       <h3
         v-if="sharedBase"
-        class="nc-project-title white--text text-capitalize"
+        class="nc-project-title text-capitalize"
       >
         {{ $store.getters["project/GtrProjectName"] }}
       </h3>
-      <github-star-btn v-else/>
+      <github-star-btn v-else />
     </div>
     <v-navigation-drawer
       ref="drawer"
@@ -29,7 +29,7 @@
     >
       <div class="h-100 d-flex flex-column">
         <div class="flex-grow-1" style="overflow-y: auto; min-height: 200px">
-          <v-skeleton-loader
+          <!--          <v-skeleton-loader
             v-if="!projects || !projects.length"
             class="mt-2 ml-2"
             type="button"
@@ -58,7 +58,7 @@
                 mdi-close
               </v-icon>
             </template>
-          </v-text-field>
+          </v-text-field>-->
 
           <v-skeleton-loader
             v-if="!projects || !projects.length"
@@ -139,8 +139,12 @@
               class="nc-project-tree nc-single-env-project-tree pt-1"
             >
               <template v-for="item in listViewArr">
-                <!--                   v-if="item.children && item.children.length"-->
-                <v-list-group
+                <template
+                  v-if="item.type === 'tableDir'"
+                >
+                  <!--                   v-if="item.children && item.children.length"-->
+                  <!--                <v-list-group
+
                   v-if="isNested(item) && showNode(item)"
                   :key="item.type"
                   color="textColor"
@@ -152,12 +156,13 @@
                   @contextmenu.prevent="showCTXMenu($event, item, true, false)"
                 >
                   <template #appendIcon>
-                    <v-icon small color="grey">
+                    <span />
+                    &lt;!&ndash;                    <v-icon small color="grey">
                       mdi-chevron-down
-                    </v-icon>
-                  </template>
-                  <template #activator>
-                    <v-list-item-icon>
+                    </v-icon>&ndash;&gt;
+                  </template>-->
+                  <!--                  <template #activator>-->
+                  <!--                    <v-list-item-icon>
                       <v-icon
                         v-if="open && icons[item._nodes.type].openIcon"
                         small
@@ -174,63 +179,107 @@
                       >
                         {{ icons[item._nodes.type].icon }}
                       </v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>
-                      <v-tooltip v-if="!isNonAdminAccessAllowed(item)" top>
-                        <template #activator="{ on }">
+                    </v-list-item-icon>-->
+                  <div
+                    :key="item.name"
+                    class="d-flex align-center mx-4"
+                    @contextmenu.prevent="showCTXMenu($event, item, true, false)"
+                  >
+                    <div class="nc-table-filter-wrapper" :class="{active: showFilter || search}">
+                      <v-text-field
+                        v-model="search"
+                        :placeholder="$t('placeholder.searchProjectTree')"
+                        dense
+                        autofocus
+                        hide-details
+                        class="elevation-0 mt-0   caption nc-table-list-filter"
+                        @blur="showFilter=false"
+                      >
+                        <template #prepend-inner>
+                          <v-icon small class="mt-2 ml-2 mr-1">
+                            mdi-magnify
+                          </v-icon>
+                        </template>
+                        <template #append>
+                          <v-icon
+                            v-if="search"
+                            class="mt-3 mr-3"
+                            color="grey"
+                            x-small
+                            @click="search = ''"
+                          >
+                            mdi-close
+                          </v-icon>
+                        </template>
+                      </v-text-field>
+                    </div>
+
+                    <div class="nc-table-list-heading-wrapper d-flex align-center" :class="{active: !showFilter && !search}">
+                      <v-list-item-title>
+                        <v-tooltip v-if="!isNonAdminAccessAllowed(item)" top>
+                          <template #activator="{ on }">
+                            <span
+                              v-if="item.type === 'tableDir'"
+                              class="caption text-uppercase font-weight-medium"
+                              v-on="on"
+                            >
+                              {{
+                                $t("objects.tables")
+                              }}<template
+                                v-if="item.children && item.children.length"
+                              >
+                                ({{
+                                  item.children.filter(
+                                    (child) =>
+                                      !search ||
+                                      child.name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                  ).length
+                                }})</template></span>
+                            <span
+                              v-else
+                              class=" text-uppercase body-2 font-weight-regular"
+                              v-on="on"
+                            >
+                              {{ item.name }}</span>
+                          </template>
+                          <span class="caption">Only visible to Creator</span>
+                        </v-tooltip>
+                        <template v-else>
                           <span
                             v-if="item.type === 'tableDir'"
-                            class="body-2 font-weight-medium"
-                            v-on="on"
+                            class="caption textColor1--text text-uppercase body-2 font-weight-medium"
                           >
                             {{
                               $t("objects.tables")
                             }}<template
-                            v-if="item.children && item.children.length"
-                          >
+                              v-if="item.children && item.children.length"
+                            >
                               ({{
-                              item.children.filter(
-                                (child) =>
-                                  !search ||
-                                  child.name
-                                  .toLowerCase()
-                                  .includes(search.toLowerCase())
-                              ).length
-                            }})</template></span>
-                          <span
-                            v-else
-                            class="body-2 font-weight-medium"
-                            v-on="on"
-                          >
+                                item.children.filter(
+                                  (child) =>
+                                    !search ||
+                                    child.name
+                                      .toLowerCase()
+                                      .includes(search.toLowerCase())
+                                ).length
+                              }})</template></span>
+                          <span v-else class=" font-weight-regular">
                             {{ item.name }}</span>
                         </template>
-                        <span class="caption">Only visible to Creator</span>
-                      </v-tooltip>
-                      <template v-else>
-                        <span
-                          v-if="item.type === 'tableDir'"
-                          class="body-2 font-weight-medium"
-                        >
-                          {{
-                            $t("objects.tables")
-                          }}<template
-                          v-if="item.children && item.children.length"
-                        >
-                            ({{
-                            item.children.filter(
-                              (child) =>
-                                !search ||
-                                child.name
-                                .toLowerCase()
-                                .includes(search.toLowerCase())
-                            ).length
-                          }})</template></span>
-                        <span v-else class="caption font-weight-regular">
-                          {{ item.name }}</span>
-                      </template>
-                    </v-list-item-title>
+                      </v-list-item-title>
 
-                    <v-spacer/>
+                      <v-spacer />
+
+                      <v-icon
+                        small
+                        class="mr-2"
+                        @click="showFilter = true"
+                      >
+                        search
+                      </v-icon>
+                    </div>
 
                     <v-tooltip bottom>
                       <template #activator="{ on }">
@@ -246,19 +295,19 @@
                             handleCreateBtnClick(item.type, item)
                           "
                         >
-                          mdi-plus-circle-outline
+                          mdi-plus-box-outline
                         </x-icon>
                       </template>
                       <span
                         class="caption"
                       >Add new
                         <span class="text-capitalize">{{
-                            item.type.slice(0, -3)
-                          }}</span></span>
+                          item.type.slice(0, -3)
+                        }}</span></span>
                     </v-tooltip>
-                  </template>
-
-                  <v-list-item-group :value="selectedItem">
+                  </div>
+                  <!--                  </template>-->
+                  <v-list-item-group :key="item.name" v-model="item.selected">
                     <component
                       :is="
                         _isUIAllowed('treeview-drag-n-drop')
@@ -288,11 +337,7 @@
                           active-class="font-weight-bold"
                           :selectable="true"
                           dense
-                          :value="`${
-                            (child._nodes && child._nodes).type || ''
-                          }||${(child._nodes && child._nodes.dbAlias) || ''}||${
-                            child.name
-                          }`"
+                          :value="child.name"
                           class="nested ml-3 nc-draggable-child"
                           style="position: relative"
                           @click.stop="addTab({ ...child }, false, true)"
@@ -305,7 +350,6 @@
                           >
                             mdi-drag-vertical
                           </v-icon>
-
                           <v-list-item-icon>
                             <v-icon
                               v-if="icons[child._nodes.type].openIcon"
@@ -334,21 +378,29 @@
                             >
                               <template #activator="{ on }">
                                 <span
-                                  class="caption"
+                                  :class="item.selected === child.name ? 'font-weight-bold': 'font-weight-regular'"
+                                  class="body-1"
                                   v-on="on"
                                   @dblclick="showSqlClient = true"
                                 >
                                   {{ child.name }}
                                 </span>
                               </template>
-                              <span class="caption">{{
-                                  child.creator_tooltip
-                                }}</span>
+                              <span
+                                class="caption"
+                                :class="item.selected === child.name ? 'font-weight-bold': 'font-weight-regular'"
+                              >{{
+                                child.creator_tooltip
+                              }}</span>
                             </v-tooltip>
-                            <span v-else class="caption">{{ child.name }}</span>
+                            <span
+                              v-else
+                              class="body-1"
+                              :class="item.selected === child.name ? 'font-weight-bold': 'font-weight-regular'"
+                            >{{ child.name }}</span>
                           </v-list-item-title>
                           <template v-if="child.type === 'table'">
-                            <v-spacer/>
+                            <v-spacer />
                             <div class="action d-flex" @click.stop>
                               <v-menu>
                                 <template #activator="{ on }">
@@ -412,15 +464,15 @@
                                 </v-list>
                               </v-menu>
 
-                              <!--                          <v-icon @click.stop="" x-small>mdi-delete-outline</v-icon>-->
+                            <!--                          <v-icon @click.stop="" x-small>mdi-delete-outline</v-icon>-->
                             </div>
                           </template>
                         </v-list-item>
                       </transition-group>
                     </component>
                   </v-list-item-group>
-                </v-list-group>
-                <v-list-item
+                <!--                </v-list-group>-->
+                <!--                <v-list-item
                   v-else-if="
                     (item.type !== 'sqlClientDir' || showSqlClient) &&
                       (item.type !== 'migrationsDir' || _isUIAllowed('audit'))
@@ -456,7 +508,7 @@
                     <v-tooltip v-if="!isNonAdminAccessAllowed(item)" top>
                       <template #activator="{ on }">
                         <span
-                          class="caption font-weight-regular"
+                          class=" font-weight-regular"
                           v-on="on"
                           @dblclick="showSqlClient = true"
                         >{{ item.name }}</span>
@@ -465,11 +517,12 @@
                     </v-tooltip>
                     <span
                       v-else
-                      class="caption font-weight-regular"
+                      class=" font-weight-regular"
                       @dblclick="showSqlClient = true"
                     >{{ item.name }}</span>
                   </v-list-item-title>
-                </v-list-item>
+                </v-list-item>-->
+                </template>
               </template>
             </v-list>
           </v-container>
@@ -483,7 +536,7 @@
           />
         </div>
         <div class="pr-3 advance-menu d-none" :class="{ 'pl-3': !mini }">
-          <v-divider v-if="_isUIAllowed('treeViewProjectSettings')"/>
+          <v-divider v-if="_isUIAllowed('treeViewProjectSettings')" />
 
           <v-list
             v-if="_isUIAllowed('treeViewProjectSettings')"
@@ -494,8 +547,8 @@
               <v-list-item-title>
                 <!-- Settings -->
                 <span class="body-2 font-weight-medium">{{
-                    $t("activity.settings")
-                  }}</span>
+                  $t("activity.settings")
+                }}</span>
                 <v-tooltip top>
                   <template #activator="{ on }">
                     <x-icon
@@ -534,8 +587,8 @@
                     <!-- App Store -->
                     <v-list-item-title>
                       <span class="font-weight-regular caption">{{
-                          $t("title.appStore")
-                        }}</span>
+                        $t("title.appStore")
+                      }}</span>
                     </v-list-item-title>
                   </v-list-item>
                 </template>
@@ -560,8 +613,8 @@
                     <!-- Team & Auth -->
                     <v-list-item-title>
                       <span class="font-weight-regular caption">{{
-                          $t("title.teamAndAuth")
-                        }}</span>
+                        $t("title.teamAndAuth")
+                      }}</span>
                     </v-list-item-title>
                   </v-list-item>
                 </template>
@@ -585,8 +638,8 @@
                     <!-- Project Metadata -->
                     <v-list-item-title>
                       <span class="font-weight-regular caption">{{
-                          $t("title.projMeta")
-                        }}</span>
+                        $t("title.projMeta")
+                      }}</span>
                     </v-list-item-title>
                   </v-list-item>
                 </template>
@@ -611,8 +664,8 @@
                     <!-- Project Metadata -->
                     <v-list-item-title>
                       <span class="font-weight-regular caption">{{
-                          $t("title.audit")
-                        }}</span>
+                        $t("title.audit")
+                      }}</span>
                     </v-list-item-title>
                   </v-list-item>
                 </template>
@@ -621,14 +674,14 @@
               </v-tooltip>
             </template>
           </v-list>
-          <v-divider/>
+          <v-divider />
 
           <v-list v-if="_isUIAllowed('previewAs') || previewAs" dense>
             <v-list-item>
               <!-- Preview as -->
               <span class="body-2 font-weight-medium">{{
-                  $t("activity.previewAs")
-                }}</span>
+                $t("activity.previewAs")
+              }}</span>
               <v-icon small class="ml-1">
                 mdi-drama-masks
               </v-icon>
@@ -670,29 +723,27 @@
                   </v-icon>
                   <!-- Reset Preview -->
                   <span class="caption nc-preview-reset">{{
-                      $t("activity.resetReview")
-                    }}</span>
+                    $t("activity.resetReview")
+                  }}</span>
                 </v-list-item>
               </template>
             </v-list>
           </v-list>
         </div>
 
-
-
-        <v-divider/>
+        <v-divider />
         <div
           v-t="['e:api-docs']"
-          class="caption pointer nc-docs pb-2 pl-5 pr-3 pt-2 d-flex align-center"
+          class="pointer nc-docs pl-4 pr-3 d-flex align-center py-6"
           @click="openLink(apiLink)"
         >
-          <v-icon color="brown" small class="mr-2">
+          <v-icon class="mr-2">
             mdi-open-in-new
           </v-icon>
           {{ $t('title.apiDocs') }}
         </div>
 
-
+        <!--
         <template v-if="_isUIAllowed('settings')">
           <div class="pl-5 pr-3 d-flex align-center pb-2">
             <settings-modal>
@@ -711,10 +762,12 @@
             </settings-modal>
           </div>
         </template>
+-->
 
+        <v-divider />
+        <!--        <extras class="pl-1"/>-->
 
-        <!--        <v-divider/>-->
-<!--        <extras class="pl-1"/>-->
+        <user-and-settings-section />
       </div>
     </v-navigation-drawer>
 
@@ -802,9 +855,11 @@ import GithubStarBtn from "~/components/githubStarBtn";
 import SettingsModal from "~/components/settings/settingsModal";
 import Language from "~/components/utils/language";
 import Extras from "~/components/project/spreadsheet/components/extras";
+import UserAndSettingsSection from "~/components/leftNavdrawer/userAndSettingsSection";
 
 export default {
   components: {
+    UserAndSettingsSection,
     Extras,
     Language,
     SettingsModal,
@@ -821,6 +876,7 @@ export default {
     sharedBase: Boolean,
   },
   data: () => ({
+    showFilter:false,
     treeViewStatus: {},
     drag: false,
     dragOptions: {
@@ -1311,15 +1367,15 @@ export default {
 
         if ("toast" in this.$route.query) {
           this.$toast
-          .success(
-            `Successfully generated ${(
-              this.$store.getters["project/GtrProjectType"] || ""
-            ).toUpperCase()} APIs`,
-            {
-              position: "top-center",
-            }
-          )
-          .goAway(5000);
+            .success(
+              `Successfully generated ${(
+                this.$store.getters["project/GtrProjectType"] || ""
+              ).toUpperCase()} APIs`,
+              {
+                position: "top-center",
+              }
+            )
+            .goAway(5000);
         }
 
         try {
@@ -1565,8 +1621,8 @@ export default {
         });
       } catch (e) {
         this.$toast
-        .error(await this._extractSdkResponseErrorMsg(e))
-        .goAway(3000);
+          .error(await this._extractSdkResponseErrorMsg(e))
+          .goAway(3000);
         return;
       }
       await this.removeTabsByName(item);
@@ -1969,7 +2025,7 @@ export default {
 }
 
 /deep/ .v-list-item.nested {
-  min-height: 25px;
+  min-height: 32px;
 }
 
 /deep/ .v-list-item .v-list-item__icon {
@@ -1977,7 +2033,7 @@ export default {
 }
 
 /deep/ .v-list-item.nested .v-list-item__icon {
-  min-height: 25px;
+  min-height: 32px;
   margin-top: 0;
   margin-bottom: 0;
   margin-right: 0;
@@ -2122,6 +2178,16 @@ export default {
     text-transform: capitalize;
     line-height: 20px;
     min-width: calc(100% - 30px);*/
+}
+
+.nc-table-filter-wrapper,.nc-table-list-heading-wrapper{
+  width:0;
+  transition: .3s width ;
+  overflow: hidden;
+}
+
+.nc-table-filter-wrapper.active,.nc-table-list-heading-wrapper.active{
+  width:100%;
 }
 </style>
 

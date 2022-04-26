@@ -7,8 +7,6 @@
     <v-tabs
       ref="projectTabs"
       v-model="activeTab"
-      dark
-      background-color="primary"
       height="40"
       class="project-tabs nc-project-tabs"
       color=""
@@ -42,8 +40,7 @@
             max-width: 140px;
             text-overflow: ellipsis;
           "
-          >{{ tab.name }}</span
-        >
+        >{{ tab.name }}</span>
         <v-icon icon :small="true" @click="removeTab(index)">
           mdi-close
         </v-icon>
@@ -70,9 +67,9 @@
               :ref="'tabs' + index"
               :is-active="
                 activeTab ===
-                `${(tab._nodes && tab._nodes).type || ''}||${
-                  (tab._nodes && tab._nodes.dbAlias) || ''
-                }||${tab.name}`
+                  `${(tab._nodes && tab._nodes).type || ''}||${
+                    (tab._nodes && tab._nodes.dbAlias) || ''
+                  }||${tab.name}`
               "
               :tab-id="`${pid}||${(tab._nodes && tab._nodes).type || ''}||${
                 (tab._nodes && tab._nodes.dbAlias) || ''
@@ -89,9 +86,9 @@
               :ref="'tabs' + index"
               :is-active="
                 activeTab ===
-                `${(tab._nodes && tab._nodes).type || ''}||${
-                  (tab._nodes && tab._nodes.dbAlias) || ''
-                }||${tab.name}`
+                  `${(tab._nodes && tab._nodes).type || ''}||${
+                    (tab._nodes && tab._nodes.dbAlias) || ''
+                  }||${tab.name}`
               "
               :tab-id="`${pid}||${(tab._nodes && tab._nodes).type || ''}||${
                 (tab._nodes && tab._nodes.dbAlias) || ''
@@ -277,33 +274,33 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import treeViewIcons from "../helpers/treeViewIcons";
-import TableView from "./project/table";
-import FunctionTab from "./project/function";
-import ProcedureTab from "./project/procedure";
-import SequenceTab from "./project/sequence";
-import SeedTab from "./project/seed";
-import SqlClientTab from "./project/sqlClient";
-import ApisTab from "./project/apis";
-import ApiClientTab from "./project/apiClientOld";
-import sqlLogAndOutput from "./project/sqlLogAndOutput";
-import graphqlClient from "./project/graphqlClient";
-import xTerm from "./xTerm";
+import { mapGetters, mapMutations } from 'vuex'
+import treeViewIcons from '../helpers/treeViewIcons'
+import TableView from './project/table'
+import FunctionTab from './project/function'
+import ProcedureTab from './project/procedure'
+import SequenceTab from './project/sequence'
+import SeedTab from './project/seed'
+import SqlClientTab from './project/sqlClient'
+import ApisTab from './project/apis'
+import ApiClientTab from './project/apiClientOld'
+import sqlLogAndOutput from './project/sqlLogAndOutput'
+import graphqlClient from './project/graphqlClient'
+import xTerm from './xTerm'
 
-import ApiClientSwaggerTab from "./project/apiClientSwagger";
-import XcMeta from "./project/settings/xcMeta";
-import XcInfo from "./project/xcInfo";
-import SwaggerClient from "@/components/project/swaggerClient";
-import DlgTableCreate from "@/components/utils/dlgTableCreate";
-import AppStore from "@/components/project/appStore";
-import AuthTab from "@/components/authTab";
-import CronJobs from "@/components/project/cronJobs";
-import DisableOrEnableModels from "@/components/project/projectMetadata/disableOrEnableModels";
-import ProjectSettings from "@/components/project/projectSettings";
-import GrpcClient from "@/components/project/grpcClient";
-import GlobalAcl from "@/components/globalAcl";
-import AuditTab from "~/components/project/auditTab";
+import ApiClientSwaggerTab from './project/apiClientSwagger'
+import XcMeta from './project/settings/xcMeta'
+import XcInfo from './project/xcInfo'
+import SwaggerClient from '@/components/project/swaggerClient'
+import DlgTableCreate from '@/components/utils/dlgTableCreate'
+import AppStore from '@/components/project/appStore'
+import AuthTab from '@/components/authTab'
+import CronJobs from '@/components/project/cronJobs'
+import DisableOrEnableModels from '@/components/project/projectMetadata/disableOrEnableModels'
+import ProjectSettings from '@/components/project/projectSettings'
+import GrpcClient from '@/components/project/grpcClient'
+import GlobalAcl from '@/components/globalAcl'
+import AuditTab from '~/components/project/auditTab'
 
 export default {
   components: {
@@ -333,130 +330,130 @@ export default {
     SequenceTab,
     sqlLogAndOutput,
     xTerm,
-    graphqlClient,
+    graphqlClient
   },
   data() {
     return {
       dialogCreateTableShow: false,
-      test: "",
+      test: '',
       treeViewIcons,
       hideLogWindows: false,
-      showScreensaver: false,
-    };
+      showScreensaver: false
+    }
   },
   methods: {
     dialogCreateTableShowMethod() {
-      this.dialogCreateTableShow = true;
-      this.$e("c:table:create:navbar");
+      this.dialogCreateTableShow = true
+      this.$e('c:table:create:navbar')
     },
     checkInactiveState() {
-      let position = 0;
-      let idleTime = 0;
+      let position = 0
+      let idleTime = 0
       // Increment the idle time counter every minute.
-      let idleInterval = setInterval(timerIncrement, 1000);
+      let idleInterval = setInterval(timerIncrement, 1000)
 
-      const self = this;
+      const self = this
       // Zero the idle timer on mouse movement.
-      document.addEventListener("mousemove", (e) => {
-        self.showScreensaver = false;
-        idleTime = 0;
-        clearInterval(idleInterval);
-        idleInterval = setInterval(timerIncrement, 1000);
-      });
-      document.addEventListener("keypress", (e) => {
-        self.showScreensaver = false;
-        idleTime = 0;
-        clearInterval(idleInterval);
-        idleInterval = setInterval(timerIncrement, 1000);
-      });
+      document.addEventListener('mousemove', (e) => {
+        self.showScreensaver = false
+        idleTime = 0
+        clearInterval(idleInterval)
+        idleInterval = setInterval(timerIncrement, 1000)
+      })
+      document.addEventListener('keypress', (e) => {
+        self.showScreensaver = false
+        idleTime = 0
+        clearInterval(idleInterval)
+        idleInterval = setInterval(timerIncrement, 1000)
+      })
 
       function timerIncrement() {
-        idleTime = idleTime + 1;
+        idleTime = idleTime + 1
         if (idleTime > 120) {
-          const title = document.title;
+          const title = document.title
 
           function scrolltitle() {
-            document.title = title + Array(position).fill(" .").join("");
-            position = ++position % 3;
+            document.title = title + Array(position).fill(' .').join('')
+            position = ++position % 3
             if (self.showScreensaver) {
-              window.setTimeout(scrolltitle, 400);
+              window.setTimeout(scrolltitle, 400)
             } else {
-              document.title = title;
+              document.title = title
             }
           }
 
-          self.showScreensaver = self.$store.state.windows.screensaver;
-          scrolltitle();
-          clearInterval(idleInterval);
+          self.showScreensaver = self.$store.state.windows.screensaver
+          scrolltitle()
+          clearInterval(idleInterval)
         }
       }
     },
     async handleKeyDown(event) {
-      const activeTabEleKey = `tabs${this.activeTab}`;
-      let isHandled = false;
+      const activeTabEleKey = `tabs${this.activeTab}`
+      let isHandled = false
 
       if (
         this.$refs[activeTabEleKey] &&
         this.$refs[activeTabEleKey][0] &&
         this.$refs[activeTabEleKey][0].handleKeyDown
       ) {
-        isHandled = await this.$refs[activeTabEleKey][0].handleKeyDown(event);
+        isHandled = await this.$refs[activeTabEleKey][0].handleKeyDown(event)
       }
       if (!isHandled) {
         switch (
-          [this._isMac ? event.metaKey : event.ctrlKey, event.key].join("_")
+          [this._isMac ? event.metaKey : event.ctrlKey, event.key].join('_')
         ) {
-          case "true_w":
-            this.removeTab(this.activeTab);
-            event.preventDefault();
-            event.stopPropagation();
-            break;
+          case 'true_w':
+            this.removeTab(this.activeTab)
+            event.preventDefault()
+            event.stopPropagation()
+            break
         }
       }
     },
     ...mapMutations({
-      setActiveTab: "tabs/active",
-      removeTab: "tabs/remove",
-      updateActiveTabx: "tabs/activeTabCtx",
+      setActiveTab: 'tabs/active',
+      removeTab: 'tabs/remove',
+      updateActiveTabx: 'tabs/activeTabCtx'
     }),
-    tabActivated(tab) {},
+    tabActivated(tab) {}
   },
   computed: {
-    ...mapGetters({ tabs: "tabs/list", activeTabCtx: "tabs/activeTabCtx" }),
+    ...mapGetters({ tabs: 'tabs/list', activeTabCtx: 'tabs/activeTabCtx' }),
     pid() {
-      return this.$route.params.project_id;
+      return this.$route.params.project_id
     },
     activeTab: {
       set(tab) {
         if (!tab) {
           return this.$router.push({
-            query: {},
-          });
+            query: {}
+          })
         }
-        const [type, dbalias, name] = tab.split("||");
+        const [type, dbalias, name] = tab.split('||')
         this.$router.push({
           query: {
             ...this.$route.query,
             type,
             dbalias,
-            name,
-          },
-        });
+            name
+          }
+        })
       },
       get() {
         return [
           this.$route.query.type,
           this.$route.query.dbalias,
-          this.$route.query.name,
-        ].join("||");
-      },
-    },
+          this.$route.query.name
+        ].join('||')
+      }
+    }
   },
 
   beforeCreated() {},
   watch: {},
   created() {
-    document.addEventListener("keydown", this.handleKeyDown);
+    document.addEventListener('keydown', this.handleKeyDown)
     /**
      * Listening for tab change so that we can hide/show projectlogs based on tab
      */
@@ -464,17 +461,17 @@ export default {
   mounted() {},
   beforeDestroy() {},
   destroyed() {
-    document.removeEventListener("keydown", this.handleKeyDown);
+    document.removeEventListener('keydown', this.handleKeyDown)
   },
   directives: {},
   validate({ params }) {
-    return true;
+    return true
   },
   head() {
-    return {};
+    return {}
   },
-  props: {},
-};
+  props: {}
+}
 </script>
 
 <style scoped>
