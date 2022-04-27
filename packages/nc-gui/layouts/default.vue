@@ -2,6 +2,7 @@
   <v-app v-if="isProjectInfoLoaded">
     <snackbar />
     <v-app-bar
+      v-if="!isDashboard"
       class="elevation-0 backgroundColorDefault"
       app
       clipped-left

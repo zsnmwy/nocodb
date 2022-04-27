@@ -258,6 +258,8 @@
         mdi-plus-box
       </x-icon>
       <v-spacer />
+
+      <github-star-btn class="mr-1 mt-1" />
     </v-tabs>
 
     <dlg-table-create
@@ -301,9 +303,11 @@ import ProjectSettings from '@/components/project/projectSettings'
 import GrpcClient from '@/components/project/grpcClient'
 import GlobalAcl from '@/components/globalAcl'
 import AuditTab from '~/components/project/auditTab'
+import GithubStarBtn from '~/components/githubStarBtn'
 
 export default {
   components: {
+    GithubStarBtn,
     SwaggerClient,
     // Screensaver,
     DlgTableCreate,

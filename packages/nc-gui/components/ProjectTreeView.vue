@@ -5,8 +5,29 @@
     @mouseenter="onMiniHoverEnter"
     @mouseleave="onMiniHoverLeave"
   >
+    <div class="nc-brand px-4 pb-2 pt-4">
+      <v-btn
+        v-t="['c:navbar:home']"
+        to="/projects"
+        icon
+        class="pa-1 pr-0 brand-icon nc-noco-brand-icon"
+      >
+        <v-img :src="logo" max-height="32px" max-width="32px" />
+      </v-btn>
+
+      <span class="body-1 ml-1" @click="$router.push('/projects')">
+        {{ brandName }}</span>
+    </div>
+
+    <div class="pa-4 nc-text text-uppercase ">
+      <v-icon>
+        mdi-database-outline
+      </v-icon>
+      {{ projectName }}
+    </div>
+
     <!--    :expand-on-hover="mini"-->
-    <div
+    <!--    <div
       class="nc-project-title backgroundColorDefault"
       :class="{ shared: sharedBase }"
     >
@@ -18,7 +39,7 @@
         {{ $store.getters["project/GtrProjectName"] }}
       </h3>
       <github-star-btn v-else />
-    </div>
+    </div>-->
     <v-navigation-drawer
       ref="drawer"
       v-model="navigation.shown"
@@ -70,7 +91,7 @@
               height="30"
               dense
               expand
-              class="nc-project-tree nc-single-env-project-tree pt-1"
+              class="nc-project-tree nc-single-env-project-tree pt-1 ml-4"
             >
               <template v-for="item in listViewArr">
                 <template
@@ -181,26 +202,32 @@
                           <span class="caption">Only visible to Creator</span>
                         </v-tooltip>
                         <template v-else>
-                          <span
+                          <div
                             v-if="item.type === 'tableDir'"
-                            class="caption textColor1--text text-uppercase caption font-weight-medium"
+                            class="caption textColor1--text text-uppercase caption font-weight-regular d-flex mr-3"
                           >
                             {{
                               $t("objects.tables")
-                            }}<template
-                              v-if="item.children && item.children.length"
-                            >
-                              ({{
-                                item.children.filter(
-                                  (child) =>
-                                    !search ||
-                                    child.name
-                                      .toLowerCase()
-                                      .includes(search.toLowerCase())
-                                ).length
-                              }})</template></span>
+                            }}
+                            <!--                            <span class="text-truncate">{{ projectName }}</span>-->
+                            <span>
+                              <template
+                                v-if="item.children && item.children.length"
+                              >
+                                ({{
+                                  item.children.filter(
+                                    (child) =>
+                                      !search ||
+                                      child.name
+                                        .toLowerCase()
+                                        .includes(search.toLowerCase())
+                                  ).length
+                                }})</template>
+                            </span>
+                          </div>
                           <span v-else class="caption font-weight-regular">
-                            {{ item.name }}</span>
+                            {{ item.name }}
+                          </span>
                         </template>
                       </v-list-item-title>
 
@@ -209,6 +236,7 @@
                       <v-icon
                         small
                         class="mr-2"
+                        color="grey"
                         @click="showFilter = true"
                       >
                         search
@@ -289,7 +317,7 @@
                               v-if="icons[child._nodes.type].openIcon"
                               style="cursor: auto"
                               x-small
-                              :color="icons[child._nodes.type].openColor"
+                              :color="item.selected ===child.name ? 'x-active' : 'grey'"
                             >
                               {{ icons[child._nodes.type].openIcon }}
                             </v-icon>
@@ -297,7 +325,7 @@
                               v-else
                               x-small
                               style="cursor: auto"
-                              :color="icons[child._nodes.type].color"
+                              :color="item.selected ===child.name ? 'x-active' : 'grey'"
                             >
                               {{ icons[child._nodes.type].icon }}
                             </v-icon>
@@ -920,6 +948,8 @@ export default {
       return this.navigation.shown === false ? "Open" : "Closed";
     },
     ...mapGetters({
+      logo:'plugins/brandLogo',
+      brandName:'plugins/brandName',
       projects: "project/list",
       tabs: "tabs/list",
       sqlMgr: "sqlMgr/sqlMgr",
