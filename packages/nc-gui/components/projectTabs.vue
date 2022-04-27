@@ -495,17 +495,16 @@ export default {
   text-transform: capitalize;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
-  background: #0002;
+  /*background: #0002;*/
   margin: 0px 1px 0 1px;
-  color: white !important;
+  /*color: white !important;*/
 }
 
 /deep/ .project-tabs .v-tab.v-tab--active.project-tab {
-  background-color: white !important;
   color: rgba(51, 51, 51, 1) !important;
 }
 
-/deep/ .project-tabs.dark-them .v-tab.v-tab--active.project-tab {
+/deep/ .project-tabs.dark-theme .v-tab.v-tab--active.project-tab {
   background-color: #272727 !important;
   color: white !important;
 }

@@ -66,7 +66,7 @@
               <x-btn
                 v-if="_isUIAllowed('add-user')"
                 small
-                btn-class="primary--text nc-menu-share white"
+                btn-class="primary--text nc-menu-share"
                 @click="shareModal = true"
               >
                 <v-icon small class="mr-1">
@@ -799,6 +799,11 @@ a {
 /deep/ .nc-user-menu .v-list-item--dense,
 /deep/ .nc-user-menu .v-list--dense .v-list-item {
   min-height: 35px;
+}
+
+/deep/ .brand-icon .v-image__image{
+  background-color: var(--v-primary-base);
+  border-radius: 4px;
 }
 </style>
 

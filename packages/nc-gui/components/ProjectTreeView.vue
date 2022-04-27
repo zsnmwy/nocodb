@@ -65,72 +65,6 @@
             type="list-item,list-item-three-line@3,list-item@2,list-item-three-line@3"
           />
 
-          <v-treeview
-            v-else-if="isTreeView"
-            v-model="tree"
-            class="mt-5 project-tree nc-project-tree"
-            dense
-            :open.sync="open"
-            :active.sync="active"
-            :items="projects"
-            :search="search"
-            :filter="filter"
-            item-key="_nodes.key"
-            open-on-click
-            color="primary"
-          >
-            <template #label="{ item, open, leaf }">
-              <v-tooltip
-                :bottom="!!item.tooltip"
-                :right="!item.tooltip"
-                :disabled="!item.tooltip && false"
-              >
-                <template #activator="{ on }">
-                  <div
-                    v-if="!hideNode[item._nodes.type]"
-                    v-on="item.tooltip || true ? on : ''"
-                    @contextmenu.prevent="showCTXMenu($event, item, open, leaf)"
-                    @click.stop="addTab({ ...item }, open, leaf)"
-                  >
-                    <template v-if="item._nodes.type === 'db'">
-                      <v-icon size="16">
-                        mdi-database
-                      </v-icon>
-                      <!--                  <img-->
-                      <!--                    class="grey lighten-3"-->
-                      <!--                    :width="16" :src="`/db-icons/${dbIcons[item._nodes.dbConnection.client]}`"/>-->
-                    </template>
-                    <template v-else>
-                      <v-icon
-                        v-if="open && icons[item._nodes.type].openIcon"
-                        small
-                        style="cursor: auto"
-                        :color="icons[item._nodes.type].openColor"
-                      >
-                        {{ icons[item._nodes.type].openIcon }}
-                      </v-icon>
-                      <v-icon
-                        v-else
-                        small
-                        style="cursor: auto"
-                        :color="icons[item._nodes.type].color"
-                      >
-                        {{ icons[item._nodes.type].icon }}
-                      </v-icon>
-                    </template>
-                    <span
-                      class="v-treeview-node__label body-2"
-                      :class="[
-                        icons[item._nodes.type].class,
-                        item.active ? 'font-weight-bold' : '',
-                      ]"
-                    >{{ item.name }}</span>
-                  </div>
-                </template>
-                <span>{{ item.tooltip || item.name }}</span>
-              </v-tooltip>
-            </template>
-          </v-treeview>
           <v-container v-else fluid class="px-1 pt-0">
             <v-list
               height="30"
@@ -1005,18 +939,6 @@ export default {
         functionDir: !this._isUIAllowed("functionDir"),
         procedureDir: !this._isUIAllowed("procedureDir"),
       };
-    },
-    isTreeView() {
-      return (
-        this.projects &&
-        (this.projects.length > 1 ||
-          (this.projects[0] &&
-            this.projects[0].children &&
-            (this.projects[0].children.length > 1 ||
-              (this.projects[0].children[0] &&
-                this.projects[0].children[0].children &&
-                this.projects[0].children[0].children.length > 1))))
-      );
     },
     listViewArr() {
       return (

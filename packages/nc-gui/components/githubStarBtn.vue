@@ -27,17 +27,19 @@ export default {
   border-radius: 4px;
   margin:0
 }
-/deep/ .gh-button-container:not(.dark) > a {
+/deep/ .gh-button-container > a {
   background: transparent !important;
-  color: #cdcdcd !important;
+  /*color: #cdcdcd !important;*/
 }
 /deep/ .gh-button-container > a:first-child{
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
+  color: var(--v-textColor-base);
+  /*border-left-color: transparent;*/
+  /*border-top-color: transparent;*/
+  /*border-bottom-color: transparent;*/
 }
 /deep/ .gh-button-container > a:last-child{
-  border-color: transparent;
+  color: var(--v-textColor-base);
+  /*border-color: transparent;*/
 }
 
 /deep/ .gh-button, /deep/ .social-count{
