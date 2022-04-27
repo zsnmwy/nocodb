@@ -499,3 +499,13 @@ body.dark .toasted .primary.info, body.dark .toasted.toasted-primary.info {
 .nc-text {
   font-size: .8125rem;
 }
+
+.nc-hover{
+  transition: .3s background-color, .3s color;
+  color: var(--v-textColor1-base)
+}
+
+.nc-hover:hover{
+  background-color: #7772;
+  color: var(--v-textColor-base)
+}

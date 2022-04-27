@@ -1,11 +1,23 @@
 <template>
   <div
     style="height: 100%"
-    class="nc-tree-view"
+    class="nc-tree-view backgroundColorDefault"
     @mouseenter="onMiniHoverEnter"
     @mouseleave="onMiniHoverLeave"
   >
-    <div class="nc-brand px-4 pb-2 pt-4">
+    <v-navigation-drawer
+      ref="drawer"
+      v-model="navigation.shown"
+      permanent
+      mini-variant-width="50"
+      class="nc-nav-drawer"
+      style="min-width: 100%; height: calc(100%)"
+    >
+      <home-icon class="px-4 pt-4 pb-4" />
+      <v-divider />
+      <!--    <project-menu class="px-2 pt-2" />-->
+
+      <!--    <div class="nc-brand px-4 pb-2 pt-4">
       <v-btn
         v-t="['c:navbar:home']"
         to="/projects"
@@ -17,17 +29,10 @@
 
       <span class="body-1 ml-1" @click="$router.push('/projects')">
         {{ brandName }}</span>
-    </div>
+    </div>-->
 
-    <div class="pa-4 nc-text text-uppercase ">
-      <v-icon>
-        mdi-database-outline
-      </v-icon>
-      {{ projectName }}
-    </div>
-
-    <!--    :expand-on-hover="mini"-->
-    <!--    <div
+      <!--    :expand-on-hover="mini"-->
+      <!--    <div
       class="nc-project-title backgroundColorDefault"
       :class="{ shared: sharedBase }"
     >
@@ -40,16 +45,24 @@
       </h3>
       <github-star-btn v-else />
     </div>-->
-    <v-navigation-drawer
-      ref="drawer"
-      v-model="navigation.shown"
-      permanent
-      mini-variant-width="50"
-      class="nc-nav-drawer"
-      style="min-width: 100%; height: calc(100% - 30px)"
-    >
-      <div class="h-100 d-flex flex-column">
+
+      <div class="h-100 d-flex flex-column pt-3">
         <div class="flex-grow-1" style="overflow-y: auto; min-height: 200px">
+          <div
+            v-if="_isUIAllowed('add-user')"
+            v-ripple
+            v-t="['e:api-docs']"
+            class="pointer nc-docs mx-2 pl-3 pr-1 d-flex align-center py-2 nc-text text-uppercase nc-hover "
+            @click="shareModal = true"
+          >
+            <v-icon small class="mr-2" color="grey">
+              mdi-account-plus
+            </v-icon>
+            {{ $t("activity.share") }}
+          </div>
+
+          <share-or-invite-modal v-model="shareModal" />
+
           <!--          <v-skeleton-loader
             v-if="!projects || !projects.length"
             class="mt-2 ml-2"
@@ -91,7 +104,7 @@
               height="30"
               dense
               expand
-              class="nc-project-tree nc-single-env-project-tree pt-1 ml-4"
+              class="nc-project-tree nc-single-env-project-tree pt-1 "
             >
               <template v-for="item in listViewArr">
                 <template
@@ -178,6 +191,10 @@
                               class="caption text-uppercase font-weight-medium"
                               v-on="on"
                             >
+                              <v-icon small color="grey">
+                                mdi-database-outline
+                              </v-icon>
+
                               {{
                                 $t("objects.tables")
                               }}<template
@@ -206,6 +223,9 @@
                             v-if="item.type === 'tableDir'"
                             class="caption textColor1--text text-uppercase caption font-weight-regular d-flex mr-3"
                           >
+                            <v-icon small class="mr-2" color="grey">
+                              mdi-database-outline
+                            </v-icon>
                             {{
                               $t("objects.tables")
                             }}
@@ -696,30 +716,16 @@
         <v-divider class="mb-2" />
         <div
           v-t="['e:api-docs']"
-          class="pointer nc-docs pl-4 pr-3 d-flex align-center py-3 nc-text"
+          class="pointer nc-docs pl-2 pr-1 mx-2 d-flex align-center py-2 my-1 nc-text nc-hover"
           @click="openLink(apiLink)"
         >
-          <v-icon class="mr-2">
+          <v-icon class="mr-2" color="grey" size="20">
             mdi-open-in-new
           </v-icon>
           {{ $t('title.apiDocs') }}
         </div>
 
-        <div
-          v-if="_isUIAllowed('add-user')"
-          v-t="['e:api-docs']"
-          class="pointer nc-docs pl-4 pr-3 d-flex align-center py-2 nc-text text-uppercase"
-          @click="shareModal = true"
-        >
-          <v-icon class="mr-2" color="primary">
-            mdi-account-supervisor
-          </v-icon>
-          {{ $t("activity.share") }}
-        </div>
-
-        <share-or-invite-modal v-model="shareModal" />
-
-        <v-divider class="mt-2 " />
+        <!--        <v-divider class="mt-2 " />-->
         <!--        <extras class="pl-1"/>-->
 
         <user-and-settings-section />
@@ -812,9 +818,13 @@ import Language from "~/components/utils/language";
 import Extras from "~/components/project/spreadsheet/components/extras";
 import UserAndSettingsSection from "~/components/leftNavdrawer/userAndSettingsSection";
 import ShareOrInviteModal from "~/components/auth/shareOrInviteModal";
+import ProjectMenu from "~/components/leftNavdrawer/projectMenu";
+import HomeIcon from "~/components/leftNavdrawer/homeIcon";
 
 export default {
   components: {
+    HomeIcon,
+    ProjectMenu,
     ShareOrInviteModal,
     UserAndSettingsSection,
     Extras,
@@ -948,8 +958,6 @@ export default {
       return this.navigation.shown === false ? "Open" : "Closed";
     },
     ...mapGetters({
-      logo:'plugins/brandLogo',
-      brandName:'plugins/brandName',
       projects: "project/list",
       tabs: "tabs/list",
       sqlMgr: "sqlMgr/sqlMgr",
@@ -2137,6 +2145,9 @@ export default {
 .nc-table-filter-wrapper.active,.nc-table-list-heading-wrapper.active{
   width:100%;
 }
+
+
+
 </style>
 
 <!--

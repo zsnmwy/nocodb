@@ -14,9 +14,15 @@
 
       <v-card-text>
         <div>
-          <v-icon small> mdi-account-outline </v-icon>
-          <template v-if="invite_token"> Copy Invite Token </template>
-          <template v-else-if="selectedUser.id"> Edit User </template>
+          <v-icon small>
+            mdi-account-outline
+          </v-icon>
+          <template v-if="invite_token">
+            Copy Invite Token
+          </template>
+          <template v-else-if="selectedUser.id">
+            Edit User
+          </template>
           <template v-else>
             <!-- Invite Team -->
             {{ $t("activity.inviteTeam") }}
@@ -35,7 +41,9 @@
               "
             >
               <template #append>
-                <v-icon color="green" class="ml-2"> mdi-content-copy </v-icon>
+                <v-icon color="green" class="ml-2">
+                  mdi-content-copy
+                </v-icon>
               </template>
               <div class="ellipsis d-100">
                 {{ inviteUrl }}
@@ -74,6 +82,7 @@
                   <v-text-field
                     ref="email"
                     v-model="selectedUser.email"
+                    autofocus
                     :disabled="!!selectedUser.id"
                     dense
                     validate-on-blur
@@ -151,99 +160,99 @@
 </template>
 
 <script>
-import { isEmail } from "~/helpers";
-import { enumColor } from "~/components/project/spreadsheet/helpers/colors";
-import ShareBase from "~/components/base/shareBase";
+import { isEmail } from '~/helpers'
+import { enumColor } from '~/components/project/spreadsheet/helpers/colors'
+import ShareBase from '~/components/base/shareBase'
 
 export default {
-  name: "ShareOrInviteModal",
+  name: 'ShareOrInviteModal',
   components: { ShareBase },
   props: {
-    value: Boolean,
+    value: Boolean
   },
   data: () => ({
-    roles: ["creator", "editor", "commenter", "viewer"],
-    selectedUser: {},
+    roles: ['creator', 'editor', 'commenter', 'viewer'],
+    selectedUser: { roles: 'editor' },
     invite_token: null,
     valid: null,
     emailRules: [
-      (v) => !!v || "E-mail is required",
+      v => !!v || 'E-mail is required',
       (v) => {
-        const invalidEmails = (v || "")
+        const invalidEmails = (v || '')
           .split(/\s*,\s*/)
-          .filter((e) => !isEmail(e));
+          .filter(e => !isEmail(e))
         return (
           !invalidEmails.length ||
-          `"${invalidEmails.join(", ")}" - invalid email`
-        );
-      },
+          `"${invalidEmails.join(', ')}" - invalid email`
+        )
+      }
     ],
     roleRules: [
-      (v) => !!v || "User Role is required",
-      (v) =>
-        ["creator", "editor", "commenter", "viewer"].includes(v) ||
-        "invalid user role",
+      v => !!v || 'User Role is required',
+      v =>
+        ['creator', 'editor', 'commenter', 'viewer'].includes(v) ||
+        'invalid user role'
     ],
     userList: [],
     roleDescriptions: {},
-    deleteUserType: "",
+    deleteUserType: ''
   }),
   computed: {
     userEditDialog: {
       get() {
-        return this.value;
+        return this.value
       },
       set(v) {
-        this.$emit("input", v);
-      },
+        this.$emit('input', v)
+      }
     },
     inviteUrl() {
       return this.invite_token
         ? `${location.origin}${location.pathname}#/user/authentication/signup/${this.invite_token.invite_token}`
-        : null;
+        : null
     },
     rolesColors() {
       const colors = this.$store.state.windows.darkTheme
         ? enumColor.dark
-        : enumColor.light;
+        : enumColor.light
       return ['owner'].concat(this.roles).reduce((o, r, i) => {
-        o[r] = colors[i % colors.length];
-        return o;
-      }, {});
+        o[r] = colors[i % colors.length]
+        return o
+      }, {})
     },
 
     selectedRoles: {
       get() {
         return (
           this.selectedUser && this.selectedUser.roles
-            ? this.selectedUser.roles.split(",")
+            ? this.selectedUser.roles.split(',')
             : []
         ).sort(
           (a, b) => this.roleNames.indexOf(a) - this.roleNames.indexOf(a)
-        )[0];
+        )[0]
       },
       set(roles) {
         if (this.selectedUser) {
-          this.selectedUser.roles = roles; // .filter(Boolean).join(',')
+          this.selectedUser.roles = roles // .filter(Boolean).join(',')
         }
-      },
-    },
+      }
+    }
   },
   methods: {
     async saveUser() {
-      this.validate = true;
-      await this.$nextTick();
+      this.validate = true
+      await this.$nextTick()
       if (this.loading || !this.$refs.form.validate() || !this.selectedUser) {
-        return;
+        return
       }
-      this.$e("a:user:invite", { role: this.selectedUser.roles });
+      this.$e('a:user:invite', { role: this.selectedUser.roles })
 
       if (!this.edited) {
-        this.userEditDialog = false;
+        this.userEditDialog = false
       }
 
       try {
-        let data;
+        let data
         if (this.selectedUser.id) {
           await this.$api.auth.projectUserUpdate(
             this.$route.params.project_id,
@@ -252,56 +261,56 @@ export default {
               roles: this.selectedUser.roles,
               email: this.selectedUser.email,
               project_id: this.$route.params.project_id,
-              projectName: this.$store.getters["project/GtrProjectName"],
+              projectName: this.$store.getters['project/GtrProjectName']
             }
-          );
+          )
         } else {
           data = await this.$api.auth.projectUserAdd(
             this.$route.params.project_id,
             {
               ...this.selectedUser,
               project_id: this.$route.params.project_id,
-              projectName: this.$store.getters["project/GtrProjectName"],
+              projectName: this.$store.getters['project/GtrProjectName']
             }
-          );
+          )
         }
         this.$toast
-          .success("Successfully updated the user details")
-          .goAway(3000);
-        this.$emit("saved");
+          .success('Successfully updated the user details')
+          .goAway(3000)
+        this.$emit('saved')
         if (data && data.invite_token) {
-          this.invite_token = data;
+          this.invite_token = data
           // todo: bring anim
           // this.simpleAnim()
-          return;
+          return
         }
       } catch (e) {
         this.$toast
           .error(await this._extractSdkResponseErrorMsg(e))
-          .goAway(3000);
+          .goAway(3000)
       }
 
-      this.userEditDialog = false;
+      this.userEditDialog = false
     },
 
     clickInviteMore() {
-      this.$e("c:user:invite-more");
-      this.invite_token = null;
-      this.selectedUser = { roles: "editor" };
+      this.$e('c:user:invite-more')
+      this.invite_token = null
+      this.selectedUser = { roles: 'editor' }
     },
     clipboard(str) {
-      const el = document.createElement("textarea");
-      el.addEventListener("focusin", (e) => e.stopPropagation());
-      el.value = str;
-      document.body.appendChild(el);
-      el.select();
-      document.execCommand("copy");
-      document.body.removeChild(el);
+      const el = document.createElement('textarea')
+      el.addEventListener('focusin', e => e.stopPropagation())
+      el.value = str
+      document.body.appendChild(el)
+      el.select()
+      document.execCommand('copy')
+      document.body.removeChild(el)
 
-      this.$e("c:user:copy-url");
-    },
-  },
-};
+      this.$e('c:user:copy-url')
+    }
+  }
+}
 </script>
 
 <style scoped></style>

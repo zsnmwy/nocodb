@@ -803,10 +803,6 @@ a {
   min-height: 35px;
 }
 
-/deep/ .brand-icon .v-image__image{
-  background-color: var(--v-primary-base);
-  border-radius: 4px;
-}
 </style>
 
 <!--

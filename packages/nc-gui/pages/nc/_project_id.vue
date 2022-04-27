@@ -130,7 +130,7 @@ export default {
 </script>
 <style scoped>
 .xc-theme{
-  height:calc(100vh - 48px);
+  height:calc(100vh);
   position: relative;
 }
 

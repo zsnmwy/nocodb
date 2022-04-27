@@ -1,16 +1,15 @@
 <template>
-  <div class="d-flex ml-2 mr-2 my-2 align-center py-1">
-    <!--    <v-menu top offset-y>
+  <div>
+    <v-menu bottom offset-y>
       <template #activator="{on}">
-        <div v-ripple class="mr-2 nc-user-menu rounded-pill px-3 mx-n3 d-flex align-center py-1" v-on="on">
-          <v-badge color="green" dot offset-y="7" offset-x="7">
-            <div class="nc-settings-icon-wrapper">
-              <v-icon size="20" class="nc-settings-icon">
-                mdi-account
-              </v-icon>
-            </div>
-          </v-badge>
-          <v-icon small v-on="on">
+        <div v-ripple class="pointer nc-hover pa-2 body-1 text-capitalize font-weight-medium d-flex" v-on="on">
+          <!--          <v-icon>
+            mdi-database-outline
+          </v-icon>-->
+          <div class="text-truncate ">
+            {{ projectName }}
+          </div>
+          <v-icon small>
             mdi-chevron-down
           </v-icon>
         </div>
@@ -36,8 +35,8 @@
 
           <v-divider />
 
-          &lt;!&ndash; Copy Auth Token &ndash;&gt;
-          &lt;!&ndash; "Auth token copied to clipboard" &ndash;&gt;
+          <!-- Copy Auth Token -->
+          <!-- "Auth token copied to clipboard" -->
           <v-list-item
             v-if="isDashboard"
             v-t="['a:navbar:user:copy-auth-token']"
@@ -72,21 +71,21 @@
                 {{ "Swagger API Doc" }}</span>
             </v-list-item-title>
           </v-list-item>
-          &lt;!&ndash;                <v-list-item
-            v-t="['a:navbar:user:redoc']"
-            dense
-            @click.stop="
-              openUrl(redocLink)
-            "
-          >
-            <v-list-item-title>
-              <v-icon key="terminal-dash" small>
-                mdi-code-json
-              </v-icon>&nbsp;
-              <span class="font-weight-regular caption">
-                {{ "Redoc API Doc" }}</span>
-            </v-list-item-title>
-          </v-list-item>&ndash;&gt;
+          <!--                <v-list-item
+          v-t="['a:navbar:user:redoc']"
+          dense
+          @click.stop="
+            openUrl(redocLink)
+          "
+        >
+          <v-list-item-title>
+            <v-icon key="terminal-dash" small>
+              mdi-code-json
+            </v-icon>&nbsp;
+            <span class="font-weight-regular caption">
+              {{ "Redoc API Doc" }}</span>
+          </v-list-item-title>
+        </v-list-item>-->
           <v-divider />
           <v-list-item
             v-if="isDashboard"
@@ -140,124 +139,16 @@
           </v-list-item>
         </template>
       </v-list>
-    </v-menu>-->
-    <template v-if="_isUIAllowed('settings')">
-      <div class="nc-hover pa-2 d-flex align-center flex-grow-1 mr-2">
-        <settings-modal>
-          <template #default="{ click }">
-            <v-icon
-              v-t="['c:navdraw:project-settings']"
-              class="mr-1 nc-team-settings "
-              size="20"
-              color="grey"
-              @click="click"
-            >
-              mdi-cog-outline
-            </v-icon>
-            <span class="nc-text">{{
-              $t("title.teamAndSettings")
-            }}</span>
-          </template>
-        </settings-modal>
-      </div>
-    </template>
-    <!--    <v-spacer />-->
-
-    <div class="nc-thee-switch-wrapper">
-      <v-switch
-        v-model="darkTheme"
-        hide-details
-        style="margin-top: 2px !important;"
-        class="pt-0"
-        inset
-        dense
-        color="textColor"
-      />
-      <v-icon v-if="darkTheme" x-small class="moon-icon icon">
-        mdi-moon-waxing-crescent
-      </v-icon>
-      <v-icon v-else x-small class="sun-icon icon">
-        mdi-weather-sunny
-      </v-icon>
-    </div>
+    </v-menu>
   </div>
 </template>
 
 <script>
-import SettingsModal from '~/components/settings/settingsModal'
-import ShareOrInviteModal from '~/components/auth/shareOrInviteModal'
 
 export default {
-  name: 'UserAndSettingsSection',
-  components: { ShareOrInviteModal, SettingsModal },
-  data: () => ({ shareModal: false }),
-  computed: {
-    darkTheme: {
-      get() {
-        return this.$store.state.windows.darkTheme
-      },
-      set(dark) {
-        this.$store.dispatch(
-          'windows/ActToggleDarkMode',
-          dark
-        )
-      }
-    }
-  }
+  name: 'ProjectMenu'
 }
 </script>
 
-<style scoped lang="scss">
-.nc-thee-switch-wrapper {
-
-  transform:scale(.8) ;
-  position: relative;
-
-  .icon {
-    position: absolute;
-    pointer-events: none
-  }
-
-  .moon-icon {
-    left: 1px;
-    top: 0;
-    bottom: 2px;
-    transform: rotate(30deg);
-  }
-
-  .sun-icon {
-    right: 20px;
-    top: 0;
-    bottom: 2px;
-  }
-}
-
-.nc-settings-icon-wrapper {
-  border-radius: 50%;
-  overflow: hidden;
-
-  .nc-settings-icon {
-    transform: scale(1.2) translateY(3px);
-  }
-}
-
-::v-deep {
-  .theme--light {
-    .nc-settings-icon-wrapper {
-      border: 1px solid #8884;
-    }
-  }
-
-  .theme--dark {
-    .nc-settings-icon-wrapper {
-      border: 1px solid #fff3;
-    }
-  }
-
-  .nc-user-menu .v-badge__badge{
-    height: 7px;
-    width: 7px;
-  }
-}
-
+<style scoped>
 </style>
