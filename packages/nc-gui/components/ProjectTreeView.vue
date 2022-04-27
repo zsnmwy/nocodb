@@ -173,7 +173,7 @@
                                 }})</template></span>
                             <span
                               v-else
-                              class=" text-uppercase body-2 font-weight-regular"
+                              class="caption text-uppercase caption font-weight-regular"
                               v-on="on"
                             >
                               {{ item.name }}</span>
@@ -183,7 +183,7 @@
                         <template v-else>
                           <span
                             v-if="item.type === 'tableDir'"
-                            class="caption textColor1--text text-uppercase body-2 font-weight-medium"
+                            class="caption textColor1--text text-uppercase caption font-weight-medium"
                           >
                             {{
                               $t("objects.tables")
@@ -199,7 +199,7 @@
                                       .includes(search.toLowerCase())
                                 ).length
                               }})</template></span>
-                          <span v-else class=" font-weight-regular">
+                          <span v-else class="caption font-weight-regular">
                             {{ item.name }}</span>
                         </template>
                       </v-list-item-title>
@@ -313,7 +313,7 @@
                               <template #activator="{ on }">
                                 <span
                                   :class="item.selected === child.name ? 'font-weight-bold': 'font-weight-regular'"
-                                  class="body-1"
+                                  class="nc-text"
                                   v-on="on"
                                   @dblclick="showSqlClient = true"
                                 >
@@ -329,7 +329,7 @@
                             </v-tooltip>
                             <span
                               v-else
-                              class="body-1"
+                              class="nc-text"
                               :class="item.selected === child.name ? 'font-weight-bold': 'font-weight-regular'"
                             >{{ child.name }}</span>
                           </v-list-item-title>
@@ -665,10 +665,10 @@
           </v-list>
         </div>
 
-        <v-divider />
+        <v-divider class="mb-2" />
         <div
           v-t="['e:api-docs']"
-          class="pointer nc-docs pl-4 pr-3 d-flex align-center py-6"
+          class="pointer nc-docs pl-4 pr-3 d-flex align-center py-3 nc-text"
           @click="openLink(apiLink)"
         >
           <v-icon class="mr-2">
@@ -677,28 +677,21 @@
           {{ $t('title.apiDocs') }}
         </div>
 
-        <!--
-        <template v-if="_isUIAllowed('settings')">
-          <div class="pl-5 pr-3 d-flex align-center pb-2">
-            <settings-modal>
-              <template #default="{ click }">
-                <div
-                  v-t="['c:navdraw:project-settings']"
-                  class="caption pointer nc-team-settings"
-                  @click="click"
-                >
-                  <v-icon color="brown" small class="mr-1">
-                    mdi-cog
-                  </v-icon>
-                  {{ $t('title.teamAndSettings') }}
-                </div>
-              </template>
-            </settings-modal>
-          </div>
-        </template>
--->
+        <div
+          v-if="_isUIAllowed('add-user')"
+          v-t="['e:api-docs']"
+          class="pointer nc-docs pl-4 pr-3 d-flex align-center py-2 nc-text text-uppercase"
+          @click="shareModal = true"
+        >
+          <v-icon class="mr-2" color="primary">
+            mdi-account-supervisor
+          </v-icon>
+          {{ $t("activity.share") }}
+        </div>
 
-        <v-divider />
+        <share-or-invite-modal v-model="shareModal" />
+
+        <v-divider class="mt-2 " />
         <!--        <extras class="pl-1"/>-->
 
         <user-and-settings-section />
@@ -790,9 +783,11 @@ import SettingsModal from "~/components/settings/settingsModal";
 import Language from "~/components/utils/language";
 import Extras from "~/components/project/spreadsheet/components/extras";
 import UserAndSettingsSection from "~/components/leftNavdrawer/userAndSettingsSection";
+import ShareOrInviteModal from "~/components/auth/shareOrInviteModal";
 
 export default {
   components: {
+    ShareOrInviteModal,
     UserAndSettingsSection,
     Extras,
     Language,
@@ -811,6 +806,7 @@ export default {
   },
   data: () => ({
     showFilter:false,
+    shareModal:false,
     treeViewStatus: {},
     drag: false,
     dragOptions: {

@@ -62,22 +62,22 @@
 
           <language class="mr-3" />
           <template v-if="isDashboard">
-            <div>
+            <!--            <div>
               <x-btn
                 v-if="_isUIAllowed('add-user')"
                 small
-                btn-class="primary--text nc-menu-share"
+                btn-class="primary&#45;&#45;text nc-menu-share"
                 @click="shareModal = true"
               >
                 <v-icon small class="mr-1">
                   mdi-account-supervisor-outline
                 </v-icon>
-                <!-- Share -->
+                &lt;!&ndash; Share &ndash;&gt;
                 {{ $t("activity.share") }}
               </x-btn>
 
               <share-or-invite-modal v-model="shareModal" />
-            </div>
+            </div>-->
             <span
               v-shortkey="['ctrl', 'shift', 'd']"
               @shortkey="$router.push('/')"
@@ -104,76 +104,76 @@
           </template>
 
           <preview-as class="mx-1" />
-
-          <v-menu v-if="isAuthenticated" offset-y>
-            <template #activator="{ on }">
-              <v-icon
-                v-ge="['Profile', '']"
-                text
-                class="font-weight-bold nc-menu-account icon"
-                v-on="on"
-              >
-                <!--              <v-icon></v-icon>-->
-                mdi-dots-vertical
-              </v-icon>
-            </template>
-            <v-list dense class="nc-user-menu">
-              <template>
-                <v-list-item
-                  v-t="['c:navbar:user:email']"
-                  v-ge="['Settings', '']"
-                  dense
-                  to="/user/settings"
+          <template v-if="!isDashboard">
+            <v-menu v-if="isAuthenticated" offset-y>
+              <template #activator="{ on }">
+                <v-icon
+                  v-ge="['Profile', '']"
+                  text
+                  class="font-weight-bold nc-menu-account icon"
+                  v-on="on"
                 >
-                  <v-list-item-title>
-                    <v-icon small>
-                      mdi-at
-                    </v-icon>&nbsp;
-                    <span class="font-weight-bold caption">{{
-                      userEmail
-                    }}</span>
-                  </v-list-item-title>
-                </v-list-item>
+                  <!--              <v-icon></v-icon>-->
+                  mdi-dots-vertical
+                </v-icon>
+              </template>
+              <v-list dense class="nc-user-menu">
+                <template>
+                  <v-list-item
+                    v-t="['c:navbar:user:email']"
+                    v-ge="['Settings', '']"
+                    dense
+                    to="/user/settings"
+                  >
+                    <v-list-item-title>
+                      <v-icon small>
+                        mdi-at
+                      </v-icon>&nbsp;
+                      <span class="font-weight-bold caption">{{
+                        userEmail
+                      }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
 
-                <v-divider />
+                  <v-divider />
 
-                <!-- Copy Auth Token -->
-                <!-- "Auth token copied to clipboard" -->
-                <v-list-item
-                  v-if="isDashboard"
-                  v-t="['a:navbar:user:copy-auth-token']"
-                  v-clipboard="$store.state.users.token"
-                  dense
-                  @click.stop="
-                    $toast.success($t('msg.toast.authToken')).goAway(3000)
-                  "
-                >
-                  <v-list-item-title>
-                    <v-icon key="terminal-dash" small>
-                      mdi-content-copy
-                    </v-icon>&nbsp;
-                    <span class="font-weight-regular caption">{{
-                      $t("activity.account.authToken")
-                    }}</span>
-                  </v-list-item-title>
-                </v-list-item>
-                <v-list-item
-                  v-if="isDashboard"
-                  v-t="['a:navbar:user:swagger']"
-                  dense
-                  @click.stop="
-                    openUrl(swaggerLink)
-                  "
-                >
-                  <v-list-item-title>
-                    <v-icon key="terminal-dash" small>
-                      mdi-code-json
-                    </v-icon>&nbsp;
-                    <span class="font-weight-regular caption">
-                      {{ "Swagger API Doc" }}</span>
-                  </v-list-item-title>
-                </v-list-item>
-                <!--                <v-list-item
+                  <!-- Copy Auth Token -->
+                  <!-- "Auth token copied to clipboard" -->
+                  <v-list-item
+                    v-if="isDashboard"
+                    v-t="['a:navbar:user:copy-auth-token']"
+                    v-clipboard="$store.state.users.token"
+                    dense
+                    @click.stop="
+                      $toast.success($t('msg.toast.authToken')).goAway(3000)
+                    "
+                  >
+                    <v-list-item-title>
+                      <v-icon key="terminal-dash" small>
+                        mdi-content-copy
+                      </v-icon>&nbsp;
+                      <span class="font-weight-regular caption">{{
+                        $t("activity.account.authToken")
+                      }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item
+                    v-if="isDashboard"
+                    v-t="['a:navbar:user:swagger']"
+                    dense
+                    @click.stop="
+                      openUrl(swaggerLink)
+                    "
+                  >
+                    <v-list-item-title>
+                      <v-icon key="terminal-dash" small>
+                        mdi-code-json
+                      </v-icon>&nbsp;
+                      <span class="font-weight-regular caption">
+                        {{ "Swagger API Doc" }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <!--                <v-list-item
                   v-t="['a:navbar:user:redoc']"
                   dense
                   @click.stop="
@@ -188,104 +188,105 @@
                       {{ "Redoc API Doc" }}</span>
                   </v-list-item-title>
                 </v-list-item>-->
-                <v-divider />
-                <v-list-item
-                  v-if="isDashboard"
-                  v-t="['c:navbar:user:copy-proj-info']"
-                  v-ge="['Sign Out', '']"
-                  dense
-                  @click="copyProjectInfo"
-                >
-                  <v-list-item-title>
-                    <v-icon small>
-                      mdi-content-copy
-                    </v-icon>&nbsp;
-                    <span class="font-weight-regular caption">{{
-                      $t("activity.account.projInfo")
-                    }}</span>
-                  </v-list-item-title>
-                </v-list-item>
-                <v-divider v-if="isDashboard" />
-                <v-list-item
-                  v-if="isDashboard"
-                  v-t="['c:navbar:user:themes']"
-                  dense
-                  @click.stop="settingsTabAdd"
-                >
-                  <v-list-item-title>
-                    <v-icon key="terminal-dash" small>
-                      mdi-palette
-                    </v-icon>&nbsp;
-                    <span class="font-weight-regular caption">{{
-                      $t("activity.account.themes")
-                    }}</span>
-                  </v-list-item-title>
-                </v-list-item>
+                  <v-divider />
+                  <v-list-item
+                    v-if="isDashboard"
+                    v-t="['c:navbar:user:copy-proj-info']"
+                    v-ge="['Sign Out', '']"
+                    dense
+                    @click="copyProjectInfo"
+                  >
+                    <v-list-item-title>
+                      <v-icon small>
+                        mdi-content-copy
+                      </v-icon>&nbsp;
+                      <span class="font-weight-regular caption">{{
+                        $t("activity.account.projInfo")
+                      }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-divider v-if="isDashboard" />
+                  <v-list-item
+                    v-if="isDashboard"
+                    v-t="['c:navbar:user:themes']"
+                    dense
+                    @click.stop="settingsTabAdd"
+                  >
+                    <v-list-item-title>
+                      <v-icon key="terminal-dash" small>
+                        mdi-palette
+                      </v-icon>&nbsp;
+                      <span class="font-weight-regular caption">{{
+                        $t("activity.account.themes")
+                      }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
 
-                <v-divider v-if="isDashboard" />
+                  <v-divider v-if="isDashboard" />
 
-                <v-list-item
-                  v-t="['a:navbar:user:sign-out']"
-                  v-ge="['Sign Out', '']"
-                  dense
-                  @click="MtdSignOut"
+                  <v-list-item
+                    v-t="['a:navbar:user:sign-out']"
+                    v-ge="['Sign Out', '']"
+                    dense
+                    @click="MtdSignOut"
+                  >
+                    <v-list-item-title>
+                      <v-icon small>
+                        mdi-logout
+                      </v-icon>&nbsp;
+                      <span class="font-weight-regular caption">{{
+                        $t("general.signOut")
+                      }}</span>
+                    </v-list-item-title>
+                  </v-list-item>
+                </template>
+              </v-list>
+            </v-menu>
+            <v-menu v-else offset-y open-on-hover>
+              <template #activator="{ on }">
+                <v-btn
+                  v-ge="['Profile', '']"
+                  text
+                  class="font-weight-bold nc-menu-account"
+                  v-on="on"
                 >
-                  <v-list-item-title>
-                    <v-icon small>
-                      mdi-logout
-                    </v-icon>&nbsp;
-                    <span class="font-weight-regular caption">{{
-                      $t("general.signOut")
-                    }}</span>
-                  </v-list-item-title>
-                </v-list-item>
+                  <!--              Menu-->
+                  <v-icon>mdi-account</v-icon>
+                  <v-icon>arrow_drop_down</v-icon>
+                </v-btn>
               </template>
-            </v-list>
-          </v-menu>
-          <v-menu v-else offset-y open-on-hover>
-            <template #activator="{ on }">
-              <v-btn
-                v-ge="['Profile', '']"
-                text
-                class="font-weight-bold nc-menu-account"
-                v-on="on"
-              >
-                <!--              Menu-->
-                <v-icon>mdi-account</v-icon>
-                <v-icon>arrow_drop_down</v-icon>
-              </v-btn>
-            </template>
-            <v-list dense>
-              <v-list-item
-                v-if="!user && !isThisMobile"
-                dense
-                to="/user/authentication/signup"
-              >
-                <v-list-item-title>
-                  <v-icon small>
-                    mdi-account-plus-outline
-                  </v-icon> &nbsp;
-                  <span class="font-weight-regular caption">{{
-                    $t("general.signUp")
-                  }}</span>
-                </v-list-item-title>
-              </v-list-item>
-              <v-list-item
-                v-if="!user && !isThisMobile"
-                dense
-                to="/user/authentication/signin"
-              >
-                <v-list-item-title>
-                  <v-icon small>
-                    mdi-login
-                  </v-icon> &nbsp;
-                  <span class="font-weight-regular caption">{{
-                    $t("general.signIn")
-                  }}</span>
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+              <v-list dense>
+                <v-list-item
+                  v-if="!user && !isThisMobile"
+                  dense
+                  to="/user/authentication/signup"
+                >
+                  <v-list-item-title>
+                    <v-icon small>
+                      mdi-account-plus-outline
+                    </v-icon> &nbsp;
+                    <span class="font-weight-regular caption">{{
+                      $t("general.signUp")
+                    }}</span>
+                  </v-list-item-title>
+                </v-list-item>
+                <v-list-item
+                  v-if="!user && !isThisMobile"
+                  dense
+                  to="/user/authentication/signin"
+                >
+                  <v-list-item-title>
+                    <v-icon small>
+                      mdi-login
+                    </v-icon> &nbsp;
+                    <span class="font-weight-regular caption">{{
+                      $t("general.signIn")
+                    }}</span>
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
         </v-toolbar-items>
       </div>
     </v-app-bar>

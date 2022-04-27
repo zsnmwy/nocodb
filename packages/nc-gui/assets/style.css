@@ -495,3 +495,7 @@ body.dark .toasted .primary.info, body.dark .toasted.toasted-primary.info {
 .nc-remove-border{
   border: none !important;
 }
+
+.nc-text {
+  font-size: .8125rem;
+}

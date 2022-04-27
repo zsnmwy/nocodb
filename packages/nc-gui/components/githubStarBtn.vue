@@ -29,7 +29,7 @@ export default {
 }
 /deep/ .gh-button-container > a {
   background: transparent !important;
-  /*color: #cdcdcd !important;*/
+  color: var(--v-textColor1-base) !important;
 }
 /deep/ .gh-button-container > a:first-child{
   color: var(--v-textColor-base);

@@ -13,13 +13,15 @@
           <v-icon small class="mr-1">
             mdi-play-circle
           </v-icon>
-          Preview
+          <!--          Preview-->
           <v-icon small>
             mdi-menu-down
           </v-icon>
         </v-btn>
       </template>
       <v-list dense>
+        <v-list-item><v-list-item-title><span class="textColor1--text">Preview as</span></v-list-item-title></v-list-item>
+
         <template v-for="role in rolesList">
           <v-list-item
             :key="role.title"

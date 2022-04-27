@@ -1,11 +1,11 @@
 <template>
-  <div class="d-flex ml-4 mr-2 my-4 align-center py-2">
+  <div class="d-flex ml-4 mr-2 my-3 align-center py-1">
     <v-menu top offset-y>
       <template #activator="{on}">
-        <div v-ripple class="mr-2 rounded-pill px-3 mx-n3 d-flex align-center py-1" v-on="on">
-          <v-badge color="green" dot offset-y="9" offset-x="9">
+        <div v-ripple class="mr-2 nc-user-menu rounded-pill px-3 mx-n3 d-flex align-center py-1" v-on="on">
+          <v-badge color="green" dot offset-y="7" offset-x="7">
             <div class="nc-settings-icon-wrapper">
-              <v-icon size="30" class="nc-settings-icon">
+              <v-icon size="20" class="nc-settings-icon">
                 mdi-account
               </v-icon>
             </div>
@@ -148,8 +148,8 @@
         <template #default="{ click }">
           <v-icon
             v-t="['c:navdraw:project-settings']"
-            class="mr-5 nc-team-settings"
-            size="30"
+            class="mr-2 nc-team-settings"
+            size="20"
             @click="click"
           >
             mdi-cog-outline
@@ -162,7 +162,8 @@
       <v-switch
         v-model="darkTheme"
         hide-details
-        class="mt-0 pt-0"
+        style="margin-top: 2px !important;"
+        class="pt-0"
         inset
         dense
         color="textColor"
@@ -179,10 +180,12 @@
 
 <script>
 import SettingsModal from '~/components/settings/settingsModal'
+import ShareOrInviteModal from '~/components/auth/shareOrInviteModal'
 
 export default {
   name: 'UserAndSettingsSection',
-  components: { SettingsModal },
+  components: { ShareOrInviteModal, SettingsModal },
+  data: () => ({ shareModal: false }),
   computed: {
     darkTheme: {
       get() {
@@ -201,6 +204,8 @@ export default {
 
 <style scoped lang="scss">
 .nc-thee-switch-wrapper {
+
+  transform:scale(.8) ;
   position: relative;
 
   .icon {
@@ -223,7 +228,6 @@ export default {
 }
 
 .nc-settings-icon-wrapper {
-
   border-radius: 50%;
   overflow: hidden;
 
@@ -243,6 +247,11 @@ export default {
     .nc-settings-icon-wrapper {
       border: 1px solid #fff3;
     }
+  }
+
+  .nc-user-menu .v-badge__badge{
+    height: 7px;
+    width: 7px;
   }
 }
 
