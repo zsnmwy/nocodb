@@ -104,11 +104,12 @@ export const referencedRowIdParam = {
 export const exportTypeParam = {
   schema: {
     type: 'string',
-    enum: ['csv', 'excel']
+    enum: ['csv']
   },
   name: 'type',
   in: 'path',
-  required: true
+  required: true,
+  description: 'Export file type, currently we are only supporting `csv` type.'
 };
 
 export const csvExportOffsetParam = {

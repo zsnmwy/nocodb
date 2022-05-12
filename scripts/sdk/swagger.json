@@ -2446,7 +2446,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2454,13 +2455,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -2478,21 +2481,68 @@
               "type": "array"
             },
             "in": "query",
-            "name": "fields"
+            "name": "fields",
+            "description": "Array of field names or comma separated filed names to include in the response objects. In array syntax pass it like `fields[]=field1&fields[]=field2` or alternately `fields=field1,field2`."
           },
           {
             "schema": {
               "type": "array"
             },
             "in": "query",
-            "name": "sort"
+            "name": "sort",
+            "description": "Comma separated field names to sort rows, rows will sort in ascending order based on provided columns. To sort in descending order provide `-` prefix along with column name, like `-field`. Example : `sort=field1,-field2`"
           },
           {
             "schema": {
               "type": "string"
             },
             "in": "query",
-            "name": "where"
+            "name": "where",
+            "description":
+            "This can be used for filtering rows, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `where=(field1,eq,value)`"
+          },   {
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][offset]",
+            "description": "The `offset` parameter used for pagination  of nested `nestedListColumn` rows, the value helps to select collection from a certain index.",
+            "example": 0
+          },
+          {
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][limit]",
+            "description": "The `limit` parameter used for pagination of nested `nestedListColumn` rows, the response collection size depends on limit value and default value is `25`.",
+            "example": "25"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][fields]",
+            "description": "Array of field names or comma separated filed names to include in the in nested column `nestedListColumn` result. In array syntax pass it like `fields[]=field1&fields[]=field2.`. Example : `nested[nestedListColumn][fields]=field1,field2`"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][sort]",
+            "description": "Comma separated field names to sort rows in nested column `nestedListColumn` rows, it will sort in ascending order based on provided columns. To sort in descending order provide `-` prefix along with column name, like `-field`. Example : `nested[nestedListColumn][sort]=field1,-field2`"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][where]",
+            "description": "This can be used for filtering rows in nested column `nestedListColumn`, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `nested[nestedListColumn][where]=(field1,eq,value)`"
           }
         ],
         "responses": {
@@ -2539,7 +2589,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2547,13 +2598,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -2565,27 +2618,31 @@
         "tags": [
           "DB table row"
         ],
-        "parameters": [
-          {
-            "schema": {
-              "type": "array"
-            },
-            "in": "query",
-            "name": "fields"
+        "parameters": [ {
+          "schema": {
+            "type": "array"
           },
+          "in": "query",
+          "name": "fields",
+          "description": "Array of field names or comma separated filed names to include in the response objects. In array syntax pass it like `fields[]=field1&fields[]=field2` or alternately `fields=field1,field2`."
+        },
           {
             "schema": {
               "type": "array"
             },
             "in": "query",
-            "name": "sort"
+            "name": "sort",
+            "description": "Comma separated field names to sort rows, rows will sort in ascending order based on provided columns. To sort in descending order provide `-` prefix along with column name, like `-field`. Example : `sort=field1,-field2`"
           },
           {
             "schema": {
               "type": "string"
             },
             "in": "query",
-            "name": "where"
+            "name": "where",
+            "description":
+            "This can be used for filtering rows, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `where=(field1,eq,value)`"
+
           }
         ],
         "responses": {
@@ -2608,7 +2665,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2616,13 +2674,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -2640,13 +2700,10 @@
               "type": "string"
             },
             "in": "query",
-            "name": "where"
-          },
-          {
-            "schema": {},
-            "in": "query",
-            "name": "nested",
-            "description": "Query params for nested data"
+            "name": "where",
+            "description":
+            "This can be used for filtering rows, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `where=(field1,eq,value)`"
+
           }
         ],
         "responses": {
@@ -2669,7 +2726,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2677,7 +2735,8 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
@@ -2685,13 +2744,15 @@
           },
           "name": "tableName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The alias of the table or table id, you can pass either on of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "viewName",
+          "description": "The alias of the view or view id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -2709,28 +2770,71 @@
               "type": "array"
             },
             "in": "query",
-            "name": "fields"
+            "name": "fields",
+            "description": "Array of field names or comma separated filed names to include in the response objects. In array syntax pass it like `fields[]=field1&fields[]=field2` or alternately `fields=field1,field2`."
           },
           {
             "schema": {
               "type": "array"
             },
             "in": "query",
-            "name": "sort"
+            "name": "sort",
+            "description": "Comma separated field names to sort rows, rows will sort in ascending order based on provided columns. To sort in descending order provide `-` prefix along with column name, like `-field`. Example : `sort=field1,-field2`"
           },
           {
             "schema": {
               "type": "string"
             },
             "in": "query",
-            "name": "where"
+            "name": "where",
+            "description":
+            "This can be used for filtering rows, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `where=(field1,eq,value)`"
+
+          },  {
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][offset]",
+            "description": "The `offset` parameter used for pagination  of nested `nestedListColumn` rows, the value helps to select collection from a certain index.",
+            "example": 0
           },
           {
-            "schema": {},
+            "schema": {
+              "type": "number",
+              "minimum": 1
+            },
             "in": "query",
-            "name": "nested",
-            "description": "Query params for nested data"
+            "name": "nested[nestedListColumn][limit]",
+            "description": "The `limit` parameter used for pagination of nested `nestedListColumn` rows, the response collection size depends on limit value and default value is `25`.",
+            "example": "25"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][fields]",
+            "description": "Array of field names or comma separated filed names to include in the in nested column `nestedListColumn` result. In array syntax pass it like `fields[]=field1&fields[]=field2.`. Example : `nested[nestedListColumn][fields]=field1,field2`"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][sort]",
+            "description": "Comma separated field names to sort rows in nested column `nestedListColumn` rows, it will sort in ascending order based on provided columns. To sort in descending order provide `-` prefix along with column name, like `-field`. Example : `nested[nestedListColumn][sort]=field1,-field2`"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "name": "nested[nestedListColumn][where]",
+            "description": "This can be used for filtering rows in nested column `nestedListColumn`, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `nested[nestedListColumn][where]=(field1,eq,value)`"
           }
+
         ],
         "responses": {
           "200": {
@@ -2776,7 +2880,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2784,13 +2889,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -2799,6 +2906,7 @@
             "type": "string"
           },
           "name": "viewName",
+          "description": "The alias of the view or view id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -2816,27 +2924,26 @@
               "type": "array"
             },
             "in": "query",
-            "name": "fields"
+            "name": "fields",
+            "description": "Array of field names or comma separated filed names to include in the response objects. In array syntax pass it like `fields[]=field1&fields[]=field2` or alternately `fields=field1,field2`."
           },
           {
             "schema": {
               "type": "array"
             },
             "in": "query",
-            "name": "sort"
+            "name": "sort",
+            "description": "Comma separated field names to sort rows, rows will sort in ascending order based on provided columns. To sort in descending order provide `-` prefix along with column name, like `-field`. Example : `sort=field1,-field2`"
           },
           {
             "schema": {
               "type": "string"
             },
             "in": "query",
-            "name": "where"
-          },
-          {
-            "schema": {},
-            "in": "query",
-            "name": "nested",
-            "description": "Query params for nested data"
+            "name": "where",
+            "description":
+            "This can be used for filtering rows, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `where=(field1,eq,value)`"
+
           }
         ],
         "responses": {
@@ -2859,7 +2966,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2867,13 +2975,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -2882,6 +2992,7 @@
             "type": "string"
           },
           "name": "viewName",
+          "description": "The alias of the view or view id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -2894,18 +3005,16 @@
           "DB view row"
         ],
         "parameters": [
+
           {
             "schema": {
               "type": "string"
             },
             "in": "query",
-            "name": "where"
-          },
-          {
-            "schema": {},
-            "in": "query",
-            "name": "nested",
-            "description": "Query params for nested data"
+            "name": "where",
+            "description":
+            "This can be used for filtering rows, which accepts complicated where conditions. For more info visit [here](https://docs.nocodb.com/developer-resources/rest-apis#comparison-operators). Example : `where=(field1,eq,value)`"
+
           }
         ],
         "responses": {
@@ -2928,7 +3037,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -2936,13 +3046,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -2951,6 +3063,7 @@
             "type": "string"
           },
           "name": "viewName",
+          "description": "The alias of the view or view id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -2960,7 +3073,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         }
       ],
       "get": {
@@ -3027,7 +3143,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3035,13 +3152,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3051,7 +3170,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         }
       ],
       "get": {
@@ -3118,7 +3240,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3126,13 +3249,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -3218,7 +3343,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3226,13 +3352,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         }
@@ -3294,7 +3422,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3302,13 +3431,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3317,6 +3448,7 @@
             "type": "string"
           },
           "name": "viewName",
+          "description": "The alias of the view or view id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3330,7 +3462,8 @@
           },
           "name": "type",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "Export file type, currently we are only supporting `csv` type."
         }
       ],
       "get": {
@@ -3369,7 +3502,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3377,13 +3511,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3436,7 +3572,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3444,13 +3581,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3460,7 +3599,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         },
         {
           "schema": {
@@ -3525,7 +3667,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3533,13 +3676,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3549,7 +3694,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         },
         {
           "schema": {
@@ -3640,7 +3788,8 @@
           },
           "name": "orgs",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the organization and it's kept for future use. For time being you can set the name of the organization as `noco`"
         },
         {
           "schema": {
@@ -3648,13 +3797,15 @@
           },
           "name": "projectName",
           "in": "path",
-          "required": true
+          "required": true,
+          "description": "The name of the project or the project id, you can pass either one of them."
         },
         {
           "schema": {
             "type": "string"
           },
           "name": "tableName",
+          "description": "The alias of the table or table id, you can pass either on of them.",
           "in": "path",
           "required": true
         },
@@ -3664,7 +3815,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         },
         {
           "schema": {
@@ -3825,7 +3979,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         },
         {
           "schema": {
@@ -4272,7 +4429,10 @@
           },
           "name": "rowId",
           "in": "path",
-          "required": true
+          "required": true,
+          "example": 1,
+          "description":
+          "Primary key of the record you want to read. If the table have composite primary key then combine them by using `___` and pass it as primary key."
         }
       ],
       "post": {
