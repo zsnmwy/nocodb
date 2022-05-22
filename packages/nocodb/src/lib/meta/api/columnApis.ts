@@ -698,12 +698,21 @@ export async function columnUpdate(req: Request, res: Response<TableType>) {
       )
     };
 
-    const sqlMgr = await ProjectMgrv2.getSqlMgr({ id: base.project_id });
-    await sqlMgr.sqlOpPlus(base, 'tableUpdate', tableUpdateBody);
+    if ([UITypes.SingleSelect, UITypes.MultiSelect].includes(colBody.uidt)) {
+      await Column.update(req.params.columnId, {
+        ...colBody
+      });
 
-    await Column.update(req.params.columnId, {
-      ...colBody
-    });
+      const sqlMgr = await ProjectMgrv2.getSqlMgr({ id: base.project_id });
+      await sqlMgr.sqlOpPlus(base, 'tableUpdate', tableUpdateBody);
+    } else {
+      const sqlMgr = await ProjectMgrv2.getSqlMgr({ id: base.project_id });
+      await sqlMgr.sqlOpPlus(base, 'tableUpdate', tableUpdateBody);
+    
+      await Column.update(req.params.columnId, {
+        ...colBody
+      });
+    }
   }
   Audit.insert({
     project_id: base.project_id,

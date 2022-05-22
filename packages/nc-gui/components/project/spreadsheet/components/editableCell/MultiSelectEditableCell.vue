@@ -1,8 +1,10 @@
 <template>
   <div>
-    <v-combobox
+    <v-select
       v-model="localState"
-      :items="setValues"
+      :menu-props="{ bottom: true, offsetY: true }"
+      :items="setValues.concat(unsetValues)"
+      item-value="id"
       multiple
       chips
       flat
@@ -14,36 +16,33 @@
     >
       <template #selection="data">
         <v-chip
-          :key="data.item"
+          :key="data.item.id"
           small
-          class="ma-1 "
-          :color="colors[setValues.indexOf(data.item) % colors.length]"
+          class="ma-1"
+          :color="data.item.color"
           @click:close="data.parent.selectItem(data.item)"
         >
-          {{ data.item }}
+          {{ migrate(data.item.title) }}
         </v-chip>
       </template>
 
       <template #item="{item}">
-        <v-chip small :color="colors[setValues.indexOf(item) % colors.length]">
-          {{ item }}
+        <v-chip small :color="item.color">
+          {{ migrate(item.title) }}
         </v-chip>
       </template>
       <template #append>
-        <v-icon small class="mt-2">
+        <v-icon small class="mt-1">
           mdi-menu-down
         </v-icon>
       </template>
-    </v-combobox>
+    </v-select>
   </div>
 </template>
 
 <script>
-import colors from '@/mixins/colors'
-
 export default {
-  name: 'SetListEditableCell',
-  mixins: [colors],
+  name: 'MultiSelectEditableCell',
   props: {
     value: String,
     column: Object
@@ -51,21 +50,36 @@ export default {
   computed: {
     localState: {
       get() {
-        return this.value && this.value
-          .match(/(?:[^',]|\\')+(?='?(?:,|$))/g)
-          .map(v => v.replace(/\\'/g, '\''))
+        return (this.column.dt === 'set')
+          ? this.values.map(el => this.setValues.find(opt => el === this.migrate(opt.title)).id)
+          : this.values
       },
       set(val) {
-        this.$emit('input', val.filter(v => this.setValues.includes(v)).join(','))
+        if (this.column.dt === 'set' && val) {
+          this.$emit('input',
+            this.setValues.filter(el => val.includes(el.id)).map(el => this.migrate(el.title)).join(','))
+        } else {
+          this.$emit('input', val.join(',') || null)
+        }
       }
     },
-    setValues() {
-      if (this.column && this.column.dtxp) {
-        return this.column.dtxp
-          .match(/(?:[^']|\\')+(?='?(?:,|$))/g)
-          .map(v => v.replace(/\\'/g, '\'').replace(/^'|'$/g, ''))
+    unsetValues() {
+      if (this.value) {
+        const unsetVals = this.value.split(',').filter(el => !this.setValues.find(sv => sv.id === el))
+        return unsetVals.map((el) => {
+          return { id: el, title: el }
+        })
       }
       return []
+    },
+    setValues() {
+      if (this.column && this.column.colOptions?.options) {
+        return this.column.colOptions.options
+      }
+      return []
+    },
+    values() {
+      return this.value ? this.value.split(',') : []
     },
     parentListeners() {
       const $listeners = {}
@@ -86,20 +100,38 @@ export default {
     // event = document.createEvent('MouseEvents');
     // event.initMouseEvent('mousedown', true, true, window);
     // this.$el.dispatchEvent(event);
+  },
+  methods: {
+    migrate(val) {
+      if (this.column.dt === 'set') {
+        if ((typeof val === 'string' || val instanceof String)) {
+          return val.replace(/'/g, '')
+        }
+      }
+      return val
+    }
   }
 }
 </script>
 
-<style scoped>
-select {
-  width: 100%;
-  height: 100%;
-  color: var(--v-textColor-base);
-  -webkit-appearance: menulist;
-  /*webkit browsers */
-  -moz-appearance: menulist;
-  /*Firefox */
-  appearance: menulist;
+<style scoped lang="scss">
+
+::v-deep {
+  .v-select {
+    min-width: 150px;
+    .v-select__selections {
+      min-height: 38px !important;
+    }
+  }
+  .v-input__slot{
+    padding-right: 0 !important;
+  }
+  .v-input__icon.v-input__icon--clear {
+    width: 15px !important;
+    .v-icon {
+      font-size: 13px !important;
+    }
+  }
 }
 
 </style>

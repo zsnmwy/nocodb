@@ -74,13 +74,13 @@
       v-on="parentListeners"
     />
 
-    <enum-cell
+    <single-select-cell
       v-else-if="isEnum && (( !isForm && !active) || isLocked || (isPublic && !isForm))"
       v-model="localState"
       :column="column"
       v-on="parentListeners"
     />
-    <enum-list-cell
+    <single-select-editable-cell
       v-else-if="isEnum"
       v-model="localState"
       :is-form="isForm"
@@ -97,14 +97,14 @@
       @input="$emit('save')"
     />
 
-    <set-list-editable-cell
+    <multi-select-editable-cell
       v-else-if="isSet && (active || isForm) && !isLocked && !(isPublic && !isForm)"
       v-model="localState"
       :column="column"
       v-on="parentListeners"
       @input="$emit('save')"
     />
-    <set-list-cell
+    <multi-select-cell
       v-else-if="isSet"
       v-model="localState"
       :column="column"
@@ -137,16 +137,16 @@ import JsonEditableCell from '~/components/project/spreadsheet/components/editab
 import TextCell from '~/components/project/spreadsheet/components/editableCell/TextCell'
 import DateTimePickerCell from '~/components/project/spreadsheet/components/editableCell/DateTimePickerCell'
 import TextAreaCell from '~/components/project/spreadsheet/components/editableCell/TextAreaCell'
-import EnumListCell from '~/components/project/spreadsheet/components/editableCell/EnumListEditableCell'
+import SingleSelectEditableCell from '~/components/project/spreadsheet/components/editableCell/SingleSelectEditableCell'
 import IntegerCell from '~/components/project/spreadsheet/components/editableCell/IntegerCell'
 import FloatCell from '~/components/project/spreadsheet/components/editableCell/FloatCell'
 import TimePickerCell from '~/components/project/spreadsheet/components/editableCell/TimePickerCell'
 import BooleanCell from '~/components/project/spreadsheet/components/editableCell/BooleanCell'
 import cell from '@/components/project/spreadsheet/mixins/cell'
 import EditableAttachmentCell from '~/components/project/spreadsheet/components/editableCell/EditableAttachmentCell'
-import EnumCell from '~/components/project/spreadsheet/components/cell/EnumCell'
-import SetListEditableCell from '~/components/project/spreadsheet/components/editableCell/SetListEditableCell'
-import SetListCell from '~/components/project/spreadsheet/components/cell/SetListCell'
+import SingleSelectCell from '~/components/project/spreadsheet/components/cell/SingleSelectCell'
+import MultiSelectEditableCell from '~/components/project/spreadsheet/components/editableCell/MultiSelectEditableCell'
+import MultiSelectCell from '~/components/project/spreadsheet/components/cell/MultiSelectCell'
 import RatingCell from '~/components/project/spreadsheet/components/editableCell/RatingCell'
 
 export default {
@@ -155,15 +155,15 @@ export default {
     RatingCell,
     JsonEditableCell,
     EditableUrlCell,
-    SetListCell,
-    SetListEditableCell,
-    EnumCell,
+    MultiSelectCell,
+    MultiSelectEditableCell,
+    SingleSelectCell,
     EditableAttachmentCell,
     BooleanCell,
     TimePickerCell,
     FloatCell,
     IntegerCell,
-    EnumListCell,
+    SingleSelectEditableCell,
     TextAreaCell,
     DateTimePickerCell,
     TextCell,

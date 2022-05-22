@@ -1,10 +1,12 @@
 <template>
   <v-select
     v-model="localState"
+    :menu-props="{ bottom: true, offsetY: true }"
     solo
     dense
     flat
-    :items="enumValues"
+    :items="enumValues.concat(unsetValue)"
+    item-value="id"
     hide-details
     class="mt-0"
     :clearable="!column.rqd"
@@ -17,14 +19,14 @@
           'text-center' : !isForm
         }"
       >
-        <v-chip small :color="colors[enumValues.indexOf(item) % colors.length]" class="ma-1">
-          {{ item }}
+        <v-chip small :color="item.color" class="ma-1">
+          {{ migrate(item.title) }}
         </v-chip>
       </div>
     </template>
     <template #item="{item}">
-      <v-chip small :color="colors[enumValues.indexOf(item) % colors.length]">
-        {{ item }}
+      <v-chip small :color="item.color">
+        {{ migrate(item.title) }}
       </v-chip>
     </template>
     <template #append>
@@ -36,12 +38,8 @@
 </template>
 
 <script>
-import colors from '@/mixins/colors'
-
 export default {
-  name: 'EnumListEditableCell',
-  mixins: [colors],
-
+  name: 'SingleSelectEditableCell',
   props: {
     value: String,
     column: Object,
@@ -50,17 +48,32 @@ export default {
   computed: {
     localState: {
       get() {
-        return this.value && this.value.replace(/\\'/g, '\'').replace(/^'|'$/g, '')
+        return (this.column.dt === 'enum')
+          ? this.enumValues.find((el) => {
+            if (this.migrate(el.title) === this.value) {
+              return this.value
+            }
+            return undefined
+          })
+          : this.enumValues.find(el => el.id === this.value) || this.value
       },
       set(val) {
-        this.$emit('input', val)
+        if (this.column.dt === 'enum' && val) {
+          this.$emit('input', this.migrate(this.enumValues.find(el => el.id === val).title))
+        } else {
+          this.$emit('input', val)
+        }
       }
     },
+    unsetValue() {
+      if (this.value && !this.enumValues.find(el => el.id === this.value)) {
+        return { id: this.value, title: this.value }
+      }
+      return []
+    },
     enumValues() {
-      if (this.column && this.column.dtxp) {
-        return this.column.dtxp
-          .split(',')
-          .map(v => v.replace(/\\'/g, '\'').replace(/^'|'$/g, ''))
+      if (this.column && this.column.colOptions?.options) {
+        return this.column.colOptions.options
       }
       return []
     },
@@ -83,6 +96,16 @@ export default {
     // event = document.createEvent('MouseEvents');
     // event.initMouseEvent('mousedown', true, true, window);
     // this.$el.dispatchEvent(event);
+  },
+  methods: {
+    migrate(val) {
+      if (this.column.dt === 'enum') {
+        if ((typeof val === 'string' || val instanceof String)) {
+          return val.replace(/'/g, '')
+        }
+      }
+      return val
+    }
   }
 }
 </script>

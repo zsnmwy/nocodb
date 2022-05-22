@@ -7,9 +7,9 @@
     :column="column"
     @click.stop="$emit('enableedit')"
   />
-  <set-list-cell v-else-if="isSet" :value="value" :column="column" @click.stop="$emit('enableedit')" />
+  <multi-select-cell v-else-if="isSet" :value="value" :column="column" @click.stop="$emit('enableedit')" />
   <!--  <enum-list-editable-cell @click.stop="$emit('enableedit')" v-else-if="isEnum && selected" :value="value" :column="column"></enum-list-editable-cell>-->
-  <enum-cell v-else-if="isEnum" :value="value" :column="column" @click.stop="$emit('enableedit')" />
+  <single-select-cell v-else-if="isEnum" :value="value" :column="column" @click.stop="$emit('enableedit')" />
   <url-cell v-else-if="isURL" :value="value" />
   <email-cell v-else-if="isEmail" :value="value" />
   <json-cell v-else-if="isJSON" :value="value" />
@@ -30,8 +30,8 @@ import TimeCell from './cell/TimeCell'
 import JsonCell from '~/components/project/spreadsheet/components/cell/JsonCell'
 import UrlCell from '~/components/project/spreadsheet/components/cell/UrlCell'
 import cell from '@/components/project/spreadsheet/mixins/cell'
-import SetListCell from '~/components/project/spreadsheet/components/cell/SetListCell'
-import EnumCell from '~/components/project/spreadsheet/components/cell/EnumCell'
+import MultiSelectCell from '~/components/project/spreadsheet/components/cell/MultiSelectCell'
+import SingleSelectCell from '~/components/project/spreadsheet/components/cell/SingleSelectCell'
 import EditableAttachmentCell from '~/components/project/spreadsheet/components/editableCell/EditableAttachmentCell'
 import BooleanCell from '~/components/project/spreadsheet/components/cell/BooleanCell'
 import EmailCell from '~/components/project/spreadsheet/components/cell/EmailCell'
@@ -40,7 +40,7 @@ import CurrencyCell from '@/components/project/spreadsheet/components/cell/Curre
 
 export default {
   name: 'TableCell',
-  components: { RatingCell, EmailCell, TimeCell, DateTimeCell, DateCell, JsonCell, UrlCell, EditableAttachmentCell, EnumCell, SetListCell, BooleanCell, CurrencyCell },
+  components: { RatingCell, EmailCell, TimeCell, DateTimeCell, DateCell, JsonCell, UrlCell, EditableAttachmentCell, SingleSelectCell, MultiSelectCell, BooleanCell, CurrencyCell },
   mixins: [cell],
   props: ['value', 'dbAlias', 'isLocked', 'selected', 'column'],
   computed: {

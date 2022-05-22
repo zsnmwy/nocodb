@@ -1,5 +1,6 @@
 import Noco from '../Noco';
 import Column from './Column';
+import SelectOption from './SelectOption'
 import NocoCache from '../cache/NocoCache';
 import { XKnex } from '../db/sql-data-mapper';
 import { BaseModelSqlv2 } from '../db/sql-data-mapper/lib/sql/BaseModelSqlv2';
@@ -403,9 +404,25 @@ export default class Model implements TableType {
     const insertObj = {};
     for (const col of await this.getColumns()) {
       if (isVirtualCol(col)) continue;
-      const val =
+      if ([UITypes.SingleSelect, UITypes.MultiSelect].includes(col.uidt) && !['enum', 'set'].includes(col.dt)) {
+        let val =
         data?.[sanitize(col.column_name)] ?? data?.[sanitize(col.title)];
-      if (val !== undefined) insertObj[sanitize(col.column_name)] = val;
+        if (val !== undefined) {
+          let selection = [];
+          if (val !== null) {
+            for (const opt of val.split(',')) {
+              let tmp = await SelectOption.get(opt) ?? await SelectOption.find(col.id, opt)
+              if (tmp) selection.push(tmp.id);
+            }
+            val = selection.join(',');
+          }
+          insertObj[sanitize(col.column_name)] = val;
+        }
+      } else {
+        const val =
+        data?.[sanitize(col.column_name)] ?? data?.[sanitize(col.title)];
+        if (val !== undefined) insertObj[sanitize(col.column_name)] = val;
+      }
     }
     return insertObj;
   }

@@ -254,7 +254,7 @@ export class MysqlUi {
         return '';
 
       case 'enum':
-        return "'a','b'";
+        return '';
 
       case 'set':
         return "'a','b'";
@@ -1135,10 +1135,10 @@ export class MysqlUi {
         ];
 
       case 'MultiSelect':
-        return ['set', 'text', 'tinytext', 'mediumtext', 'longtext'];
+        return ['varchar', 'text', 'tinytext', 'mediumtext', 'longtext'];
 
       case 'SingleSelect':
-        return ['enum', 'text', 'tinytext', 'mediumtext', 'longtext'];
+        return ['varchar', 'text', 'tinytext', 'mediumtext', 'longtext'];
 
       case 'Year':
         return ['year'];
