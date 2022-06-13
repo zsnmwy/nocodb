@@ -1,60 +1,79 @@
 <template>
-  <v-container fluid class="wrapper">
-    <draggable v-model="options" handle=".nc-child-draggable-icon">
-      <div v-for="(op,i) in options" :key="`${op.color}-${i}`" class="d-flex py-1">
-        <v-icon
-          small
-          class="nc-child-draggable-icon handle"
+  <v-form v-model="isValid">
+    <v-container fluid class="wrapper">
+      <draggable v-model="options" handle=".nc-child-draggable-icon">
+        <div
+          v-for="(op,i) in options"
+          :key="`${op.color}-${i}`"
+          class="d-flex py-1"
         >
-          mdi-drag-vertical
-        </v-icon>
-        <v-menu
-          v-model="colorMenus[i]"
-          rounded="lg"
-          :close-on-content-click="false"
-          offset-y
-        >
-          <template
-            #activator="{ on }"
+          <v-icon
+            small
+            class="nc-child-draggable-icon handle"
           >
-            <v-icon
-              :color="op.color"
-              class="mr-2"
-              v-on="on"
+            mdi-drag-vertical
+          </v-icon>
+          <v-menu
+            v-model="colorMenus[i]"
+            rounded="lg"
+            :close-on-content-click="false"
+            offset-y
+          >
+            <template
+              #activator="{ on }"
             >
-              mdi-arrow-down-drop-circle
-            </v-icon>
-          </template>
-          <color-picker v-model="op.color" @input="colorMenus[i] = false;" />
-        </v-menu>
-        <v-text-field
-          v-model="op.title"
-          :autofocus="true"
-          class="caption"
-          :rules="[enumNotNull, enumNoDuplicate]"
-          dense
+              <v-icon
+                :color="op.color"
+                class="mr-2"
+                v-on="on"
+              >
+                mdi-arrow-down-drop-circle
+              </v-icon>
+            </template>
+            <color-picker v-model="op.color" @input="colorMenus[i] = false;" />
+          </v-menu>
+          <div
+            class="input-wrapper"
+            @mouseover="disabledError = (op.id && isMigrated)"
+            @mouseleave="disabledError = false"
+          >
+            <v-text-field
+              v-model="op.title"
+              :autofocus="true"
+              class="caption"
+              :rules="[enumNotNull, enumNoDuplicate]"
+              dense
+              outlined
+              hide-details
+              :disabled="op.id && isMigrated"
+            />
+          </div>
+          <v-icon class="ml-2" color="error lighten-2" size="13" @click="removeOption(op, i)">
+            mdi-close
+          </v-icon>
+        </div>
+        <v-btn
+          slot="footer"
+          x-small
+          color="primary"
           outlined
-          :disabled="op.id && isMigrated"
-        />
-        <v-icon class="ml-2" color="error lighten-2" size="13" @click="removeOption(op, i)">
-          mdi-close
-        </v-icon>
+          class="d-100 caption mt-2"
+          @click="addNewOption()"
+        >
+          <v-icon x-small outlined color="primary" class="mr-2">
+            mdi-plus
+          </v-icon>
+          Add option
+        </v-btn>
+      </draggable>
+      <div v-if="!isValid" class="pt-3 text-center caption error--text">
+        Migrated options can't have duplicates or null
       </div>
-      <v-btn
-        slot="footer"
-        x-small
-        color="primary"
-        outlined
-        class="d-100 caption mt-2"
-        @click="addNewOption()"
-      >
-        <v-icon x-small outlined color="primary" class="mr-2">
-          mdi-plus
-        </v-icon>
-        Add option
-      </v-btn>
-    </draggable>
-  </v-container>
+      <div v-if="disabledError" class="pt-3 text-center caption error--text">
+        Edits not allowed for migrated options
+      </div>
+    </v-container>
+  </v-form>
 </template>
 
 <script>
@@ -72,7 +91,9 @@ export default {
   data: () => ({
     options: [],
     colorMenus: {},
-    colors: enumColor.light
+    colors: enumColor.light,
+    isValid: true,
+    disabledError: false
   }),
   computed: {
     alias() {
@@ -182,9 +203,8 @@ export default {
   cursor: pointer;
 }
 
-/deep/ .v-text-field__details {
-  position: absolute;
-  margin-top: 10px;
-  margin-left: 25px;
+.input-wrapper {
+  width: 100%;
+  height: auto;
 }
 </style>
