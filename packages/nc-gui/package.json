@@ -39,6 +39,7 @@
     "socket.io-client": "^4.4.1",
     "splitpanes": "^2.2.1",
     "sql-formatter": "^2.3.3",
+    "tinymce": "^6.0.3",
     "unique-names-generator": "^4.3.1",
     "uuid": "^8.3.2",
     "v-clipboard": "^2.2.3",

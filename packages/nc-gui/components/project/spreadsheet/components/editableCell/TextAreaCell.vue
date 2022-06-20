@@ -1,19 +1,32 @@
 <template>
-  <textarea
-    ref="textarea"
-    v-model="localState"
-    rows="4"
-    v-on="parentListeners"
-    @keydown.alt.enter.stop
-    @keydown.shift.enter.stop
-  />
+  <div style="" class="nc-text-area-container d-100">
+    <div class="d-100 nc-text-area-wrapper pa-1">
+      {{ column.meta }}
+      <template v-if="isRichText">
+        <div ref="editor" class="nc-tiny-mce-editor">
+          xsdsds
+        </div>
+      </template>
+      <textarea
+        v-else
+        ref="textarea"
+        v-model="localState"
+        class=""
+        rows="6"
+        v-on="parentListeners"
+        @keydown.alt.enter.stop
+        @keydown.shift.enter.stop
+      />
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
   name: 'TextAreaCell',
   props: {
-    value: String
+    value: String,
+    column: Object
   },
   computed: {
 
@@ -24,6 +37,9 @@ export default {
       set(val) {
         this.$emit('input', val)
       }
+    },
+    isRichText() {
+      return this.column.meta && this.column.meta.richText
     },
     parentListeners() {
       const $listeners = {}
@@ -41,8 +57,40 @@ export default {
   created() {
     this.localState = this.value
   },
-  mounted() {
+  async mounted() {
     this.$refs.textarea && this.$refs.textarea.focus()
+    if (this.isRichText) {
+      await this.initTinymce()
+    }
+  },
+  methods: {
+    async initTinymce() {
+      const tinymce = (await import('tinymce')).default
+      const emailBodyConfig = {
+        target: this.$refs.editor,
+        menubar: false,
+        inline: true,
+        plugins: [
+          'link',
+          'lists',
+          'powerpaste',
+          'autolink',
+          'tinymcespellchecker'
+        ],
+        toolbar: [
+          'undo redo | bold italic underline | fontselect fontsizeselect',
+          'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent'
+        ],
+        valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
+        valid_styles: {
+          '*': 'font-size,font-family,color,text-decoration,text-align'
+        },
+        powerpaste_word_import: 'clean',
+        powerpaste_html_import: 'clean'
+      }
+
+      tinymce.init(emailBodyConfig)
+    }
   }
 }
 </script>
@@ -53,6 +101,33 @@ input, textarea {
   min-height: 60px;
   height: 100%;
   color: var(--v-textColor-base);
+}
+
+.nc-text-area-container {
+  position: relative;
+  overflow: visible;
+  /* todo: vary based on parent height */
+  height: 32px;
+  /*height: calc(100% - 0px);*/
+
+}
+
+.nc-text-area-wrapper {
+  position: absolute;
+  border-radius: 4px;
+  border: 2px solid var(--v-primary-base) !important;
+
+  background-color: var(--v-backgroundColorDefault-base);
+  height:fit-content;
+  left:-6px;
+  top:-4px;
+  width: max(calc(100% + 12px), 200px);
+  z-index:4;
+}
+
+.nc-tiny-mce-editor{
+  min-width:250px;
+  min-height:250px;
 }
 </style>
 <!--

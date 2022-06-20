@@ -119,6 +119,7 @@
       v-else-if="isTextArea"
       v-model="localState"
       :is-form="isForm"
+      :column="column"
       v-on="parentListeners"
     />
 

@@ -139,7 +139,7 @@
                 v-show="!rowMeta || !rowMeta.selected"
                 class="ml-2 grey--text"
                 :class="{ 'row-no': !isPublicView }"
-                >{{ row + 1 }}</span>
+              >{{ row + 1 }}</span>
 
               <template v-if="!isPublicView">
                 <v-checkbox
@@ -1187,4 +1187,7 @@ td:first-child {
   }
 }
 
+.nc-grid-cell{
+  overflow: visible
+}
 </style>

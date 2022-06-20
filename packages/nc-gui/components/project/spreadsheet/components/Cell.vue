@@ -54,7 +54,11 @@ export default {
 
 <style scoped>
 .long-text-cell {
-  white-space: break-spaces;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+  width:100%
 }
 </style>
 <!--

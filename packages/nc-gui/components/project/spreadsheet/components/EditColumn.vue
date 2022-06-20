@@ -159,6 +159,13 @@
                     :meta="meta"
                   />
                 </v-col>
+                <v-col v-else-if="isLongText" cols="12">
+                  <long-text-options
+                    v-model="newColumn.meta"
+                    :column="newColumn"
+                    :meta="meta"
+                  />
+                </v-col>
                 <v-col v-else-if="isCheckbox" cols="12">
                   <checkbox-options
                     v-model="newColumn.meta"
@@ -572,12 +579,14 @@ import { validateColumnName } from '~/helpers'
 import RatingOptions from '~/components/project/spreadsheet/components/editColumn/RatingOptions'
 import CheckboxOptions from '~/components/project/spreadsheet/components/editColumn/CheckboxOptions'
 import CurrencyOptions from '@/components/project/spreadsheet/components/editColumn/CurrencyOptions'
+import LongTextOptions from '~/components/project/spreadsheet/components/editColumn/LongTextOptions'
 
 const columnToValidate = [UITypes.Email, UITypes.URL, UITypes.PhoneNumber]
 
 export default {
   name: 'EditColumn',
   components: {
+    LongTextOptions,
     CheckboxOptions,
     RatingOptions,
     RollupOptions,
@@ -660,6 +669,9 @@ export default {
     },
     isRating() {
       return this.newColumn && this.newColumn.uidt === UITypes.Rating
+    },
+    isLongText() {
+      return this.newColumn && this.newColumn.uidt === UITypes.LongText
     },
     isCheckbox() {
       return this.newColumn && this.newColumn.uidt === UITypes.Checkbox
