@@ -87,6 +87,10 @@ const copyAuthToken = async () => {
     message.error(e.message)
   }
 }
+
+definePageMeta({
+  hideHeader: true,
+})
 </script>
 
 <template>

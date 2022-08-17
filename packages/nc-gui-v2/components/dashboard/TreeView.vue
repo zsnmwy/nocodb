@@ -137,7 +137,7 @@ const activeTable = computed(() => {
 
 <template>
   <div class="nc-treeview-container flex flex-col">
-    <div class="px-6 py-[9px] border-b-1 nc-filter-input">
+    <!--    <div class="px-6 py-[9px] border-b-1 nc-filter-input">
       <div class="flex items-center bg-gray-50 rounded relative">
         <a-input
           v-model:value="filterQuery"
@@ -146,7 +146,7 @@ const activeTable = computed(() => {
         />
         <MdiSearch class="nc-filter-input-icon text-gray-400 mx-3 absolute right-[-4px] top-[7px]" />
       </div>
-    </div>
+    </div> -->
 
     <a-dropdown :trigger="['contextmenu']">
       <div

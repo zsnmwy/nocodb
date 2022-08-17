@@ -58,11 +58,10 @@ watch(tabMeta, async (newTabMeta, oldTabMeta) => {
             <SmartsheetForm v-else-if="isForm" />
           </div>
         </div>
-
-        <teleport to="#content">
-          <SmartsheetSidebar />
-        </teleport>
       </template>
     </div>
+    <!--    <teleport to="#content"> -->
+    <SmartsheetSidebar />
+    <!--    </teleport> -->
   </div>
 </template>
