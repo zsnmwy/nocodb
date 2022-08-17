@@ -14,6 +14,8 @@ import {
   useUIPermission,
 } from '#imports'
 import { TabType } from '~/composables'
+// import GithubStarButton from '~/components/dashboard/GithubStarButton.vue'
+
 const route = useRoute()
 
 const { appInfo, token } = useGlobal()
@@ -274,6 +276,23 @@ definePageMeta({
     <NuxtPage />
 
     <GeneralPreviewAs float />
+
+<Teleport to="#nc-footer">
+
+  <a-tooltip :placement="isOpen ? 'topRight' : 'right'">
+    <template #title> Toggle sidebar </template>
+
+    <div class="nc-sidebar-right-item hover:after:bg-primary/75 group nc-sidebar-add-row">
+      <MdiChevronDoubleLeft class="cursor-pointer group-hover:(!text-white) transform transition-transform duration-500" :class="{'rotate-180':!isOpen}" @click="toggle(!isOpen)" />
+    </div>
+
+
+
+
+  </a-tooltip>
+<!--    <GithubStarButton />-->
+
+</Teleport>
   </NuxtLayout>
 </template>
 
@@ -292,5 +311,9 @@ definePageMeta({
 
 :deep(.ant-dropdown-menu-item) {
   @apply !py-0 active:(ring ring-pink-500);
+}
+
+:global(#nc-sidebar-left .ant-layout-sider-collapsed){
+  @apply !w-0 !max-w-0 !min-w-0
 }
 </style>

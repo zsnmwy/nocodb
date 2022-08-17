@@ -110,7 +110,7 @@ function onCreate(view: GridType | FormType | KanbanType | GalleryType) {
       </Transition>
     </a-tooltip>
 
-    <Toolbar v-if="sidebarOpen" class="flex items-center py-3 px-3 justify-between border-b-1" />
+    <Toolbar v-if="sidebarOpen" class="flex items-center py-2 px-3 justify-between border-b-1 h-[var(--toolbar-height)]" />
 
     <Toolbar v-else class="py-3 px-2 max-w-[50px] flex !flex-col-reverse gap-4 items-center mt-[-1px]">
       <template #start>

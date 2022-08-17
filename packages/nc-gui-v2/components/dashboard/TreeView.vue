@@ -9,7 +9,6 @@ import MdiView from '~icons/mdi/eye-circle-outline'
 import MdiTableLarge from '~icons/mdi/table-large'
 import MdiMenuIcon from '~icons/mdi/dots-vertical'
 import MdiDrag from '~icons/mdi/drag-vertical'
-import GithubStarButton from '~/components/dashboard/GithubStarButton.vue'
 
 const { addTab } = useTabs()
 
@@ -133,6 +132,16 @@ const addTableTab = (table: TableType) => {
 const activeTable = computed(() => {
   return [TabType.TABLE, TabType.VIEW].includes(activeTab.value?.type) ? activeTab.value.title : null
 })
+
+const airtableImportDialog = ref(false)
+const quickImportDialog = ref(false)
+const importType = ref('')
+
+function openQuickImportDialog(type: string) {
+  quickImportDialog.value = true
+  importType.value = type
+}
+
 </script>
 
 <template>
@@ -165,7 +174,111 @@ const activeTable = computed(() => {
             <template v-if="tables?.length"> ({{ tables.length }}) </template>
           </span>
         </div>
+
         <div style="direction: ltr" class="flex-1">
+          <div
+            @click="tableCreateDlg = true"
+            class="group flex items-center gap-2 pl-5 pr-3 py-2 text-primary/70 hover:(text-primary/100) cursor-pointer select-none"
+          >
+            <MdiPlus />
+            <span class="text-gray-500 group-hover:(text-primary/100) flex-1">{{ $t('tooltip.addTable') }}</span>
+
+            <a-dropdown :trigger="['click']" @click.stop>
+              <MdiDotsVertical class="transition-opacity opacity-0 group-hover:opacity-100" />
+              <template #overlay>
+                <a-menu
+                  v-if="isUIAllowed('addOrImport')"
+                  class="border-0 nc-create-import-menu"
+                  mode="horizontal"
+                >
+
+                  <div class="text-gray-500 pl-3 pt-3">QUICK IMPORT FROM</div>
+
+<!--                  <a-menu-item
+                    v-if="isUIAllowed('addTable')"
+                    key="add-new-table"
+                    v-t="['a:actions:create-table']"
+                    @click="tableCreateDialog = true"
+                  >
+                    <span class="flex items-center gap-2">
+                      <MdiTable class="text-primary" />
+                      &lt;!&ndash; Add new table &ndash;&gt;
+                      {{ $t('tooltip.addTable') }}
+                    </span>
+                  </a-menu-item>-->
+
+                  <a-menu-item
+                    v-if="isUIAllowed('airtableImport')"
+                    key="quick-import-airtable"
+                    v-t="['a:actions:import-airtable']"
+                    @click="airtableImportDialog = true"
+                  >
+                    <span class="flex items-center gap-2">
+                      <MdiTableLarge class="text-primary" />
+                      <!-- TODO: i18n -->
+                      Airtable
+                    </span>
+                  </a-menu-item>
+                  <a-menu-item
+                    v-if="isUIAllowed('csvImport')"
+                    key="quick-import-csv"
+                    v-t="['a:actions:import-csv']"
+                    @click="openQuickImportDialog('csv')"
+                  >
+                    <span class="flex items-center gap-2">
+                      <MdiFileDocumentOutline class="text-primary" />
+                      <!-- TODO: i18n -->
+                      CSV file
+                    </span>
+                  </a-menu-item>
+
+                  <a-menu-item
+                    v-if="isUIAllowed('jsonImport')"
+                    key="quick-import-json"
+                    v-t="['a:actions:import-json']"
+                    @click="openQuickImportDialog('json')"
+                  >
+                    <span class="flex items-center gap-2">
+                      <MdiCodeJson class="text-primary" />
+                      <!-- TODO: i18n -->
+                      JSON file
+                    </span>
+                  </a-menu-item>
+
+                  <a-menu-item
+                    v-if="isUIAllowed('excelImport')"
+                    key="quick-import-excel"
+                    v-t="['a:actions:import-excel']"
+                    @click="openQuickImportDialog('excel')"
+                  >
+                    <span class="flex items-center gap-2">
+                      <MdiFileExcel class="text-primary" />
+                      <!-- TODO: i18n -->
+                      Microsoft Excel
+                    </span>
+                  </a-menu-item>
+
+                  <a-menu-divider class="ma-0 mb-2" />
+
+                  <a-menu-item
+                    v-if="isUIAllowed('importRequest')"
+                    key="add-new-table"
+                    v-t="['e:datasource:import-request']"
+                    class="ma-0 mt-3"
+                  >
+                    <a href="https://github.com/nocodb/nocodb/issues/2052" target="_blank" class="prose-sm pa-0">
+                      <span class="flex items-center gap-2">
+                        <MdiOpenInNew class="text-primary" />
+                        <!-- TODO: i18n -->
+                        Request a data source you need?
+                      </span>
+                    </a>
+                  </a-menu-item>
+                </a-menu>
+              </template>
+            </a-dropdown>
+          </div>
+
           <div v-if="tables.length" class="transition-height duration-200 overflow-hidden">
             <div :key="key" ref="menuRef" class="border-none sortable-list">
               <div
@@ -209,8 +322,9 @@ const activeTable = computed(() => {
                           v-t="['c:table:rename']"
                           class="!text-xs"
                           @click="showRenameTableDlg(table)"
-                          ><div>Rename</div></a-menu-item
                         >
+                          <div>Rename</div>
+                        </a-menu-item>
 
                         <a-menu-item
                           v-if="isUIAllowed('table-delete')"
@@ -218,8 +332,8 @@ const activeTable = computed(() => {
                           class="!text-xs"
                           @click="deleteTable(table)"
                         >
-                          Delete</a-menu-item
-                        >
+                          Delete
+                        </a-menu-item>
                       </a-menu>
                     </template>
                   </a-dropdown>
@@ -269,18 +383,20 @@ const activeTable = computed(() => {
 
     <a-divider class="mt-0 mb-2" />
 
-    <div class="items-center flex justify-center mb-1">
-      <GithubStarButton />
-    </div>
 
     <DlgTableCreate v-if="tableCreateDlg" v-model="tableCreateDlg" />
     <DlgTableRename v-if="renameTableMeta" v-model="renameTableDlg" :table-meta="renameTableMeta" />
+
+    <DlgQuickImport v-if="quickImportDialog" v-model="quickImportDialog" :import-type="importType" />
+
+    <DlgAirtableImport v-if="airtableImportDialog" v-model="airtableImportDialog" />
   </div>
+
 </template>
 
 <style scoped lang="scss">
 .nc-treeview-container {
-  @apply h-[calc(100vh_-_var(--header-height))];
+  @apply h-[calc(100vh_-_var(--header-height)_-_var(--footer-height))];
 }
 
 .nc-treeview-footer-item {

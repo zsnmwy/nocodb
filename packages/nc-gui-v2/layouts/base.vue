@@ -17,7 +17,8 @@ const logout = () => {
 </script>
 
 <template>
-  <a-layout id="nc-app" has-sider>
+  <a-layout class="!flex-col">
+  <a-layout id="nc-app" has-sider ha>
     <div id="nc-sidebar-left" />
 
     <a-layout class="!flex-col">
@@ -104,6 +105,9 @@ const logout = () => {
         <slot />
       </div>
     </a-layout>
+
+  </a-layout>
+    <a-layout-footer id="nc-footer" class="!h-[var(--footer-height)] px-1 !py-[1px] bg-white flex align-center border-t-1"/>
   </a-layout>
 </template>
 

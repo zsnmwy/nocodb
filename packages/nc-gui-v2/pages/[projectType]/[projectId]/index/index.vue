@@ -39,7 +39,7 @@ const icon = (tab: TabItem) => {
   <div class="h-full w-full nc-container">
     <div class="h-full w-full flex flex-col">
       <div class="flex items-end !min-h-[50px] bg-primary/100">
-        <div>
+<!--        <div>
           <a-menu
             v-if="isUIAllowed('addOrImport')"
             v-model:selectedKeys="currentMenu"
@@ -59,7 +59,7 @@ const icon = (tab: TabItem) => {
                 <a-menu-item key="add-new-table" v-t="['a:actions:create-table']" @click="tableCreateDialog = true">
                   <span class="flex items-center gap-2">
                     <MdiTable class="text-primary" />
-                    <!-- Add new table -->
+                    &lt;!&ndash; Add new table &ndash;&gt;
                     {{ $t('tooltip.addTable') }}
                   </span>
                 </a-menu-item>
@@ -74,7 +74,7 @@ const icon = (tab: TabItem) => {
                 >
                   <span class="flex items-center gap-2">
                     <MdiTableLarge class="text-primary" />
-                    <!-- TODO: i18n -->
+                    &lt;!&ndash; TODO: i18n &ndash;&gt;
                     Airtable
                   </span>
                 </a-menu-item>
@@ -86,7 +86,7 @@ const icon = (tab: TabItem) => {
                 >
                   <span class="flex items-center gap-2">
                     <MdiFileDocumentOutline class="text-primary" />
-                    <!-- TODO: i18n -->
+                    &lt;!&ndash; TODO: i18n &ndash;&gt;
                     CSV file
                   </span>
                 </a-menu-item>
@@ -99,7 +99,7 @@ const icon = (tab: TabItem) => {
                 >
                   <span class="flex items-center gap-2">
                     <MdiCodeJson class="text-primary" />
-                    <!-- TODO: i18n -->
+                    &lt;!&ndash; TODO: i18n &ndash;&gt;
                     JSON file
                   </span>
                 </a-menu-item>
@@ -112,7 +112,7 @@ const icon = (tab: TabItem) => {
                 >
                   <span class="flex items-center gap-2">
                     <MdiFileExcel class="text-primary" />
-                    <!-- TODO: i18n -->
+                    &lt;!&ndash; TODO: i18n &ndash;&gt;
                     Microsoft Excel
                   </span>
                 </a-menu-item>
@@ -129,14 +129,14 @@ const icon = (tab: TabItem) => {
                 <a href="https://github.com/nocodb/nocodb/issues/2052" target="_blank" class="prose-sm pa-0">
                   <span class="flex items-center gap-2">
                     <MdiOpenInNew class="text-primary" />
-                    <!-- TODO: i18n -->
+                    &lt;!&ndash; TODO: i18n &ndash;&gt;
                     Request a data source you need?
                   </span>
                 </a>
               </a-menu-item>
             </a-sub-menu>
           </a-menu>
-        </div>
+        </div>-->
 
         <a-tabs v-model:activeKey="activeTabIndex" class="nc-root-tabs" type="editable-card" @edit="closeTab(activeTabIndex)">
           <a-tab-pane v-for="(tab, i) in tabs" :key="i">
@@ -164,7 +164,7 @@ const icon = (tab: TabItem) => {
 
 <style scoped lang="scss">
 .nc-container {
-  height: 100vh;
+  height: 100vh - var(--footer-height);
   flex: 1 1 100%;
 }
 
@@ -213,5 +213,4 @@ const icon = (tab: TabItem) => {
 :deep(.nc-create-import-menu.ant-menu) {
   @apply !bg-white/10 text-white  mr-1 mb-1 !text-xs rounded;
 }
-
 </style>
