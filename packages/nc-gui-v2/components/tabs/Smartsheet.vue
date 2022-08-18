@@ -34,7 +34,7 @@ provide(ActiveViewInj, activeView)
 provide(IsLockedInj, false)
 provide(ReloadViewDataHookInj, reloadEventHook)
 provide(FieldsInj, fields)
-provide(RightSidebarInj, ref(false))
+provide(RightSidebarInj, ref(true))
 
 const { isGallery, isGrid, isForm } = useProvideSmartsheetStore(activeView as Ref<TableType>, meta)
 

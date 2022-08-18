@@ -11,7 +11,11 @@ const sidebarOpen = inject(RightSidebarInj, ref(true))
     <template #title> Toggle sidebar </template>
 
     <div class="nc-sidebar-right-item hover:after:bg-primary/75 group nc-sidebar-add-row">
-      <MdiChevronDoubleLeft class="cursor-pointer group-hover:(!text-white) transform transition-transform" :class="{'rotate-180':sidebarOpen}" @click="sidebarOpen = !sidebarOpen" />
+      <MdiChevronDoubleLeft
+        class="cursor-pointer group-hover:(!text-white) transform transition-transform"
+        :class="{ 'rotate-180': sidebarOpen }"
+        @click="sidebarOpen = !sidebarOpen"
+      />
     </div>
   </a-tooltip>
 </template>

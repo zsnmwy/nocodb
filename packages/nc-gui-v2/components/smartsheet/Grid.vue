@@ -476,10 +476,7 @@ const expandForm = (row: Row, state: Record<string, any>) => {
       </a-dropdown>
     </div>
 
-
-    <Teleport to="#nc-footer">
-    <SmartsheetPagination class="flex-1 flex-row-reverse  mr-3 ml-[200px]"/>
-    </Teleport>
+    <SmartsheetPagination class="flex-1 flex-row-reverse mx-auto max-w-[700px]" />
     <SmartsheetExpandedForm
       v-if="expandedFormRow && expandedFormDlg"
       v-model="expandedFormDlg"

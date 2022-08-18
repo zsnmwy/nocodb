@@ -33,13 +33,16 @@ const icon = (tab: TabItem) => {
       return MdiAccountGroup
   }
 }
+
+const isSideBarOpen = inject('leftSidebar', false)
+const toggleSidebar = inject('toggleLeftSidebar', () => {})
 </script>
 
 <template>
   <div class="h-full w-full nc-container">
     <div class="h-full w-full flex flex-col">
       <div class="flex items-end !min-h-[50px] bg-primary/100">
-<!--        <div>
+        <!--        <div>
           <a-menu
             v-if="isUIAllowed('addOrImport')"
             v-model:selectedKeys="currentMenu"
@@ -136,7 +139,18 @@ const icon = (tab: TabItem) => {
               </a-menu-item>
             </a-sub-menu>
           </a-menu>
-        </div>-->
+        </div> -->
+
+        <div
+          v-if="!isSideBarOpen"
+          class="nc-sidebar-left-toggle-icon hover:after:bg-primary/75 group nc-sidebar-add-row py-2 px-3"
+        >
+          <MdiMenu
+            class="cursor-pointer transform transition-transform duration-500 text-white"
+            :class="{ 'rotate-180': !isOpen }"
+            @click="toggleSidebar(!isSideBarOpen)"
+          />
+        </div>
 
         <a-tabs v-model:activeKey="activeTabIndex" class="nc-root-tabs" type="editable-card" @edit="closeTab(activeTabIndex)">
           <a-tab-pane v-for="(tab, i) in tabs" :key="i">
@@ -170,7 +184,7 @@ const icon = (tab: TabItem) => {
 
 :deep(.nc-root-tabs) {
   & > .ant-tabs-nav {
-    @apply !mb-0;
+    @apply !mb-0 before:(!border-b-0);
 
     .ant-tabs-extra-content {
       @apply !bg-white/0;

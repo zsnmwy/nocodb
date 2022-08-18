@@ -177,8 +177,8 @@ function openQuickImportDialog(type: string) {
 
         <div style="direction: ltr" class="flex-1">
           <div
-            @click="tableCreateDlg = true"
             class="group flex items-center gap-2 pl-5 pr-3 py-2 text-primary/70 hover:(text-primary/100) cursor-pointer select-none"
+            @click="tableCreateDlg = true"
           >
             <MdiPlus />
             <span class="text-gray-500 group-hover:(text-primary/100) flex-1">{{ $t('tooltip.addTable') }}</span>
@@ -186,26 +186,8 @@ function openQuickImportDialog(type: string) {
             <a-dropdown :trigger="['click']" @click.stop>
               <MdiDotsVertical class="transition-opacity opacity-0 group-hover:opacity-100" />
               <template #overlay>
-                <a-menu
-                  v-if="isUIAllowed('addOrImport')"
-                  class="border-0 nc-create-import-menu"
-                  mode="horizontal"
-                >
-
+                <a-menu v-if="isUIAllowed('addOrImport')" class="border-0 nc-create-import-menu" mode="horizontal">
                   <div class="text-gray-500 pl-3 pt-3">QUICK IMPORT FROM</div>
-
-<!--                  <a-menu-item
-                    v-if="isUIAllowed('addTable')"
-                    key="add-new-table"
-                    v-t="['a:actions:create-table']"
-                    @click="tableCreateDialog = true"
-                  >
-                    <span class="flex items-center gap-2">
-                      <MdiTable class="text-primary" />
-                      &lt;!&ndash; Add new table &ndash;&gt;
-                      {{ $t('tooltip.addTable') }}
-                    </span>
-                  </a-menu-item>-->
 
                   <a-menu-item
                     v-if="isUIAllowed('airtableImport')"
@@ -381,8 +363,10 @@ function openQuickImportDialog(type: string) {
       </template>
     </a-dropdown>
 
-    <a-divider class="mt-0 mb-2" />
+    <div class="py-4 flex justify-center items-center border-t-1">
 
+      <GeneralShareBaseButton class="!mr-0" />
+    </div>
 
     <DlgTableCreate v-if="tableCreateDlg" v-model="tableCreateDlg" />
     <DlgTableRename v-if="renameTableMeta" v-model="renameTableDlg" :table-meta="renameTableMeta" />
@@ -391,7 +375,6 @@ function openQuickImportDialog(type: string) {
 
     <DlgAirtableImport v-if="airtableImportDialog" v-model="airtableImportDialog" />
   </div>
-
 </template>
 
 <style scoped lang="scss">

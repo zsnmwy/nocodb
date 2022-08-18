@@ -1,9 +1,3 @@
-<script>
-export default {
-  name: 'Index',
-}
-</script>
-
 <template>
   <div class="nc-main-tab">
     <span>Welcome to NocoDB!</span>

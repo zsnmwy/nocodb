@@ -93,7 +93,7 @@ const attachments = (record: any): Array<Attachment> => {
         </Row>
       </div>
     </div>
-    <SmartsheetPagination />
+    <SmartsheetPagination class="flex-1 flex-row-reverse mx-auto max-w-[600px]" />
   </div>
 </template>
 

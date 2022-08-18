@@ -17,8 +17,7 @@ const logout = () => {
 </script>
 
 <template>
-  <a-layout class="!flex-col">
-  <a-layout id="nc-app" has-sider ha>
+  <a-layout id="nc-app" has-sider>
     <div id="nc-sidebar-left" />
 
     <a-layout class="!flex-col">
@@ -52,7 +51,7 @@ const logout = () => {
           <GeneralShareBaseButton />
 
           <a-tooltip placement="bottom">
-            <template #title> Switch language </template>
+            <template #title> Switch language</template>
 
             <div class="flex pr-4 items-center">
               <GeneralLanguage class="cursor-pointer text-2xl" />
@@ -92,7 +91,7 @@ const logout = () => {
       </Transition>
 
       <a-tooltip placement="bottom">
-        <template #title> Switch language </template>
+        <template #title> Switch language</template>
 
         <Transition name="layout">
           <div v-if="!signedIn" class="nc-lang-btn">
@@ -105,10 +104,14 @@ const logout = () => {
         <slot />
       </div>
     </a-layout>
-
   </a-layout>
-    <a-layout-footer id="nc-footer" class="!h-[var(--footer-height)] px-1 !py-[1px] bg-white flex align-center border-t-1"/>
-  </a-layout>
+  <!--    <a-layout-footer v-if="route.meta.showFooter" id="nc-footer" -->
+  <!--                     class="!h-[var(&#45;&#45;footer-height)] px-1 !py-[1px] bg-white flex align-center border-t-1"> -->
+  <!--      <div id="nc-footer-left"></div> -->
+  <!--      <div id="nc-footer-center" class="flex-1 flex items-center justify-center"></div> -->
+  <!--      <div id="nc-footer-right"></div> -->
+  <!--    </a-layout-footer> -->
+  <!--  </a-layout> -->
 </template>
 
 <style lang="scss" scoped>

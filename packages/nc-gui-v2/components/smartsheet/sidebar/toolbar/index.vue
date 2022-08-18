@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { RightSidebarInj } from '~/context'
 import AddRow from './AddRow.vue'
 import LockMenu from './LockMenu.vue'
 import Reload from './Reload.vue'
@@ -7,13 +6,13 @@ import ExportCache from './ExportCache.vue'
 import DeleteCache from './DeleteCache.vue'
 import DebugMeta from './DebugMeta.vue'
 import ToggleDrawer from './ToggleDrawer.vue'
+import { RightSidebarInj } from '~/context'
 
 const { isUIAllowed } = useUIPermission()
 
 const debug = $ref(false)
 
 const clickCount = $ref(0)
-
 
 const sidebarOpen = inject(RightSidebarInj, ref(true))
 </script>
@@ -28,8 +27,6 @@ const sidebarOpen = inject(RightSidebarInj, ref(true))
       }
     "
   >
-
-
     <slot name="start" />
 
     <template v-if="debug">
@@ -56,8 +53,7 @@ const sidebarOpen = inject(RightSidebarInj, ref(true))
 
     <AddRow v-if="isUIAllowed('xcDatatableEditable')" @click.stop />
 
-
-    <div :class="{'w-[calc(100%_+_32px)] h-[1px] bg-gray-200 mt-1 -ml-4':!sidebarOpen,'dot':sidebarOpen }" />
+    <div :class="{ 'w-[calc(100%_+_32px)] h-[1px] bg-gray-200 mt-1 -ml-4': !sidebarOpen, 'dot': sidebarOpen }" />
 
     <ToggleDrawer />
 
