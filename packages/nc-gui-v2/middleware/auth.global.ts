@@ -47,9 +47,14 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   /** if auth is required or unspecified (same as required) and user is not signed in, redirect to signin page */
   if ((to.meta.requiresAuth || typeof to.meta.requiresAuth === 'undefined') && !state.signedIn.value) {
-    /** If this is the first usern navigate to signup page directly */
+    /** If this is the first user navigate to signup/intro page directly */
     if (state.appInfo.value.firstUser) {
-      return navigateTo('/signup')
+      /** if ncMin true navigate to sigup or navigate to intro page */
+      if(state.appInfo.value.ncMin) {
+        return navigateTo('/signup')
+      }else{
+        return navigateTo('/intro')
+      }
     }
 
     return navigateTo('/signin')
