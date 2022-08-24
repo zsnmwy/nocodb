@@ -11,7 +11,7 @@ import * as express from 'express';
 import { Router } from 'express';
 import importFresh from 'import-fresh';
 import morgan from 'morgan';
-import NcToolGui from 'nc-lib-gui-v2';
+// import NcToolGui from 'nc-lib-gui-v2';
 import requestIp from 'request-ip';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -43,6 +43,9 @@ import * as http from 'http';
 import weAreHiring from './utils/weAreHiring';
 import getInstance from './utils/getInstance';
 import initAdminFromEnv from './meta/api/userApi/initAdminFromEnv';
+
+// @ts-expect-error
+import { handler } from './gui/server/index.mjs'
 
 const log = debug('nc:app');
 require('dotenv').config();
@@ -196,6 +199,8 @@ export default class Noco {
       await args.afterMetaMigrationInit();
     }
 
+    this.router.use('/test', handler)
+
     /******************* Middlewares : start *******************/
     this.router.use((req: any, _res, next) => {
       req.nc = this.requestContext;
@@ -252,9 +257,9 @@ export default class Noco {
     //   this.config.dashboardPath,
     //   await this.ncToolApi.expressMiddleware()
     // );
-    this.router.use(NcToolGui.expressMiddleware(
-      this.config.dashboardPath,
-    ));
+    // this.router.use(NcToolGui.expressMiddleware(
+    //   this.config.dashboardPath,
+    // ));
     this.router.get('/', (_req, res) =>
       res.redirect(this.config.dashboardPath)
     );

@@ -5,13 +5,13 @@
     "target": "es2017",
     "outDir": "build/main",
     "rootDir": "src",
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "module": "commonjs",
     "declaration": true,
     "inlineSourceMap": true,
     "esModuleInterop": true
     /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
-    "allowJs": false,
+    "allowJs": true,
     // "strict": true /* Enable all strict type-checking options. */,
 
     /* Strict Type-Checking Options */
@@ -57,8 +57,8 @@
   },
   "include": [
     "src/**/*.ts",
-//    "src/lib/xgene/migrations/*.js",
-    "src/**/*.json"
+    "src/**/*.json",
+    "src/**/*.mjs"
   ],
   "exclude": [
     "node_modules/**",
