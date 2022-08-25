@@ -90,6 +90,11 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'node',
+    rollupConfig:{
+      output: {
+        esModule: false,
+      }
+    }
   },
   experimental: {
     reactivityTransform: true,

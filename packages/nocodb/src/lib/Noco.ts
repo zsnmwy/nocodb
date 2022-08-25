@@ -44,8 +44,7 @@ import weAreHiring from './utils/weAreHiring';
 import getInstance from './utils/getInstance';
 import initAdminFromEnv from './meta/api/userApi/initAdminFromEnv';
 
-// @ts-expect-error
-import { handler } from './gui/server/index.mjs'
+// import { handler } from './gui/server/index.mjs'
 
 const log = debug('nc:app');
 require('dotenv').config();
@@ -199,7 +198,9 @@ export default class Noco {
       await args.afterMetaMigrationInit();
     }
 
-    this.router.use('/test', handler)
+    const { handler } = await import('./gui/index.js');
+    console.log(handler)
+    // this.router.use('/test', handler);
 
     /******************* Middlewares : start *******************/
     this.router.use((req: any, _res, next) => {
