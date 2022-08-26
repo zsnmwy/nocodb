@@ -6,6 +6,7 @@ import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import monacoEditorPlugin from 'vite-plugin-monaco-editor'
+// import { createWebHashHistory } from 'vue-router'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
@@ -13,7 +14,7 @@ export default defineNuxtConfig({
 
   ssr: false,
   app: {
-    baseURL: '/dashboard/',
+    // baseURL: '/dashboard/',
   },
   css: [
     'virtual:windi.css',
@@ -46,12 +47,23 @@ export default defineNuxtConfig({
     ],
   },
 
+  // typescript: {
+  //   tsConfig: {
+  //     module: 'commonjs',
+  //   },
+  // },
+
+  router: {
+    options: {},
+
+    mode: 'hash',
+  },
   vite: {
     // todo: minifiy again
     build: {
       minify: false,
       rollupOptions: {
-        external: 'httpsnippet',
+        external: ['httpsnippet', 'nocodb'],
       },
     },
     plugins: [
@@ -87,14 +99,19 @@ export default defineNuxtConfig({
         usePolling: true,
       },
     },
+    alias: {
+      fs: require.resolve('rollup-plugin-node-builtins'),
+    },
   },
   nitro: {
     preset: 'node',
-    rollupConfig:{
-      output: {
-        esModule: false,
-      }
-    }
+    prerender: {
+      crawlLinks: false,
+      routes: [],
+    },
+    externals: {
+      // external: ['nocodb'],
+    },
   },
   experimental: {
     reactivityTransform: true,
@@ -116,4 +133,8 @@ export default defineNuxtConfig({
     name: 'layout',
     mode: 'out-in',
   },
+
+  serverMiddleware: [
+    { path: '/', handler: '~/server-middleware/index.ts' },
+  ],
 })

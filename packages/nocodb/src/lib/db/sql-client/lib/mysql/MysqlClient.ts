@@ -12,7 +12,6 @@ import path from 'path';
 import mkdirp from 'mkdirp';
 import { promisify } from 'util';
 
-// @ts-expect-error
 import { nanoid } from 'nanoid';
 
 import fakerFunctionList from './fakerFunctionList';

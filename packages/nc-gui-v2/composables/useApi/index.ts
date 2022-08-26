@@ -32,7 +32,7 @@ export function createApiInstance<SecurityDataType = any>(options: CreateApiOpti
  */
 export function useApi<Data = any, RequestConfig = any>({
   useGlobalInstance = false,
-  apiOptions,
+  apiOptions = { baseURL: '/' },
   axiosConfig,
 }: UseApiProps<Data> = {}): UseApiReturn<Data, RequestConfig> {
   /**

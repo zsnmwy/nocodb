@@ -197,9 +197,12 @@ export default class Noco {
     if (args?.afterMetaMigrationInit) {
       await args.afterMetaMigrationInit();
     }
-
-    const { handler } = await import('./gui/index.js');
-    console.log(handler)
+    try {
+      const { handler } = await import('./gui/server/index.mjs')
+      console.log(handler)
+    } catch (e) {
+      console.log(e)
+    }
     // this.router.use('/test', handler);
 
     /******************* Middlewares : start *******************/
