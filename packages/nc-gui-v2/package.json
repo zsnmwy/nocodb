@@ -11,10 +11,12 @@
     "coverage": "vitest -c test/vite.config.ts run --coverage",
     "build:copy": "npm run generate; rm -rf ../nc-lib-gui-v2/lib/dist/; rsync -rvzh ./dist/ ../nc-lib-gui-v2/lib/dist/",
     "build:copy:publish": "npm run generate; rm -rf ../nc-lib-gui-v2/lib/dist/; rsync -rvzh ./dist/ ../nc-lib-gui-v2/lib/dist/; npm publish ../nc-lib-gui-v2"
-
   },
   "dependencies": {
     "@ckpack/vue-color": "^1.2.0",
+    "@nuxt/kit": "file:../../../framework/packages/kit",
+    "@nuxt/schema": "file:../../../framework/packages/schema",
+    "@nuxt/vite-builder": "file:../../../framework/packages/vite",
     "@vuelidate/core": "^2.0.0-alpha.44",
     "@vuelidate/validators": "^2.0.0-alpha.31",
     "@vueuse/core": "^9.0.2",
@@ -71,9 +73,11 @@
     "eslint-plugin-prettier": "^4.0.0",
     "happy-dom": "^6.0.3",
     "httpsnippet": "^2.0.0",
-    "nuxt": "3.0.0-rc.4",
+    "lodash-es": "^4.17.21",
+    "nuxt": "file:../../../framework/packages/nuxt",
     "nuxt-windicss": "^2.5.0",
     "prettier": "^2.7.1",
+    "rollup-plugin-node-builtins": "^2.1.2",
     "sass": "^1.53.0",
     "unplugin-icons": "^0.14.7",
     "unplugin-vue-components": "^0.22.4",

@@ -1,7 +1,8 @@
 import { ConfigProvider } from 'ant-design-vue'
 import type { Theme as AntTheme } from 'ant-design-vue/es/config-provider'
 import { useStorage } from '@vueuse/core'
-import { NOCO, hexToRGB, themeV2Colors, useCssVar, useInjectionState } from '#imports'
+import { NOCO, hexToRGB, themeV2Colors, useCssVar,  } from '#imports'
+import { useInjectionState } from '~/composables/useInjectionState'
 
 interface ThemeConfig extends AntTheme {
   primaryColor: string

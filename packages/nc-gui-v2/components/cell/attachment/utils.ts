@@ -13,10 +13,12 @@ import {
   ref,
   useApi,
   useFileDialog,
-  useInjectionState,
+  // useInjectionState,
   useProject,
   watch,
 } from '#imports'
+import { useInjectionState } from '~/composables/useInjectionState'
+
 import MdiPdfBox from '~icons/mdi/pdf-box'
 import MdiFileWordOutline from '~icons/mdi/file-word-outline'
 import MdiFilePowerpointBox from '~icons/mdi/file-powerpoint-box'

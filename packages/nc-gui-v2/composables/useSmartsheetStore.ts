@@ -1,7 +1,8 @@
 import { ViewTypes } from 'nocodb-sdk'
 import type { FilterType, SortType, TableType, ViewType } from 'nocodb-sdk'
 import type { Ref } from 'vue'
-import { computed, reactive, useInjectionState, useNuxtApp, useProject, useTemplateRefsList } from '#imports'
+import { computed, reactive, useNuxtApp, useProject, useTemplateRefsList } from '#imports'
+import { useInjectionState } from '~/composables/useInjectionState'
 
 const [useProvideSmartsheetStore, useSmartsheetStore] = useInjectionState(
   (

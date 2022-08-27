@@ -1,5 +1,6 @@
 import { useStorage } from '@vueuse/core'
-import { useInjectionState, watch } from '#imports'
+import {  watch } from '#imports'
+import { useInjectionState } from '~/composables/useInjectionState'
 
 interface UseSidebarProps {
   hasSidebar?: boolean

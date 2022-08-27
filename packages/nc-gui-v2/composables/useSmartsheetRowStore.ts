@@ -12,12 +12,13 @@ import {
   extractSdkResponseErrorMsg,
   ref,
   unref,
-  useInjectionState,
+  // useInjectionState,
   useMetas,
   useNuxtApp,
   useProject,
   useVirtualCell,
 } from '#imports'
+import { useInjectionState } from '~/composables/useInjectionState'
 
 const [useProvideSmartsheetRowStore, useSmartsheetRowStore] = useInjectionState((meta: Ref<TableType>, row: MaybeRef<Row>) => {
   const { $api } = useNuxtApp()

@@ -6,14 +6,20 @@ import IconsResolver from 'unplugin-icons/resolver'
 import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 import monacoEditorPlugin from 'vite-plugin-monaco-editor'
+import rollupPluginNodeBuiltins from 'rollup-plugin-node-builtins'
 
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
 export default defineNuxtConfig({
   modules: ['@vueuse/nuxt', 'nuxt-windicss', '@nuxt/image-edge'],
 
   ssr: false,
+  router: {
+    options: {
+      hashMode: true
+    } as any
+  },
   app: {
-    baseURL: '/dashboard/',
+    // baseURL: '/dashboard/',
   },
   css: [
     'virtual:windi.css',
@@ -46,7 +52,12 @@ export default defineNuxtConfig({
     ],
   },
 
+
   vite: {
+
+    alias: {
+      fs: rollupPluginNodeBuiltins
+    },
     // todo: minifiy again
     build: {
       minify: false,
@@ -96,7 +107,9 @@ export default defineNuxtConfig({
     dir: 'assets/',
   },
   autoImports: {
-    dirs: ['./context', './utils', './lib'],
+    dirs: ['./context', './utils', './lib', 'composables/**', 'utils/**'],
+    global: true,
+
     imports: [{ name: 'useI18n', from: 'vue-i18n' }],
   },
 

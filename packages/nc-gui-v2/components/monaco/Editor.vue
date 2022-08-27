@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import * as monaco from 'monaco-editor'
 import JsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import TypescriptWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
@@ -60,7 +59,7 @@ self.MonacoEnvironment = {
 }
 
 const root = ref<HTMLDivElement>()
-let editor: monaco.editor.IStandaloneCodeEditor
+let editor: any //monaco.editor.IStandaloneCodeEditor
 
 const format = () => {
   editor.setValue(JSON.stringify(JSON.parse(editor?.getValue() as string), null, 2))
@@ -71,49 +70,54 @@ defineExpose({
   isValid,
 })
 
-onMounted(() => {
-  if (root.value && lang) {
-    const model = monaco.editor.createModel(vModel, lang)
+onMounted(async () => {
+  if(process.client) {
 
-    if (lang === 'json') {
-      // configure the JSON language support with schemas and schema associations
-      monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
-        validate: validate as boolean,
+    const monaco = await import('monaco-editor')
+
+    if (root.value && lang) {
+      const model = monaco.editor.createModel(vModel, lang)
+
+      if (lang === 'json') {
+        // configure the JSON language support with schemas and schema associations
+        monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
+          validate: validate as boolean,
+        })
+      }
+
+      editor = monaco.editor.create(root.value, {
+        model,
+        theme: 'vs',
+        foldingStrategy: 'indentation',
+        selectOnLineNumbers: true,
+        scrollbar: {
+          verticalScrollbarSize: 8,
+          horizontalScrollbarSize: 8,
+        },
+        tabSize: 2,
+        automaticLayout: true,
+        readOnly,
+        minimap: {
+          enabled: !hideMinimap,
+        },
+      })
+
+      editor.onDidChangeModelContent(async () => {
+        try {
+          isValid.value = true
+
+          if (disableDeepCompare) {
+            vModel = editor.getValue()
+          } else {
+            const obj = JSON.parse(editor.getValue())
+            if (!obj || !deepCompare(vModel, obj)) vModel = obj
+          }
+        } catch (e) {
+          isValid.value = false
+          console.log(e)
+        }
       })
     }
-
-    editor = monaco.editor.create(root.value, {
-      model,
-      theme: 'vs',
-      foldingStrategy: 'indentation',
-      selectOnLineNumbers: true,
-      scrollbar: {
-        verticalScrollbarSize: 8,
-        horizontalScrollbarSize: 8,
-      },
-      tabSize: 2,
-      automaticLayout: true,
-      readOnly,
-      minimap: {
-        enabled: !hideMinimap,
-      },
-    })
-
-    editor.onDidChangeModelContent(async () => {
-      try {
-        isValid.value = true
-
-        if (disableDeepCompare) {
-          vModel = editor.getValue()
-        } else {
-          const obj = JSON.parse(editor.getValue())
-          if (!obj || !deepCompare(vModel, obj)) vModel = obj
-        }
-      } catch (e) {
-        isValid.value = false
-        console.log(e)
-      }
-    })
   }
 })
 
