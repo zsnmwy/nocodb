@@ -10,7 +10,7 @@ export function createApiInstance<SecurityDataType = any>(options: CreateApiOpti
 
   return addAxiosInterceptors(
     new Api<SecurityDataType>({
-      baseURL: options.baseURL ?? appInfo.ncSiteUrl,
+      baseURL: options.baseURL ?? appInfo.ncSiteUrl ?? '..',
     }),
   )
 }
