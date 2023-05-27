@@ -10,6 +10,7 @@ import { GlobalGuard } from '../../guards/global/global.guard';
 import { MetaService } from '../../meta/meta.service';
 import { AppHooksService } from '../../services/app-hooks/app-hooks.service';
 import Noco from '../../Noco';
+import { ExpService } from '../../services/exp.service'
 import { JwtStrategy } from '../../strategies/jwt.strategy';
 import { UsersService } from '../../services/users/users.service';
 import { EventEmitterModule } from '../event-emitter/event-emitter.module';
@@ -51,6 +52,7 @@ export const JwtStrategyProvider: Provider = {
     JwtStrategyProvider,
     GlobalGuard,
     SocketGateway,
+    ExpService
   ],
   exports: [
     AppHooksService,
@@ -61,6 +63,7 @@ export const JwtStrategyProvider: Provider = {
     UsersService,
     GlobalGuard,
     SocketGateway,
+    ExpService
   ],
 })
 export class GlobalModule {}

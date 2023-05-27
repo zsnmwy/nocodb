@@ -12,6 +12,7 @@ import CryptoJS from 'crypto-js';
 import { Connection } from '../connection/connection';
 import Noco from '../Noco';
 import NocoCache from '../cache/NocoCache';
+import { ExpService } from '../services/exp.service';
 import XcMigrationSourcev2 from './migrations/XcMigrationSourcev2';
 import XcMigrationSource from './migrations/XcMigrationSource';
 import type { Knex } from 'knex';
@@ -187,7 +188,11 @@ const nanoidv2 = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 14);
 
 @Injectable()
 export class MetaService {
-  constructor(private metaConnection: Connection, @Optional() trx = null) {
+  constructor(
+    private metaConnection: Connection,
+    private readonly expService: ExpService,
+    @Optional() trx = null,
+  ) {
     this.trx = trx;
   }
 
@@ -235,8 +240,18 @@ export class MetaService {
     }
 
     // console.log(query.toQuery())
+    query.first();
 
-    return query.first();
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    });
+
+    return query;
   }
 
   public async metaInsert2(
@@ -403,6 +418,15 @@ export class MetaService {
       query.select(...args.fields);
     }
 
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    })
+
     return {
       list: await query,
       count: Object.values(await countQuery.count().first())?.[0] as any,
@@ -515,7 +539,18 @@ export class MetaService {
       query.where(idOrCondition);
     }
 
-    return query.first();
+    query.first()
+
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    })
+
+    return query;
   }
 
   public async metaGetNextOrder(
@@ -589,6 +624,16 @@ export class MetaService {
       query.select(...args.fields);
     }
 
+
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    })
+
     return query;
   }
 
@@ -636,6 +681,15 @@ export class MetaService {
       query.select(...args.fields);
     }
 
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    })
+
     return query;
   }
 
@@ -667,6 +721,15 @@ export class MetaService {
     }
 
     query.count(args?.aggField || 'id', { as: 'count' }).first();
+
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    })
 
     return +(await query)?.['count'] || 0;
   }
@@ -753,7 +816,7 @@ export class MetaService {
     });
 
     // todo: tobe done
-    return new MetaService(this.metaConnection, trx);
+    return new MetaService(this.metaConnection,this.expService, trx);
   }
 
   async metaReset(
@@ -855,52 +918,63 @@ export class MetaService {
   }
 
   public async userProjectList(userId: any): Promise<any[]> {
+    const query = this.knexConnection('nc_projects')
+      .leftJoin(
+        this.knexConnection('nc_projects_users')
+          .where(`nc_projects_users.user_id`, userId)
+          .as('user'),
+        'user.project_id',
+        'nc_projects.id',
+      )
+      .select('nc_projects.*')
+      .select('user.user_id')
+      .select(
+        this.knexConnection('xc_users')
+          .select('xc_users.email')
+          .innerJoin(
+            'nc_projects_users',
+            'nc_projects_users.user_id',
+            '=',
+            'xc_users.id',
+          )
+          .whereRaw('nc_projects.id = nc_projects_users.project_id')
+          .where('nc_projects_users.roles', 'like', '%owner%')
+          .first()
+          .as('owner'),
+      )
+      .select(
+        this.knexConnection('xc_users')
+          .count('xc_users.id')
+          .innerJoin(
+            'nc_projects_users',
+            'nc_projects_users.user_id',
+            '=',
+            'xc_users.id',
+          )
+          .where((qb) => {
+            qb.where('nc_projects_users.roles', 'like', '%creator%').orWhere(
+              'nc_projects_users.roles',
+              'like',
+              '%owner%',
+            );
+          })
+          .whereRaw('nc_projects.id = nc_projects_users.project_id')
+          .andWhere('xc_users.id', userId)
+          .first()
+          .as('is_creator'),
+      )
+
+    const sql = query.toQuery();
+    const explain = await this.connection.raw(`EXPLAIN ANALYZE ${sql}`);
+
+    const stack = new Error().stack;
+
+    this.expService.insert({ stack, explain, query:sql }).catch((err) => {
+      console.log(err);
+    })
+
     return (
-      await this.knexConnection('nc_projects')
-        .leftJoin(
-          this.knexConnection('nc_projects_users')
-            .where(`nc_projects_users.user_id`, userId)
-            .as('user'),
-          'user.project_id',
-          'nc_projects.id',
-        )
-        .select('nc_projects.*')
-        .select('user.user_id')
-        .select(
-          this.knexConnection('xc_users')
-            .select('xc_users.email')
-            .innerJoin(
-              'nc_projects_users',
-              'nc_projects_users.user_id',
-              '=',
-              'xc_users.id',
-            )
-            .whereRaw('nc_projects.id = nc_projects_users.project_id')
-            .where('nc_projects_users.roles', 'like', '%owner%')
-            .first()
-            .as('owner'),
-        )
-        .select(
-          this.knexConnection('xc_users')
-            .count('xc_users.id')
-            .innerJoin(
-              'nc_projects_users',
-              'nc_projects_users.user_id',
-              '=',
-              'xc_users.id',
-            )
-            .where((qb) => {
-              qb.where('nc_projects_users.roles', 'like', '%creator%').orWhere(
-                'nc_projects_users.roles',
-                'like',
-                '%owner%',
-              );
-            })
-            .whereRaw('nc_projects.id = nc_projects_users.project_id')
-            .andWhere('xc_users.id', userId)
-            .first()
-            .as('is_creator'),
-        )
+      await query
     ).map((p) => {
       p.allowed = p.user_id === userId;
       p.config = CryptoJS.AES.decrypt(
@@ -1054,3 +1128,5 @@ export class MetaService {
     return true;
   }
 }
+
+
