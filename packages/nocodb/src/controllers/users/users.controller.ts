@@ -52,13 +52,19 @@ export class UsersController {
   ])
   @HttpCode(200)
   async refreshToken(@Request() req: any, @Response() res: any): Promise<any> {
-    res.json(
-      await this.usersService.refreshToken({
-        body: req.body,
-        req,
-        res,
-      }),
-    );
+    try {
+      res.json(
+        await this.usersService.refreshToken({
+          body: req.body,
+          req,
+          res,
+        }),
+      );
+    } catch (e) {
+      res.status(400).json({
+        msg: e.message,
+      });
+    }
   }
 
   @Post([

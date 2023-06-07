@@ -60,7 +60,7 @@ export function addAxiosInterceptors(api: Api<any>) {
               .then((response) => {
                 resolve(response)
               })
-              .catch((error) => {
+              .catch((_) => {
                 reject(error)
               })
           })
@@ -68,7 +68,7 @@ export function addAxiosInterceptors(api: Api<any>) {
         .catch(async (error) => {
           await state.signOut()
 
-          if (!route.meta.public) navigateTo('/signIn')
+          if (!route.meta?.public) navigateTo('/signIn')
 
           return Promise.reject(error)
         })
