@@ -12,13 +12,13 @@ import formulaQueryBuilderv2 from '../db/formulav2/formulaQueryBuilderv2';
 import ProjectMgrv2 from '../db/sql-mgr/v2/ProjectMgrv2';
 import {
   createHmAndBtColumn,
-  generateFkName,
+  generateFkName, generateIndexName,
   randomID,
   validateLookupPayload,
   validatePayload,
   validateRequiredField,
   validateRollupPayload,
-} from '../helpers';
+} from '../helpers'
 import { NcError } from '../helpers/catchError';
 import getColumnPropsFromUIDT from '../helpers/getColumnPropsFromUIDT';
 import {
@@ -1838,7 +1838,7 @@ export class ColumnsService {
       columns: [column.column_name],
       tn: model.table_name,
       non_unique: nonUnique,
-      indexName,
+      indexName: indexName ?? generateIndexName([column.column_name])
     };
     sqlMgr.sqlOpPlus(base, 'indexCreate', indexArgs);
   }

@@ -1,5 +1,6 @@
 import { RelationTypes, UITypes } from 'nocodb-sdk';
 import NocoCache from '../cache/NocoCache';
+import { generateIndexName } from '../helpers';
 import { MetaTable } from '../meta/meta.service';
 import { Base } from '../models';
 import NcConnectionMgrv2 from '../utils/common/NcConnectionMgrv2';
@@ -84,6 +85,7 @@ async function upgradeModelRelations({
               columns: [relation.cn],
               tn: relation.tn,
               non_unique: true,
+              indexName: generateIndexName([relation.cn]),
             };
             await sqlClient.indexCreate(indexArgs);
           }

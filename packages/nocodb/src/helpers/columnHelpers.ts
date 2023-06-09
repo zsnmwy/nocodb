@@ -206,3 +206,13 @@ export const generateFkName = (parent: TableType, child: TableType) => {
     .slice(0, 10)}_${randomID(15)}`;
   return constraintName;
 };
+// generate unique foreign key constraint name for foreign key
+export const generateIndexName = (columNames: string[]) => {
+  // generate a unique constraint name by taking of maximum length less than 64 chars
+  // and we are generating a name of maximum 40 chars
+  const constraintName = `${columNames
+    .map((n) => n.slice(0, 4))
+    .join('_')
+    .slice(0, 20)}_${randomID(15)}_idx`;
+  return constraintName;
+};
