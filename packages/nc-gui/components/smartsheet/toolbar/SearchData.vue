@@ -33,6 +33,8 @@ const columns = computed(() =>
   })),
 )
 
+const isFilterApplied = computed(() => !!search.value?.query)
+
 const filterCol = computed(() => (meta.value as TableType)?.columns?.find((column) => column.id === search.value?.field))
 
 watch(
@@ -52,12 +54,13 @@ function onPressEnter() {
 </script>
 
 <template>
-  <div class="flex flex-row border-1 rounded-sm">
+  <div class="flex flex-row border-1 rounded-sm " :class="{'!bg-primary bg-opacity-5' : isFilterApplied}">
     <div
       ref="searchDropdown"
       class="flex items-center relative bg-gray-50 px-2 cursor-pointer border-r-1"
-      :class="{ '!bg-gray-100 ': isDropdownOpen }"
+      :class="{ '!bg-gray-100 ': isDropdownOpen}"
       @click="isDropdownOpen = !isDropdownOpen"
+
     >
       <component :is="iconMap.search" class="text-grey" />
 
