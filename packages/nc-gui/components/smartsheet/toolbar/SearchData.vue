@@ -33,6 +33,8 @@ const columns = computed(() =>
   })),
 )
 
+const filterCol = computed(() => (meta.value as TableType)?.columns?.find((column) => column.id === search.value?.field))
+
 watch(
   () => activeView.value?.id,
   (n, o) => {
@@ -46,6 +48,7 @@ watch(
 function onPressEnter() {
   reloadData.trigger()
 }
+
 </script>
 
 <template>
@@ -75,7 +78,7 @@ function onPressEnter() {
       v-model:value="search.query"
       size="small"
       class="max-w-[200px] !text-xs"
-      :placeholder="$t('placeholder.filterQuery')"
+      :placeholder="filterCol ? `Filter ${filterCol.title}` : $t('placeholder.filterQuery')"
       :bordered="false"
       data-testid="search-data-input"
       @press-enter="onPressEnter"
