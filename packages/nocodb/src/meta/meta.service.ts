@@ -205,6 +205,10 @@ export class MetaService {
     return this._config;
   }
 
+  public get isTransaction(): boolean {
+    return !!this.trx;
+  }
+
   public get connection() {
     return this.trx ?? this.knexInstance;
   }
