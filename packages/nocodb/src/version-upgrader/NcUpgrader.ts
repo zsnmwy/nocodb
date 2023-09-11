@@ -18,6 +18,7 @@ import ncXcdbLTARUpgrader from './ncXcdbLTARUpgrader';
 import ncXcdbLTARIndexUpgrader from './ncXcdbLTARIndexUpgrader';
 import type { MetaService } from '~/meta/meta.service';
 import type { NcConfig } from '~/interface/config';
+import KnexLock from '~/version-upgrader/KnexLock';
 
 const log = debug('nc:version-upgrader');
 
@@ -30,92 +31,107 @@ export default class NcUpgrader {
 
   // Todo: transaction
   public static async upgrade(ctx: NcUpgraderCtx): Promise<any> {
-    this.log(`upgrade :`);
-    let oldVersion;
+    const knexLock = new KnexLock(
+      ctx.ncMeta.knexConnection,
+      'nc_upgrader_lock',
+    );
 
-    try {
-      ctx.ncMeta = await ctx.ncMeta.startTransaction();
+    await knexLock.executeWithLock(
+      async () => {
+        this.log(`upgrade :`);
+        let oldVersion;
 
-      if (!(await ctx.ncMeta.knexConnection?.schema?.hasTable?.('nc_store'))) {
-        return;
-      }
-      this.log(`upgrade : Getting configuration from meta database`);
+        try {
+          ctx.ncMeta = await ctx.ncMeta.startTransaction();
 
-      const config = await ctx.ncMeta.metaGet('', '', 'nc_store', {
-        key: this.STORE_KEY,
-      });
+          if (
+            !(await ctx.ncMeta.knexConnection?.schema?.hasTable?.('nc_store'))
+          ) {
+            return;
+          }
+          this.log(`upgrade : Getting configuration from meta database`);
 
-      const NC_VERSIONS: any[] = this.getUpgraderList();
+          const config = await ctx.ncMeta.metaGet('', '', 'nc_store', {
+            key: this.STORE_KEY,
+          });
 
-      if (config) {
-        const configObj: NcConfig = JSON.parse(config.value);
-        if (configObj.version !== process.env.NC_VERSION) {
-          oldVersion = configObj.version;
-          for (const version of NC_VERSIONS) {
-            // compare current version and old version
-            if (version.name > configObj.version) {
-              this.log(
-                `upgrade : Upgrading '%s' => '%s'`,
-                configObj.version,
-                version.name,
-              );
-              await version?.handler?.(ctx);
+          const NC_VERSIONS: any[] = this.getUpgraderList();
 
-              // update version in meta after each upgrade
-              config.version = version.name;
-              await ctx.ncMeta.metaUpdate(
-                '',
-                '',
-                'nc_store',
-                {
-                  value: JSON.stringify({ version: config.version }),
-                },
-                {
-                  key: NcUpgrader.STORE_KEY,
-                },
-              );
+          if (config) {
+            const configObj: NcConfig = JSON.parse(config.value);
+            if (configObj.version !== process.env.NC_VERSION) {
+              oldVersion = configObj.version;
+              for (const version of NC_VERSIONS) {
+                // compare current version and old version
+                if (version.name > configObj.version) {
+                  this.log(
+                    `upgrade : Upgrading '%s' => '%s'`,
+                    configObj.version,
+                    version.name,
+                  );
+                  await version?.handler?.(ctx);
 
-              // todo: backup data
+                  // update version in meta after each upgrade
+                  config.version = version.name;
+                  await ctx.ncMeta.metaUpdate(
+                    '',
+                    '',
+                    'nc_store',
+                    {
+                      value: JSON.stringify({ version: config.version }),
+                    },
+                    {
+                      key: NcUpgrader.STORE_KEY,
+                    },
+                  );
+
+                  // todo: backup data
+                }
+                if (version.name === process.env.NC_VERSION) {
+                  break;
+                }
+              }
+              config.version = process.env.NC_VERSION;
             }
-            if (version.name === process.env.NC_VERSION) {
-              break;
+          } else {
+            this.log(`upgrade : Inserting config to meta database`);
+            const configObj: any = {};
+            const isOld =
+              process.env.NC_CLOUD !== 'true' &&
+              (await ctx.ncMeta.projectList())?.length;
+            configObj.version = isOld ? '0009000' : process.env.NC_VERSION;
+            await ctx.ncMeta.metaInsert('', '', 'nc_store', {
+              key: NcUpgrader.STORE_KEY,
+              value: JSON.stringify(configObj),
+            });
+            if (isOld) {
+              await this.upgrade(ctx);
             }
           }
-          config.version = process.env.NC_VERSION;
+          await ctx.ncMeta.commit();
+          T.emit('evt', {
+            evt_type: 'appMigration:upgraded',
+            from: oldVersion,
+            to: process.env.NC_VERSION,
+          });
+        } catch (e) {
+          await ctx.ncMeta.rollback(e);
+          T.emit('evt', {
+            evt_type: 'appMigration:failed',
+            from: oldVersion,
+            to: process.env.NC_VERSION,
+            msg: e.message,
+            err: e?.stack?.split?.('\n').slice(0, 2).join('\n'),
+          });
+          console.log(
+            getUpgradeErrorLog(e, oldVersion, process.env.NC_VERSION),
+          );
+          throw e;
         }
-      } else {
-        this.log(`upgrade : Inserting config to meta database`);
-        const configObj: any = {};
-        const isOld =
-          process.env.NC_CLOUD !== 'true' &&
-          (await ctx.ncMeta.projectList())?.length;
-        configObj.version = isOld ? '0009000' : process.env.NC_VERSION;
-        await ctx.ncMeta.metaInsert('', '', 'nc_store', {
-          key: NcUpgrader.STORE_KEY,
-          value: JSON.stringify(configObj),
-        });
-        if (isOld) {
-          await this.upgrade(ctx);
-        }
-      }
-      await ctx.ncMeta.commit();
-      T.emit('evt', {
-        evt_type: 'appMigration:upgraded',
-        from: oldVersion,
-        to: process.env.NC_VERSION,
-      });
-    } catch (e) {
-      await ctx.ncMeta.rollback(e);
-      T.emit('evt', {
-        evt_type: 'appMigration:failed',
-        from: oldVersion,
-        to: process.env.NC_VERSION,
-        msg: e.message,
-        err: e?.stack?.split?.('\n').slice(0, 2).join('\n'),
-      });
-      console.log(getUpgradeErrorLog(e, oldVersion, process.env.NC_VERSION));
-      throw e;
-    }
+      },
+      900000,
+      5000,
+    );
   }
 
   protected static log(str, ...args): void {
