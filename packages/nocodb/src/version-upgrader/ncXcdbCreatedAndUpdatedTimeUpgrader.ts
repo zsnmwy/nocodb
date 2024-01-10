@@ -1,5 +1,6 @@
 import { UITypes } from 'nocodb-sdk';
 import { Logger } from '@nestjs/common';
+import Noco from '~/Noco'
 import type { NcUpgraderCtx } from './NcUpgrader';
 import type { MetaService } from '~/meta/meta.service';
 import { MetaTable } from '~/utils/globals';
@@ -176,11 +177,15 @@ export default async function ({ ncMeta }: NcUpgraderCtx) {
             eq: 1,
           },
         },
-        {
-          is_local: {
-            eq: 1,
-          },
-        },
+        ...(Noco.isEE()
+          ? [
+              {
+                is_local: {
+                  eq: 1,
+                },
+              },
+            ]
+          : []),
       ],
     },
   });
