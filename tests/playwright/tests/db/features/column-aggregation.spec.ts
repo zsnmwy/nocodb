@@ -374,6 +374,8 @@ test.describe('Field Aggregation', () => {
     await dashboard.treeView.openTable({ title: 'Test Table' });
 
     await api.dbTableRow.bulkCreate('noco', base.id, table.id, data);
+
+    await page.reload();
   });
 
   test.afterEach(async () => {
