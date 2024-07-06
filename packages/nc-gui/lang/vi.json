@@ -271,6 +271,7 @@
     "ipAddress": "IP Address"
   },
   "objects": {
+    "files": "files",
     "owner": "Owner",
     "member": "Member",
     "day": "Day",
@@ -384,6 +385,9 @@
     "isNotNull": "không phải là null."
   },
   "title": {
+    "webcam": "Webcam",
+    "uploadViaUrl": "Upload via URL",
+    "localFiles": "Local Files",
     "renameBase": "Rename Base",
     "renameWorkspace": "Rename Workspace",
     "renamingWorkspace": "Renaming Workspace",
@@ -513,6 +517,18 @@
     "looksLikeThisStackIsEmpty": "Looks like this stack does not have any records"
   },
   "labels": {
+    "toUpload": "to upload",
+    "dragFilesHere": "drag files here",
+    "browseFiles": "browse files",
+    "clickTo": "Click to",
+    "allowAccessToYourCamera": "Please allow access to your camera",
+    "openFile": "Open file",
+    "enterValidUrl": "Enter a valid URL to upload files",
+    "addFilesFromUrl": "Add files from URL",
+    "uploading": "Uploading",
+    "dropHere": "Drop here",
+    "addMore": "Add more",
+    "clearAllFiles": "Clear all files",
     "notRecommended": "Not recommended",
     "allowMetaWrite": "Allow Schema Edit",
     "allowDataWrite": "Allow Data Edit",
@@ -605,7 +621,7 @@
     "headerName": "Header Name",
     "icon": "Icon",
     "max": "Max",
-    "enableRichText": "Enable Rich Text",
+    "enableRichText": "Enable rich text",
     "idColon": "Id:",
     "copiedRecordURL": "Copied Record URL",
     "copyRecordURL": "Copy Record URL",
@@ -648,7 +664,6 @@
     "createdBy": "Đã tạo bởi",
     "viewingAttachmentsOf": "Viewing Attachments of",
     "readOnly": "Readonly",
-    "dropHere": "Drop here",
     "createdOn": "Created On",
     "notifyVia": "Thông báo qua",
     "projName": "Tên dự án",
@@ -941,7 +956,7 @@
     "addFilter": "Thêm bộ lọc",
     "share": "Chia sẻ",
     "groupBy": "Group By",
-    "addSubGroup": "Add subgroup",
+    "addSubGroup": "New Subgroup",
     "shareBase": {
       "label": "Share Base",
       "disable": "Vô hiệu hóa cơ sở chia sẻ",
@@ -1067,12 +1082,12 @@
       "showJunctionTableNames": "Show Junction Table Names"
     },
     "kanban": {
-      "collapseStack": "Collapse Stack",
+      "collapseStack": "Collapse stack",
       "collapseAll": "Collapse all",
       "expandAll": "Expand all",
       "renameStack": "Rename stack",
       "deleteStack": "Xóa ngăn xếp",
-      "stackedBy": "Stacked By",
+      "stackedBy": "Stacked by",
       "chooseGroupingField": "Choose a Grouping Field",
       "addOrEditStack": "Add / Edit Stack"
     },
@@ -1211,7 +1226,7 @@
     "optimizedQueryEnabled": "Optimized query is enabled",
     "lookupNonBtWarning": "Lookup field is not supported for non-Belongs to relation",
     "invalidTime": "Invalid Time",
-    "linkColumnClearNotSupportedYet": "You don't have any supported links for Lookup",
+    "linkColumnClearNotSupportedYet": "You don't have any supported links for {type}",
     "recordCouldNotBeFound": "Record could not be found",
     "invalidPhoneNumber": "Invalid phone number",
     "pageSizeChanged": "Page size changed",
@@ -1285,7 +1300,7 @@
     "noRecordsLinked": "No records linked",
     "noLinkedRecords": "No linked records",
     "recordsLinked": "records linked",
-    "acceptOnlyValid": "Accepts only",
+    "acceptOnlyValid": "Accept only valid {type}",
     "apiTokenCreate": "Create personal API tokens to use in automation or external apps.",
     "selectFieldToSort": "Select Field to Sort",
     "selectFieldToGroup": "Select Field to Group",
