@@ -204,7 +204,8 @@ import NcMaximize from '~icons/nc-icons/maximize'
 import NcMaximizeAll from '~icons/nc-icons/maximize-all'
 import NcDrag from '~icons/nc-icons/drag'
 import NcRefresh from '~icons/nc-icons/refresh'
-import NcConnection from '~icons/nc-icons/connection'
+import NcIntegration from '~icons/nc-icons/integration'
+import NcGitCommit from '~icons/nc-icons/git-commit'
 
 // keep it for reference
 // todo: remove it after all icons are migrated
@@ -639,7 +640,8 @@ export const iconMap = {
   ncDrag: NcDrag,
   refresh: NcRefresh,
   chevronUpDown: NcChevronUpDown,
-  connection: NcConnection,
+  integration: NcIntegration,
+  gitCommit: NcGitCommit,
 }
 
 export const getMdiIcon = (type: string): any => {
