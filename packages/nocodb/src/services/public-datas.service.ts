@@ -18,6 +18,7 @@ import { mimeIcons } from '~/utils/mimeTypes';
 import { utf8ify } from '~/helpers/stringHelpers';
 import { replaceDynamicFieldWithValue } from '~/db/BaseModelSqlv2';
 import { Filter } from '~/models';
+import { DatasService } from '~/services/datas.service';
 
 // todo: move to utils
 export function sanitizeUrlPath(paths) {
@@ -26,6 +27,7 @@ export function sanitizeUrlPath(paths) {
 
 @Injectable()
 export class PublicDatasService {
+  constructor(protected datasService: DatasService) {}
   async dataList(
     context: NcContext,
     param: {
@@ -736,5 +738,171 @@ export class PublicDatasService {
     );
 
     return new PagedResponseImpl(data, { ...param.query, count });
+  }
+
+  async dataRead(
+    context: NcContext,
+    param: {
+      sharedViewUuid: string;
+      rowId: string;
+      password?: string;
+      query: any;
+    },
+  ) {
+    const { sharedViewUuid, rowId, password, query = {} } = param;
+    const view = await View.getByUUID(context, sharedViewUuid);
+
+    if (!view) NcError.viewNotFound(sharedViewUuid);
+    if (
+      view.type !== ViewTypes.GRID &&
+      view.type !== ViewTypes.KANBAN &&
+      view.type !== ViewTypes.GALLERY &&
+      view.type !== ViewTypes.MAP &&
+      view.type !== ViewTypes.CALENDAR
+    ) {
+      NcError.notFound('Not found');
+    }
+
+    if (view.password && view.password !== password) {
+      return NcError.invalidSharedViewPassword();
+    }
+
+    const model = await Model.getByIdOrName(context, {
+      id: view?.fk_model_id,
+    });
+
+    const source = await Source.get(context, model.source_id);
+
+    const baseModel = await Model.getBaseModelSQL(context, {
+      id: model.id,
+      viewId: view?.id,
+      dbDriver: await NcConnectionMgrv2.get(source),
+    });
+
+    const row = await baseModel.readByPk(rowId, false, query);
+
+    if (!row) {
+      NcError.recordNotFound(param.rowId);
+    }
+
+    return row;
+  }
+
+  async bulkDataList(
+    context: NcContext,
+    param: {
+      sharedViewUuid: string;
+      password?: string;
+      query: any;
+    },
+  ) {
+    const view = await View.getByUUID(context, param.sharedViewUuid);
+
+    if (!view) NcError.viewNotFound(param.sharedViewUuid);
+
+    if (view.type !== ViewTypes.GRID) {
+      NcError.notFound('Not found');
+    }
+
+    if (view.password && view.password !== param.password) {
+      return NcError.invalidSharedViewPassword();
+    }
+
+    const model = await Model.getByIdOrName(context, {
+      id: view?.fk_model_id,
+    });
+
+    const listArgs: any = { ...param.query };
+
+    try {
+      listArgs.bulkFilterList = JSON.parse(listArgs.bulkFilterList);
+    } catch (e) {}
+
+    try {
+      listArgs.sortArr = JSON.parse(listArgs.sortArrJson);
+    } catch (e) {}
+
+    try {
+      listArgs.filterArr = JSON.parse(listArgs.filterArrJson);
+    } catch (e) {}
+
+    if (!listArgs.bulkFilterList) {
+      NcError.badRequest('Invalid bulkFilterList');
+    }
+
+    const dataListResults = await Object.values(listArgs.bulkFilterList).reduce(
+      async (accPromise, dF: any) => {
+        const acc = await accPromise;
+        const result = await this.datasService.dataList(context, {
+          query: {
+            ...dF,
+            ...listArgs,
+          },
+          model,
+          view,
+        });
+        acc[dF.alias] = result;
+        return acc;
+      },
+      Promise.resolve({}),
+    );
+
+    return dataListResults;
+  }
+
+  async bulkGroupBy(
+    context: NcContext,
+    param: {
+      sharedViewUuid: string;
+      password?: string;
+      query: any;
+    },
+  ) {
+    const view = await View.getByUUID(context, param.sharedViewUuid);
+
+    if (!view) NcError.viewNotFound(param.sharedViewUuid);
+
+    if (view.password && view.password !== param.password) {
+      return NcError.invalidSharedViewPassword();
+    }
+
+    const model = await Model.getByIdOrName(context, {
+      id: view?.fk_model_id,
+    });
+
+    const source = await Source.get(context, model.source_id);
+
+    const baseModel = await Model.getBaseModelSQL(context, {
+      id: model.id,
+      viewId: view?.id,
+      dbDriver: await NcConnectionMgrv2.get(source),
+    });
+
+    const listArgs: any = { ...param.query };
+
+    try {
+      listArgs.bulkFilterList = JSON.parse(listArgs.bulkFilterList);
+    } catch (e) {}
+
+    try {
+      listArgs.sortArr = JSON.parse(listArgs.sortArrJson);
+    } catch (e) {}
+
+    try {
+      listArgs.filterArr = JSON.parse(listArgs.filterArrJson);
+    } catch (e) {}
+
+    if (!listArgs.bulkFilterList) {
+      NcError.badRequest('Invalid bulkFilterList');
+    }
+
+    const data = await baseModel.bulkGroupBy(listArgs, view);
+    Object.values(listArgs.bulkFilterList).forEach((dF: any) => {
+      data[dF.alias] = new PagedResponseImpl(data[dF.alias], {
+        ...dF,
+      });
+    });
+
+    return data;
   }
 }

@@ -189,4 +189,73 @@ export class PublicDatasController {
     );
     return paginatedResponse;
   }
+
+  @Get(
+    '/api/v2/public/shared-view/:sharedViewUuid/downloadAttachment/:columnId/:rowId',
+  )
+  async downloadPublicAttachment(
+    @TenantContext() context: NcContext,
+    @Req() req: NcRequest,
+    @Param('sharedViewUuid') sharedViewUuid: string,
+    @Param('columnId') columnId: string,
+    @Param('rowId') rowId: string,
+    @Query('urlOrPath') urlOrPath: string,
+  ) {
+    const column = await Column.get(context, {
+      colId: columnId,
+    });
+
+    if (!column) {
+      NcError.fieldNotFound(columnId);
+    }
+
+    const record = await this.publicDatasService.dataRead(context, {
+      sharedViewUuid,
+      query: {
+        fields: column.title,
+      },
+      rowId,
+      password: req.headers?.['xc-password'] as string,
+    });
+
+    if (!record) {
+      NcError.recordNotFound(rowId);
+    }
+
+    return this.attachmentsService.getAttachmentFromRecord({
+      record,
+      column,
+      urlOrPath,
+    });
+  }
+
+  @Get(['/api/v2/public/shared-view/:sharedViewUuid/bulk/dataList'])
+  async bulkDataList(
+    @TenantContext() context: NcContext,
+    @Req() req: NcRequest,
+    @Param('sharedViewUuid') sharedViewUuid: string,
+  ) {
+    const response = await this.publicDatasService.bulkDataList(context, {
+      query: req.query,
+      password: req.headers?.['xc-password'] as string,
+      sharedViewUuid,
+    });
+
+    return response;
+  }
+
+  @Get(['/api/v2/public/shared-view/:sharedViewUuid/bulk/group'])
+  async bulkGroupBy(
+    @TenantContext() context: NcContext,
+    @Req() req: NcRequest,
+    @Param('sharedViewUuid') sharedViewUuid: string,
+  ) {
+    const response = await this.publicDatasService.bulkGroupBy(context, {
+      query: req.query,
+      password: req.headers?.['xc-password'] as string,
+      sharedViewUuid,
+    });
+
+    return response;
+  }
 }
