@@ -33,7 +33,7 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
     const modalVisible = ref(false)
 
     /** for image carousel */
-    const selectedImage = ref()
+    const selectedFile = ref()
 
     const videoStream = ref<MediaStream | null>(null)
 
@@ -386,7 +386,7 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
       renameFile,
       downloadFile,
       updateModelValue,
-      selectedImage,
+      selectedFile,
       uploadViaUrl,
       selectedVisibleItems,
       storedFiles,
