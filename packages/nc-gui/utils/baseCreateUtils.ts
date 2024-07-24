@@ -1,3 +1,4 @@
+import type { BoolType } from 'nocodb-sdk'
 import { getTestDatabaseName } from 'nocodb-sdk'
 import { ClientType } from '~/lib/enums'
 
@@ -19,6 +20,7 @@ interface ProjectCreateForm {
   }
   sslUse?: SSLUsage
   extraParameters: { key: string; value: string }[]
+  is_private?: BoolType
 }
 
 interface DefaultConnection {
