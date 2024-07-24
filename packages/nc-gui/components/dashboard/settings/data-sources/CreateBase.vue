@@ -1,13 +1,12 @@
 <script lang="ts" setup>
 import { Form, message } from 'ant-design-vue'
-import type { SelectHandler } from 'ant-design-vue/es/vc-select/Select'
 import {
-  type CertTypes,
   ClientType,
-  type DefaultConnection,
+  type DatabricksConnection,
+  JobStatus,
   type ProjectCreateForm,
-  type SQLiteConnection,
   SSLUsage,
+  type SnowflakeConnection,
   clientTypes as _clientTypes,
 } from '#imports'
 
@@ -76,12 +75,6 @@ const onEasterEgg = () => {
   }
 }
 
-const clientTypes = computed(() => {
-  return _clientTypes.filter((type) => {
-    return ![ClientType.SNOWFLAKE, ClientType.DATABRICKS, ...(easterEgg.value ? [] : [ClientType.MSSQL])].includes(type.value)
-  })
-})
-
 const selectedIntegration = computed(() => {
   return formState.value.fk_integration_id && integrations.value.find((i) => i.id === formState.value.fk_integration_id)
 })
@@ -149,54 +142,7 @@ const onClientChange = () => {
   populateName(formState.value.title)
 }
 
-const onSSLModeChange = ((mode: SSLUsage) => {
-  if (formState.value.dataSource.client !== ClientType.SQLITE) {
-    const connection = formState.value.dataSource.connection as DefaultConnection
-    switch (mode) {
-      case SSLUsage.No:
-        delete connection.ssl
-        break
-      case SSLUsage.Allowed:
-        connection.ssl = 'true'
-        break
-      default:
-        connection.ssl = {
-          ca: '',
-          cert: '',
-          key: '',
-        }
-        break
-    }
-  }
-}) as SelectHandler
-
-const addNewParam = () => {
-  formState.value.extraParameters.push({ key: '', value: '' })
-}
-
-const removeParam = (index: number) => {
-  formState.value.extraParameters.splice(index, 1)
-}
-
 const inflectionTypes = ['camelize', 'none']
-const importURLDlg = ref(false)
-
-const caFileInput = ref<HTMLInputElement>()
-const keyFileInput = ref<HTMLInputElement>()
-const certFileInput = ref<HTMLInputElement>()
-
-const onFileSelect = (key: CertTypes, el?: HTMLInputElement) => {
-  if (!el) return
-
-  readFile(el, (content) => {
-    if ('ssl' in formState.value.dataSource.connection && typeof formState.value.dataSource.connection.ssl === 'object')
-      formState.value.dataSource.connection.ssl[key] = content ?? ''
-  })
-}
-
-const sslFilesRequired = computed(
-  () => !!formState.value.sslUse && formState.value.sslUse !== SSLUsage.No && formState.value.sslUse !== SSLUsage.Allowed,
-)
 
 function getConnectionConfig() {
   const extraParameters = Object.fromEntries(
@@ -367,12 +313,6 @@ watch(
     testConnectionError.value = null
   },
   { deep: true },
-)
-
-// populate database name based on title
-watch(
-  () => formState.value.title,
-  (v) => populateName(v),
 )
 
 // select and focus title field on load
