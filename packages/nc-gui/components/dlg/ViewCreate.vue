@@ -278,7 +278,7 @@ onMounted(async () => {
         viewSelectFieldOptions.value = [
           { value: null, label: 'No Image' },
           ...(meta.value.columns || [])
-            .filter((el) => el.uidt === UITypes.Attachment)
+            .filter((el) => el.uidt === UITypes.Attachment || el.uidt === UITypes.URL)
             .map((field) => {
               return {
                 value: field.id,

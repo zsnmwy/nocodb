@@ -369,7 +369,7 @@ watch(
 
     const filterFields =
       newValue
-        .filter((el) => el.fk_column_id && metaColumnById.value[el.fk_column_id].uidt === UITypes.Attachment)
+        .filter((el) => el.fk_column_id && (metaColumnById.value[el.fk_column_id].uidt === UITypes.Attachment || metaColumnById.value[el.fk_column_id].uidt === UITypes.URL))
         .map((field) => {
           return {
             value: field.fk_column_id,

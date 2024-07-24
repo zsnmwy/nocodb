@@ -520,6 +520,16 @@ const isFullUpdateAllowed = computed(() => {
             </div>
           </NcSwitch>
         </div>
+        
+        <div v-if="formState.meta && formState.uidt === UITypes.URL" class="flex items-center gap-1">
+          <NcSwitch v-model:checked="formState.meta.displayUrlAsImage" size="small" class="nc-switch">
+            <div class="text-sm text-gray-800">
+              {{
+                `${$t('msg.displayUrlAsImage')}`
+              }}
+            </div>
+          </NcSwitch>
+        </div>
 
         <template v-if="!readOnly && isFullUpdateAllowed">
           <div class="nc-column-options-wrapper flex flex-col gap-4">

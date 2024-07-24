@@ -99,7 +99,7 @@ watch(
     <span v-else-if="vModel === null && showNull" class="nc-cell-field nc-null uppercase"> {{ $t('general.null') }}</span>
 
     <nuxt-link
-      v-else-if="isValid && !cellUrlOptions?.overlay"
+      v-else-if="isValid && !cellUrlOptions?.overlay && !column.meta?.displayUrlAsImage"
       no-prefetch
       no-rel
       class="py-1 z-3 underline nc-cell-field-link max-w-full"
@@ -111,7 +111,7 @@ watch(
     </nuxt-link>
 
     <nuxt-link
-      v-else-if="isValid && !disableOverlay && cellUrlOptions?.overlay"
+      v-else-if="isValid && !disableOverlay && cellUrlOptions?.overlay && !column.meta?.displayUrlAsImage"
       no-prefetch
       no-rel
       class="py-1 z-3 w-full h-full text-center !no-underline nc-cell-field-link max-w-full"
@@ -123,8 +123,14 @@ watch(
     </nuxt-link>
 
     <span v-else class="w-9/10 overflow-ellipsis overflow-hidden"
-      ><LazyCellClampedText :value="value" :lines="rowHeight" class="nc-cell-field"
-    /></span>
+      >
+      <div v-if="column.meta?.displayUrlAsImage && value">
+        <LazyNuxtImg :src="value" class="m-auto h-full max-h-full w-auto nc-image object-cover rounded-md	" />
+      </div>
+      <div v-else>
+        <LazyCellClampedText :value="value" :lines="rowHeight" class="nc-cell-field"/>
+      </div>
+    </span>
 
     <div v-if="column.meta?.validate && !isValid && value?.length && !editEnabled" class="mr-1 w-1/10">
       <a-tooltip placement="top">
