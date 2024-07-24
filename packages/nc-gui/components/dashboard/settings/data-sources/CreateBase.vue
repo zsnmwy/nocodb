@@ -137,7 +137,7 @@ const validators = computed(() => {
         required: true,
         message: t('labels.sourceNameRequired'),
       },
-      baseTitleValidator,
+      baseTitleValidator(),
     ],
     'extraParameters': [extraParameterValidator],
     'dataSource.client': [fieldRequiredValidator()],
