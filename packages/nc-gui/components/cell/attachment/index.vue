@@ -290,7 +290,7 @@ const handleFileDelete = (i: number) => {
                 :class="{ '!w-30': isForm || isExpandedForm }"
                 @click="() => onFileClick(item)"
               >
-                <LazyCellAttachmentImage
+                <LazyCellAttachmentPreviewImage
                   :alt="item.title || `#${i}`"
                   class="rounded"
                   :class="{
