@@ -257,7 +257,7 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
       }
     }
 
-    async function renameFile(attachment: AttachmentType, idx: number) {
+    async function renameFile(attachment: AttachmentType, idx: number, updateSelectedFile?: boolean) {
       return new Promise<boolean>((resolve) => {
         const { close } = useDialog(RenameFile, {
           title: attachment.title,
@@ -265,6 +265,11 @@ export const [useProvideAttachmentCell, useAttachmentCell] = useInjectionState(
             attachments.value[idx].title = newTitle
             updateModelValue(JSON.stringify(attachments.value))
             close()
+
+            if (updateSelectedFile) {
+              selectedFile.value = { ...attachment, title: newTitle }
+            }
+
             resolve(true)
           },
           onCancel: () => {
