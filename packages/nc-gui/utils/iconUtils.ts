@@ -639,7 +639,7 @@ export const iconMap = {
   ncDrag: NcDrag,
   refresh: NcRefresh,
   chevronUpDown: NcChevronUpDown,
-  integration: NcIntegration
+  integration: NcIntegration,
 }
 
 export const getMdiIcon = (type: string): any => {
