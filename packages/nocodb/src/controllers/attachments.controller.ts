@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import {
   Body,
   Controller,
@@ -73,7 +74,11 @@ export class AttachmentsController {
         path: path.join('nc', 'uploads', filename),
       });
 
-      if (this.attachmentsService.previewAvailable(file.type)) {
+      if (!fs.existsSync(file.path)) {
+        return res.status(404).send('File not found');
+      }
+
+      if (isPreviewAllowed({ mimetype: file.type, path: file.path })) {
         if (queryFilename) {
           res.setHeader(
             'Content-Disposition',
@@ -110,7 +115,11 @@ export class AttachmentsController {
         ),
       });
 
-      if (this.attachmentsService.previewAvailable(file.type)) {
+      if (!fs.existsSync(file.path)) {
+        return res.status(404).send('File not found');
+      }
+
+      if (isPreviewAllowed({ mimetype: file.type, path: file.path })) {
         if (queryFilename) {
           res.setHeader(
             'Content-Disposition',
@@ -142,20 +151,22 @@ export class AttachmentsController {
         queryFilename = query.get('filename');
       }
 
+      const filePath = param.split('/')[2] === 'thumbnails' ? '' : 'uploads';
+
       const file = await this.attachmentsService.getFile({
-        path: path.join('nc', 'uploads', fpath),
+        path: path.join('nc', filePath, fpath),
       });
 
-      if (this.attachmentsService.previewAvailable(file.type)) {
-        if (queryFilename) {
-          res.setHeader(
-            'Content-Disposition',
-            `attachment; filename=${queryFilename}`,
-          );
-        }
-        res.sendFile(file.path);
-      } else {
-        res.download(file.path, queryFilename);
+      if (!fs.existsSync(file.path)) {
+        return res.status(404).send('File not found');
+      }
+
+      if (queryResponseContentType) {
+        res.setHeader('Content-Type', queryResponseContentType);
+      }
+
+      if (queryResponseContentDisposition) {
+        res.setHeader('Content-Disposition', queryResponseContentDisposition);
       }
     } catch (e) {
       res.status(404).send('Not found');
